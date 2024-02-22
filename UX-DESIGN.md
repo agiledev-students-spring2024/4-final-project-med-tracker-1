@@ -1,8 +1,53 @@
 # User Experience Design
 
-This repository contains instructions and files for two assignments that together comprise the user experience design phase of a web app.
+## App Map 
+ 
+![Alt text](ux-design/appmap.png)
 
-Replace the contents of this file with the completed assignments, as described in:
+## Wireframe Diagram
 
-- [app map & wireframe instructions](instructions-0a-app-map-wireframes.md).
-- [prototype instructions](instructions-0b-prototyping.md)
+![Alt text](ux-design/wireframes.png)
+
+## Log in
+
+![Alt text](ux-design/prototype/Wireframe%20(2)-01.png)
+
+## Register
+
+![Alt text](ux-design/prototype/Wireframe%20(2)-02.png)
+
+## Home
+
+![Alt text](ux-design/prototype/Wireframe%20(2)-03.png)
+
+## History
+
+![Alt text](ux-design/prototype/Wireframe%20(2)-04.png)
+
+## Medicines
+
+![Alt text](ux-design/prototype/Wireframe%20(2)-05.png)
+
+## Settings
+
+![Alt text](ux-design/prototype/Wireframe%20(2)-06.png)
+
+## Reminder
+
+![Alt text](ux-design/prototype/Wireframe%20(2)-07.png)
+
+## Refill Reminder
+
+![Alt text](ux-design/prototype/Wireframe%20(2)-11.png)
+
+## Add Medicine 1
+
+![Alt text](ux-design/prototype/Wireframe%20(2)-08.png)
+
+## Add Medicine 2
+
+![Alt text](ux-design/prototype/Wireframe%20(2)-10.png)
+
+## Edit Medicine
+
+![Alt text](ux-design/prototype/Wireframe%20(2)-09.png)
