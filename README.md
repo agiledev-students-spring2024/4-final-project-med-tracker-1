@@ -6,7 +6,7 @@ Med Tracker is a mobile application designed to simplify medication management f
 ## Core Team
 - [Alex Hmitti](https://github.com/alexh212) - Developer
 - [Betty Li](https://github.com/bettylirf) - Developer
-- [Silu Xing]() - Developer
+- [Silu Xing](https://github.com/TomatoIsGod) - Developer
 - [William Cui](https://github.com/willcuh4856) - Developer
 
 ## Product History
