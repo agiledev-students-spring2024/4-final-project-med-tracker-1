@@ -1,19 +1,20 @@
-# Project Repository
+# Med Tracker
 
-This repository will be used for team projects.
+## Product Vision Statement
+Med Tracker is a mobile application designed to simplify medication management for individuals with busy lifestyles or memory impairments. By providing a convenient and intuitive platform, our vision is to empower users to effortlessly organize their medication schedules, receive timely reminders, and maintain better health outcomes.
 
-Several sets of instructions are included in this repository. They should each be treated as separate assignments with their own due dates and sets of requirements.
+## Core Team
+- [Alex Hmitti](https://github.com/alexh212) - Developer
+- [Betty Li](https://github.com/bettylirf) - Developer
+- [Silu Xing]() - Developer
+- [William Cui](https://github.com/willcuh4856) - Developer
 
-1. See the [App Map & Wireframes](instructions-0a-app-map-wireframes.md) and [Prototyping](./instructions-0b-prototyping.md) instructions for the requirements of the initial user experience design of the app.
+## Product History
+The genesis of Med Tracker stemmed from a personal experience. Co-founders Betty Li and Silu Xing witnessed firsthand the challenges faced by family members managing complex medication regimens while juggling busy schedules and battling memory issues. Struggling to keep up with multiple prescriptions and dosage timings highlighted a need for a simple, intuitive solution to streamline medication management for people of all ages.
 
-1. Delete the contents of this file and replace with the contents of a proper README.md, as described in the [project setup instructions](./instructions-0c-project-setup.md)
+## Contributing
+If you want to contribute, please check the detailed instructions listed in [CONTRIBUTING.md](./CONTRIBUTING.md)
 
-1. See the [Sprint Planning instructions](instructions-0d-sprint-planning.md) for the requirements of Sprint Planning for each Sprint.
+## Building & Testing
 
-1. See the [Front-End Development instructions](./instructions-1-front-end.md) for the requirements of the initial Front-End Development.
-
-1. See the [Back-End Development instructions](./instructions-2-back-end.md) for the requirements of the initial Back-End Development.
-
-1. See the [Database Integration instructions](./instructions-3-database.md) for the requirements of integrating a database into the back-end.
-
-1. See the [Deployment instructions](./instructions-4-deployment.md) for the requirements of deploying an app.
+## Relevant Information
