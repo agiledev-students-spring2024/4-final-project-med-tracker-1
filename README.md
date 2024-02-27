@@ -5,9 +5,9 @@ Med Tracker is a mobile application designed to simplify medication management f
 
 ## Core Team
 - [Alex Hmitti](https://github.com/alexh212) - Developer
-- [Betty Li](https://github.com/bettylirf) - Scrum Master
+- [Betty Li](https://github.com/bettylirf) - Scrum Master & Developer
 - [Silu Xing](https://github.com/TomatoIsGod) - Developer
-- [William Cui](https://github.com/willcuh4856) - Product Owner
+- [William Cui](https://github.com/willcuh4856) - Product Owner & Developer
 
 ## Product History
 The genesis of Med Tracker stemmed from a personal experience. Co-founders Betty Li and Silu Xing witnessed firsthand the challenges faced by family members managing complex medication regimens while juggling busy schedules and battling memory issues. Struggling to keep up with multiple prescriptions and dosage timings highlighted a need for a simple, intuitive solution to streamline medication management for people of all ages.
