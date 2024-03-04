@@ -1,0 +1,36 @@
+.nav-bar {
+    background-color: white;
+    position: fixed; /* Position the navigation bar */
+    bottom: 0; /* Stick it to the bottom of the viewport */
+    width: 100%; /* Make it full width */
+    border-top: 1px solid #fff; /* Add a border on the top */
+}
+
+.nav-links {
+    list-style: none; /* Remove bullet points from the list */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+
+.nav-item {
+    text-align: center;
+    padding-top: 8%;
+    padding-bottom: 8%;
+    background-color: lightgray;
+    display: inline-block; /* Display list items horizontally */
+    width: 23%; /* Fixed width for each navigation item */
+    margin-right: 2%;
+    margin-bottom: 1%;
+    height: 100%
+}
+.nav-item:first-child{
+  margin-left: 1%;
+}
+.nav-item:last-child{
+  margin-right: 1%;
+}
+
+.nav-item a {
+    color: #ffffff00; /* Text color of the navigation items */
+}
+
