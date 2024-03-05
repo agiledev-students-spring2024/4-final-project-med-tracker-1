@@ -19,7 +19,6 @@ function App() {
     <>
     <div className="App">
       <Router>
-        <NavBar />
         <main className="App-main">
           <Routes>
             {/* a router for the register page */}
