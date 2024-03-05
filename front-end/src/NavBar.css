@@ -23,14 +23,16 @@
     margin-bottom: 1%;
     height: 100%
 }
+
+.links {
+  text-decoration: none;
+  font-size: 40px;
+  color: black;
+}
 .nav-item:first-child{
   margin-left: 1%;
 }
 .nav-item:last-child{
   margin-right: 1%;
-}
-
-.nav-item a {
-    color: #ffffff00; /* Text color of the navigation items */
 }
 

@@ -8,16 +8,16 @@ const NavBar = props => {
             <nav className="nav-bar">
                 <ul className="nav-links">
                     <li className="nav-item">
-                        Home{/* <Link to="/">Home</Link> */}
+                        <Link className="links" to="/">Home</Link>
                     </li>
                     <li className="nav-item">
-                        History{/* <Link to="/history">History</Link> */}
+                        <Link className="links" to="/history">History</Link>
                     </li>
                     <li className="nav-item">
-                        Medicines {/* <Link to="/medicines">Medicines</Link> */}
+                        <Link className="links" to="/medicines">Medicines</Link>
                     </li>
                     <li className="nav-item">
-                        Setting {/* <Link to="/Setting">Setting</Link> */}
+                        <Link className="links" to="/setting">Setting</Link>
                     </li>
                 </ul>
             </nav>
