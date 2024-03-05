@@ -19,16 +19,15 @@ function App() {
     <>
     <div className="App">
       <Router>
-        <NavBar />
         <main className="App-main">
           <Routes>
             {/* a router for the register page */}
             <Route path="/register" element={<Register />} />  
             {/* a router for the login page */}
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
 
             {/* a router for the home page */}
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
 
             {/* a router for the history page */}
             <Route path="/history" element={<History />} />
