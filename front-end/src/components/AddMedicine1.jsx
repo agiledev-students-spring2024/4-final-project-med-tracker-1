@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Input from "./Input";
-import { useNavigate } from 'react-router-dom';
 
 function AddMedicine1() {
     const [mockPhotoUrl, setMockPhotoUrl] = useState('');
@@ -10,12 +9,6 @@ function AddMedicine1() {
       const picsumUrl = `https://picsum.photos/200`;
       setMockPhotoUrl(picsumUrl);
     };
-
-    // let navigate = useNavigate();
-
-    // function handleNext() {
-    //   navigate('./AddMedicine2');
-    // }
   
     return (
       <div className="flex-container">
