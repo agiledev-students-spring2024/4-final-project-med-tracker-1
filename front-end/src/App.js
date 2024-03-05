@@ -10,8 +10,7 @@ const App = () => {
       </header>
       <main className="App-content">
         {/* Include the MedicationCard component */}
-        <MedicationCard />
-        <MedicationCard />
+
       </main>
     </div>
   );
