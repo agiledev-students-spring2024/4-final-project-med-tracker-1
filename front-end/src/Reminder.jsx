@@ -1,7 +1,15 @@
+// Reminder.jsx
 import React from 'react';
-import './Reminder.css'; // make sure to create a corresponding CSS file
+import { useNavigate } from 'react-router-dom';
+import './Reminder.css';
 
 const Reminder = () => {
+    const navigate = useNavigate();
+
+    const handleButtonClick = () => {
+        navigate('/home'); // This will navigate to the home route
+    };
+
     return (
         <div className="reminder-page">
             <header className="header">
@@ -20,9 +28,9 @@ const Reminder = () => {
                 <div>08:00</div>
             </div>
             <div className="buttons">
-                <button className="btn confirm">Confirm</button>
-                <button className="btn later">Later</button>
-                <button className="btn skip">Skip</button>
+                <button onClick={handleButtonClick} className="btn confirm">Confirm</button>
+                <button onClick={handleButtonClick} className="btn later">Later</button>
+                <button onClick={handleButtonClick} className="btn skip">Skip</button>
             </div>
         </div>
     );
