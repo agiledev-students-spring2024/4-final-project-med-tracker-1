@@ -3,7 +3,8 @@ import './MedicationCard.css'; // make sure to create a corresponding CSS file
 
 const MedicationCard = () => {
     const [pillsLeft, setPillsLeft] = useState(26);
-
+    //should be connected with slyvia's component 
+    //Make it not changable and representation of the state
     // Function to decrement the pill count
     const takePill = () => {
         setPillsLeft((prevPillsLeft) => (prevPillsLeft > 0 ? prevPillsLeft - 1 : 0));

@@ -13,46 +13,47 @@ import AddMedicine1 from './AddMedicine1'
 import AddMedicine2 from './AddMedicine2'
 import Reminder from './Reminder'
 import Refill from './Refill'
-
+import MedicationCard from './MedicationCard';
 function App() {
   return (
     <>
-    <div className="App">
-      <Router>
-        <NavBar />
-        <main className="App-main">
-          <Routes>
-            {/* a router for the register page */}
-            <Route path="/register" element={<Register />} />  
-            {/* a router for the login page */}
-            <Route path="/login" element={<Login />} />
+      <div className="App">
+        <Router>
+          <NavBar />
+          <main className="App-main">
 
-            {/* a router for the home page */}
-            <Route path="/" element={<Home />} />
+            <Routes>
+              {/* a router for the register page */}
+              <Route path="/register" element={<Register />} />
+              {/* a router for the login page */}
+              <Route path="/login" element={<Login />} />
 
-            {/* a router for the history page */}
-            <Route path="/history" element={<History />} />
+              {/* a router for the home page */}
+              <Route path="/" element={<Home />} />
 
-            {/* a router for the medicines page */}
-            <Route path="/medicines" element={<Medicines />} />
+              {/* a router for the history page */}
+              <Route path="/history" element={<History />} />
+
+              {/* a router for the medicines page */}
+              <Route path="/medicines" element={<Medicines />} />
               {/* a router for add medicine page one */}
               <Route path="/add-medicine-1" element={<AddMedicine1 />} />
               {/* a router for add medicine page two */}
-              <Route path="/add-medicine-2" element={<AddMedicine2 />} /> 
+              <Route path="/add-medicine-2" element={<AddMedicine2 />} />
 
-            {/* a router for setting page */}
-            <Route path="/setting" element={<Setting />} /> 
+              {/* a router for setting page */}
+              <Route path="/setting" element={<Setting />} />
 
-            {/* a router for reminder page */}
-            <Route path="/reminder" element={<Reminder />} /> 
-            {/* a router for refill reminder page */}
-            <Route path="/refill" element={<Refill />} /> 
+              {/* a router for reminder page */}
+              <Route path="/reminder" element={<Reminder />} />
+              {/* a router for refill reminder page */}
+              <Route path="/refill" element={<Refill />} />
 
 
-          </Routes>
-        </main>
-      </Router>
-    </div>
+            </Routes>
+          </main>
+        </Router>
+      </div>
     </>
   );
 }
