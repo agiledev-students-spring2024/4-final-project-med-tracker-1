@@ -1,10 +1,11 @@
 import React from 'react';
 import './Login.css';
 
-const Login = () => {
+const ForgetPassword = () => {
     return (
         <>
-            <h1>Login</h1>
+            <h1>Forget Password</h1>
+
             <form>
                 <div>
                     <label htmlFor="username">Username</label>
@@ -20,10 +21,9 @@ const Login = () => {
             </form>
             
             <button type="submit">Submit</button>
-            <small id="changePassword"><a href="/forgetpassword">Forget Password</a></small>
-            <small id="register"><a href="/register">Register for an account?</a></small>
+            <small><a href="/">Back</a></small>
         </>
     );
 }
 
-export default Login;
+export default ForgetPassword;
