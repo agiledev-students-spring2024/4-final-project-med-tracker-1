@@ -1,0 +1,50 @@
+.reminder-page {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.card {
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.medication h2,
+.dose h2,
+.time h2 {
+    font-size: 1.5em;
+    margin-bottom: 5px;
+}
+
+.pill-count {
+    font-size: 1.2em;
+    color: #333;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn {
+    background-color: #000;
+    color: #fff;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    margin-top: 10px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.btn:active {
+    background-color: #333;
+}
+
+/* Additional responsiveness and styling as needed */
