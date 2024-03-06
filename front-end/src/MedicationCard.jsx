@@ -1,21 +1,13 @@
-import React, { useState } from 'react';
-import './MedicationCard.css'; // make sure to create a corresponding CSS file
+import React from 'react';
+import './MedicationCard.css';
 
-const MedicationCard = () => {
-    const [pillsLeft, setPillsLeft] = useState(26);
-    //should be connected with slyvia's component 
-    //Make it not changable and representation of the state
-    // Function to decrement the pill count
-    const takePill = () => {
-        setPillsLeft((prevPillsLeft) => (prevPillsLeft > 0 ? prevPillsLeft - 1 : 0));
-    };
-
+const MedicationCard = ({ name, pillsLeft, schedule }) => {
     return (
         <div className="medication-card">
             <div className="medication-info">
-                <h1>Midol</h1>
-                <button onClick={takePill}>{pillsLeft} pill(s) left</button>
-                <p>Once daily</p>
+                <h1>{name}</h1>
+                <p>{pillsLeft} pill(s) left</p>
+                <p>{schedule}</p>
             </div>
             <div className="medication-image">
                 {/* Placeholder for medication image */}
