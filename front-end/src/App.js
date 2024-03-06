@@ -13,7 +13,7 @@ import AddMedicine1 from './AddMedicine1'
 import AddMedicine2 from './AddMedicine2'
 import Reminder from './Reminder'
 import Refill from './Refill'
-import MedicationCard from './MedicationCard';
+
 function App() {
   return (
     <>
