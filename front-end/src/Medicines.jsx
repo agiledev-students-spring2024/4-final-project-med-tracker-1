@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom'
 import NavBar from './NavBar';
 import MedicationCard from './MedicationCard'
 import './Medicines.css'
@@ -21,7 +22,7 @@ const Medicines = () => {
     return(
         <><div className="medications-page">
             <h1 className="page-name">Medicines</h1>
-            <button className="clickable-button">Add a medicine</button>
+            <Link className="clickable-button" to="/add-medicine-1">Add a medicine</Link>
             {medications.map((med) => (
                 <MedicationCard key={med.name} name={med.name} pillsLeft={med.pillsLeft} schedule={med.schedule} />
             ))}

@@ -6,6 +6,7 @@
 
 .clickable-button {
     color: white;
+    text-decoration: none;
     background-color: rgba(0, 0, 0, 0.9);
     font-size: 30px;
     padding: 20px 0;
