@@ -54,21 +54,21 @@
     margin-bottom: 50px;
 }
 
-.form-group {
+.med-info .form-group {
     display: flex;
     align-items: center; 
     justify-content: space-between;
     margin-bottom: 5%;
 }
 
-.form-group label {
+.med-info .form-group label {
     font-size: 40px;
     flex-shrink: 0;
     margin-left: 10%;
 }
 
-.form-group input,
-.form-group select {
+.med-info .form-group input,
+.med-info .form-group select {
     font-size: 30px;
     flex-grow: 1;
     padding: 15px;
@@ -79,25 +79,22 @@
     box-sizing: border-box;
 }
 
-.form-group input:focus,
-.form-group select:focus {
+.med-info .form-group input:focus,
+.med-info .form-group select:focus {
     background-color: lightgrey;
     outline: 3px solid #000000; 
 }
 
-
-.form-group input:not(:last-child),
-.form-group select:not(:last-child) {
+.med-info .form-group input:not(:last-child),
+.med-info .form-group select:not(:last-child) {
     margin-right: 10%; 
 }
 
-
-.select-dropdown {
+.med-info .select-dropdown {
     cursor: pointer;
     font-size: 30px;
 }
 
-
-.select-dropdown option {
+.med-info .select-dropdown option {
     font-size: 20px; 
 }
