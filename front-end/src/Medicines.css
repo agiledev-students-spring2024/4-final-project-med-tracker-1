@@ -18,6 +18,11 @@
   /* Adjust the position as needed based on your layout */
 }
 
+.medication-card-container {
+  cursor: pointer;
+  /* Add any other styling needed for the container */
+}
+
 .clickable-button {
   color: white;
   text-decoration: none;
