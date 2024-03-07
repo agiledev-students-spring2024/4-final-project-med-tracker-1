@@ -13,6 +13,7 @@ import AddMedicine2 from './AddMedicine2'
 import Reminder from './Reminder'
 import Refill from './Refill'
 import ForgetPassword from './ForgetPassword';
+import RefillReminder from './RefillReminder';
 
 function App() {
   return (
@@ -45,8 +46,9 @@ function App() {
 
               {/* a router for reminder page */}
               <Route path="/reminder" element={<Reminder />} />
+              <Route path="/refill-reminder" element={<RefillReminder />} />
               {/* a router for refill reminder page */}
-              <Route path="/refill" element={<Refill />} />
+              <Route path="/refill" element={<RefillReminder />} />
 
             {/* a router for the forget password page */}
             <Route path="/forgetpassword" element={<ForgetPassword />} />

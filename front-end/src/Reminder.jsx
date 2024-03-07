@@ -2,6 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Reminder.css';
+import MedicationCard from './MedicationCard';
 
 const Reminder = () => {
     const navigate = useNavigate();
@@ -15,9 +16,9 @@ const Reminder = () => {
             <header className="header">
                 <h1>Reminder</h1>
             </header>
-            <div className="card medication">
+            <div className="card pill">
                 <h2>Midol</h2>
-                <div className="pill-count">26 pills left</div>
+                <div className="">26 pills left</div>
             </div>
             <div className="card dose">
                 <h2>Dose</h2>
@@ -28,11 +29,11 @@ const Reminder = () => {
                 <div>08:00</div>
             </div>
             <div className="buttons">
-                <button onClick={handleButtonClick} className="btn confirm">Confirm</button>
-                <button onClick={handleButtonClick} className="btn later">Later</button>
-                <button onClick={handleButtonClick} className="btn skip">Skip</button>
+                <button onClick={handleButtonClick} className="clickable-button">Confirm</button>
+                <button onClick={handleButtonClick} className="clickable-button">Later</button>
+                <button onClick={handleButtonClick} className="clickable-button">Skip</button>
             </div>
-        </div>
+        </div >
     );
 };
 
