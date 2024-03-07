@@ -1,0 +1,159 @@
+.add-medicine-page-1 {
+    background: white;
+    width: 100%;
+    margin: auto;
+    padding: 20px;
+    box-sizing: border-box; 
+    position: relative;
+}
+
+.exit-button {
+    position: absolute;
+    top: 80px;
+    right: 50px;
+    width: 70px;
+    height: 70px;
+    font-size: 27px;
+    background: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.photo-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30%;
+    margin-bottom: 80px;
+}
+
+.med-image {
+    width: 500px;
+    height: 500px; 
+    border: 6px solid black; 
+    background-color: lightgray;
+    margin-bottom: 50px;
+}
+
+.clickable-button {
+    color: white;
+    text-decoration: none;
+    background-color: rgba(0, 0, 0, 0.9);
+    font-size: 30px;
+    padding: 20px 0;
+    width: 40%;
+    margin-bottom: 50px;
+}
+
+.med-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.med-info .form-group {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    margin-bottom: 5%;
+}
+
+.med-info .form-group label {
+    font-size: 40px;
+    flex-shrink: 0;
+    margin-left: 10%;
+}
+
+.med-info .form-group input,
+.med-info .form-group select {
+    font-size: 30px;
+    flex-grow: 1;
+    padding: 15px;
+    margin-right: 15%;
+    margin-bottom: 10px;
+    max-width: 500px; 
+    border: 5px solid black;
+    box-sizing: border-box;
+}
+
+.med-info .form-group input:focus,
+.med-info .form-group select:focus {
+    background-color: lightgrey;
+    outline: 3px solid #000000; 
+}
+
+.med-info .form-group input:not(:last-child),
+.med-info .form-group select:not(:last-child) {
+    margin-right: 10%; 
+}
+
+.med-info .select-dropdown {
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.med-info .select-dropdown option {
+    font-size: 20px; 
+}
+.set-reminder-page{
+    margin-top: 20%;
+}
+.intake-info{
+    gap: 10px;
+    margin-bottom: 50px;
+}
+.intake-info .form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.intake-info .form-group{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.intake-info .form-group label,
+.intake-info .form-group .input-label {
+    font-size: 40px;
+    margin-bottom: 15px; 
+    max-width: max-content;
+    margin-left: 24%;
+}
+
+.intake-info .form-group input,
+.intake-info .form-group select  {
+    font-size: 30px;
+    padding: 15px;
+    max-width: 500px; 
+    border: 5px solid black;
+    box-sizing: border-box;
+    margin-left: 24%;
+}
+
+.intake-info .form-group input:focus,
+.intake-info .form-group select:focus {
+    background-color: lightgrey;
+    outline: 3px solid #000000; 
+}
+
+.intake-info .form-group input:not(:last-child),
+.intake-info .form-group select:not(:last-child) {
+    margin-right: 10%; 
+}
+
+.intake-info .select-dropdown {
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.intake-info .select-dropdown option {
+    font-size: 20px; 
+}

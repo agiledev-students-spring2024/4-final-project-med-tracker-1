@@ -1,13 +1,13 @@
 import React from 'react';
-import './MedicationCard.css';
+import './HomeCard.css';
 
-const MedicationCard = ({ name, pillsLeft, schedule }) => {
+const HomeCard = ({name, schedule,pillsLeft}) => {
     return (
         <div className="medication-card">
             <div className="medication-info">
                 <h1>{name}</h1>
-                <p>{pillsLeft} pill(s) left</p>
                 <p>{schedule}</p>
+                <p>{pillsLeft} pill(s) left</p>
             </div>
             <div className="medication-image">
                 {/* Placeholder for medication image */}
@@ -16,4 +16,4 @@ const MedicationCard = ({ name, pillsLeft, schedule }) => {
     );
 };
 
-export default MedicationCard;
+export default HomeCard;
