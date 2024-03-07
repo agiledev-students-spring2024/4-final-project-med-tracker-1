@@ -1,42 +1,4 @@
-/* EditMedicine.css
-.photo-grid-container{
-    width: 420px;
-    height: 220px;
-    display: flex;
-    justify-content: center;  
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .medication-photo {
-    width: 180px;
-    height: 180px;
-    background-color: #d3d3d3;
-    display: flex;
-    flex-direction: row; 
-    justify-content: center;
-    align-items: center;
-    border: 4px solid black;
-    margin-left: 10px;
-}
-
-.medication-info{
-    width: 220px;
-    height: 220px;
-    display: flex;
-    flex-direction: row; 
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-}
-
-.info-input{
-    width: 200px;
-    height: 200px;
-    border: 4px solid black;
-}
- */
- .add-medicine-page-1-2 {
+.add-medicine-page-1-2 {
     background: white;
     width: 100%;
     margin: 5px;
@@ -52,6 +14,19 @@
     padding: 20px;
     box-sizing: border-box; 
     position: relative;
+}
+
+.add-medicine-page-1-2 .exit-button {
+    position: absolute;
+    top: 80px;
+    margin-right: 50px;
+    width: 70px;
+    height: 70px;
+    font-size: 27px;
+    background: black;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
  .med-image2 {

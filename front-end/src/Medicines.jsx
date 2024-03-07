@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
-import MedicationCard from './MedicationCard'
-import './Medicines.css'
+import MedicationCard from './MedicationCard';
+import './Medicines.css';
 
 const Medicines = () => {
     const [medications, setMedications] = useState([]);
@@ -17,14 +18,24 @@ const Medicines = () => {
         }
         fetchMedications();
     }, [])
-
-
+    
+    const navigate = useNavigate();
+    const navToEdit = (event) => {
+        event.preventDefault();
+        navigate('./edit-medicine')
+    }
     return(
         <><div className="medications-page">
             <h1 className="page-name">Medicines</h1>
             <Link className="clickable-button" to="/add-medicine-1">Add a medicine</Link>
             {medications.map((med) => (
-                <MedicationCard key={med.name} name={med.name} pillsLeft={med.pillsLeft} schedule={med.schedule} />
+                <MedicationCard 
+                    key={med.name} 
+                    name={med.name} 
+                    pillsLeft={med.pillsLeft} 
+                    schedule={med.schedule} 
+                    onClick={navToEdit}
+                />
             ))}
             <NavBar />  
         </div></>

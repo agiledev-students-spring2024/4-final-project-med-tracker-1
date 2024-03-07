@@ -9,6 +9,7 @@
     margin: 20px 0;
     width: 80%;
     max-width: 55%;
+    cursor: pointer;
 }
 
 .medication-info h1 {
