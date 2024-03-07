@@ -17,13 +17,13 @@ const Register = () => {
         </form>
         <form>
             <div>
-                <label htmlFor="password">Confirm password</label>
+                <label htmlFor="password">Confirms password</label>
                 <input type="password" id="password" placeholder="Password" />
             </div>
         </form>
 
         <button type="submit">Save</button>
-        <small id="register"><a href="/">Return to login</a></small>
+        <small id="register"><a href="/">Back</a></small>
     </>)
 }
 
