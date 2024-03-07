@@ -11,9 +11,9 @@ function Home() {
     useEffect(() => {
         const fetchMedications = async () => {
             const updatedMeds = [
-                { name: 'Midol', schedule: '8:00AM', pillsLeft: 26 },
-                { name: 'Vitamin C', schedule: '8:00AM', pillsLeft: 15 },
-                { name: 'Zinc', schedule: '8:00AM', pillsLeft: 10 },
+                { name: 'Midol', schedule: '8:00AM', dose: 1 },
+                { name: 'Vitamin C', schedule: '8:00AM', dose: 1},
+                { name: 'Zinc',  schedule: '8:00AM', dose: 1},
             ];
             setMedications(updatedMeds);
         };
@@ -32,7 +32,7 @@ function Home() {
                 <button
                     className="reminder-button"
                     onClick={handleReminderButtonClick}
-                    style={{ position: 'absolute', top: '20px', right: '20px' }}
+                    // style={{ position: 'absolute', top: '20px', right: '20px' }}
                 >
                     Reminder
                 </button>
@@ -41,7 +41,7 @@ function Home() {
                         key={med.name}
                         name={med.name}
                         schedule={med.schedule}
-                        pillsLeft={med.pillsLeft}
+                        dose={med.dose} 
                     />
                 ))}
             </div>

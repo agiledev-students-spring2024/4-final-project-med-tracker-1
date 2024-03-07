@@ -4,18 +4,29 @@
   margin-bottom: 70px;
 }
 
-.reminder-button {
+/* .reminder-button {
   padding: 10px 20px;
   margin: 0;
   background-color: #000000;
-  /* Example color */
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  /* Adjust the position as needed based on your layout */
+} */
+
+.reminder-button {
+    position: absolute;
+    top: 40px;
+    right: 50px;
+    width: 200px;
+    height: 70px;
+    font-size: 27px;
+    background: black;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
 .clickable-button {
