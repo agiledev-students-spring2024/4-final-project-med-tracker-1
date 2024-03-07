@@ -1,0 +1,132 @@
+/* EditMedicine.css
+.photo-grid-container{
+    width: 420px;
+    height: 220px;
+    display: flex;
+    justify-content: center;  
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .medication-photo {
+    width: 180px;
+    height: 180px;
+    background-color: #d3d3d3;
+    display: flex;
+    flex-direction: row; 
+    justify-content: center;
+    align-items: center;
+    border: 4px solid black;
+    margin-left: 10px;
+}
+
+.medication-info{
+    width: 220px;
+    height: 220px;
+    display: flex;
+    flex-direction: row; 
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.info-input{
+    width: 200px;
+    height: 200px;
+    border: 4px solid black;
+}
+ */
+ .add-medicine-page-1-2 {
+    background: white;
+    width: 100%;
+    margin: 5px;
+    margin-bottom: 1px;
+    padding: 20px;
+    /* box-sizing: border-box;  */
+    position: relative;
+}
+.add-medicine-page-2 {
+    background: white;
+    width: 100%;
+    margin: auto;
+    padding: 20px;
+    box-sizing: border-box; 
+    position: relative;
+}
+
+ .med-image2 {
+    width: 300px;
+    height: 300px; 
+    border: 6px solid #000000; 
+    background-color: lightgray;
+    margin-bottom: 5px;
+}
+
+.photo-info-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+.photo-upload2 {
+    display: flex;
+    flex-direction: row;
+    align-items: left;     
+    margin-top: 20%;
+    margin-bottom: 30px;
+    margin-left: 10px;
+    margin-right: 100px;
+}
+
+.med-info2 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20%;
+    margin-left: 20px;
+    margin-bottom: 50px;
+}
+
+.med-info2 .form-group {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    margin-bottom: 5%;
+}
+
+.med-info2 .form-group label {
+    font-size: 40px;
+    flex-shrink: 0;
+    margin-left: 10%;
+}
+
+.med-info2 .form-group input,
+.med-info2 .form-group select {
+    font-size: 30px;
+    flex-grow: 1;
+    padding: 15px;
+    margin-right: 15%;
+    margin-bottom: 10px;
+    max-width: 500px; 
+    border: 5px solid black;
+    box-sizing: border-box;
+}
+
+.med-info2 .form-group input:focus,
+.med-info2 .form-group select:focus {
+    background-color: lightgrey;
+    outline: 3px solid #000000; 
+}
+
+.med-info2 .form-group input:not(:last-child),
+.med-info2 .form-group select:not(:last-child) {
+    margin-right: 10%; 
+}
+
+.med-info2 .select-dropdown {
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.med-info2 .select-dropdown option {
+    font-size: 20px; 
+}
