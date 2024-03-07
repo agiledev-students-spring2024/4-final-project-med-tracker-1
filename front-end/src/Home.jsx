@@ -8,9 +8,9 @@ function Home() {
     useEffect(() => {
         const fetchMedications = async() => {
             const updatedMeds = [
-                { name: 'Midol', schedule: '8:00AM',pillsLeft: 26 },
-                { name: 'Vitamin C', schedule: '8:00AM',pillsLeft: 15},
-                { name: 'Zinc',  schedule: '8:00AM',pillsLeft: 10},
+                { name: 'Midol', schedule: '8:00AM', dose: 1 },
+                { name: 'Vitamin C', schedule: '8:00AM', dose: 1},
+                { name: 'Zinc',  schedule: '8:00AM', dose: 1},
             ];
             setMedications(updatedMeds)
         }
@@ -19,20 +19,18 @@ function Home() {
 
 
     return(
-    <>
-    <div className="medications-page">
-    <NavBar />
-        <h1 className="page-name">Today</h1>
-        {medications.map((med) => (
-                <HomeCard 
-                    key={med.name} 
-                    name={med.name} 
-                    schedule={med.schedule} 
-                    pillsLeft={med.pillsLeft} 
-                />
-        ))}
-    </div>
-    </>
+        <div className="medications-page">
+            <h1 className="page-name">Today</h1>
+            {medications.map((med) => (
+                    <HomeCard 
+                        key={med.name} 
+                        name={med.name} 
+                        schedule={med.schedule} 
+                        dose={med.dose} 
+                    />
+            ))}
+            <NavBar />
+        </div>
     )
 }
 
