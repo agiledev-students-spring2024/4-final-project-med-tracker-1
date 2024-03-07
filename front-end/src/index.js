@@ -1,10 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import AddMedicine1 from "./components/AddMedicine1";
-import AddMedicine2 from "./components/AddMedicine2";
-import App from "./components/App"
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
 
-ReactDOM.render(
-  <AddMedicine2 />,
-  document.getElementById("root")
-)
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
