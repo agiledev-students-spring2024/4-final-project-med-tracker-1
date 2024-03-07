@@ -1,0 +1,46 @@
+.medication-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f0f0;
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
+    padding: 40px 50px;
+    margin: 20px 0;
+    width: 80%;
+    max-width: 55%;
+}
+
+.medication-info h1 {
+    text-align: left;
+    font-size: 30px;
+    margin: 10px 0 40px 10px;
+    color: #333;
+}
+
+.medication-info p {
+    background-color: lightgray;
+    color: #fff;
+    color: #333;
+    font-size: 24px;
+    width: 200px;
+    border-radius: 20px; 
+    padding: 8px 0;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.medication-info {
+    margin-bottom: 20px;
+}
+
+.medication-image {
+    width: 160px;
+    height: 160px;
+    background-color: #d3d3d3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid black;
+    margin-right: 20px;
+}
