@@ -1,108 +1,123 @@
+/* Reset default browser styles */
 body,
 html {
     height: 100%;
     margin: 0;
-
-    /* Assuming this is the background color you want */
     font-family: Arial, sans-serif;
-    /* or any other font-family you prefer */
+    background: #fff;
+    /* or any other preferred background color */
 }
 
+/* Style for the entire refill reminder page */
 .refill-reminder {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    padding: 32px;
-    /* Increased padding */
+    padding: 20px;
     box-sizing: border-box;
 }
 
+/* Header styling */
 .refill-reminder h1 {
-    margin: 2vh 0;
-    /* Increased space around the header */
-    font-size: 4vh;
-    /* Adjusted for more space */
+    margin-bottom: 30px;
+    /* Space between the header and the card */
+    font-size: 24px;
+    /* Adjust based on your design */
+    color: #000;
+    /* Color for the header */
 }
 
+/* Card styling */
 .medication-card {
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    padding: 16px;
-    /* Reduced padding for a smaller card */
-    margin: 3vh 0;
-    /* More vertical space between elements */
-    width: 60vw;
-    /* Reduced width */
-    max-width: 300px;
-    /* Smaller max-width */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    /* Light grey border */
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 200px;
+    margin-top: 50px;
+    /* Space between the card and the buttons */
+    width: 80%;
+    max-width: 350px;
+    /* Maximum width of the card */
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Center items inside the card */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Medication details within the card */
 .medication-details {
     display: flex;
-    justify-content: center;
-    /* Center horizontally */
+    width: 100%;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 2vh;
-    /* Added bottom margin */
+    margin-top: 20px;
+    /* Space above the medication details */
 }
 
-.medication-card h2 {
-    font-size: 3vh;
-    /* Smaller font size */
-}
-
+/* Medication name and pill count container */
+.medication-card h2,
 .pill-count {
-    background-color: #a9a9a9;
-    color: #fff;
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Pill count button */
+.pill-count {
+    background-color: #e0e0e0;
+    color: #000;
     border: none;
     border-radius: 15px;
-    padding: 10px 15px;
-    font-size: 2vh;
-    /* Smaller font size */
-    margin-right: 5vw;
-    /* Adjusted right margin */
+    padding: 10px 20px;
+    cursor: pointer;
+    /* Change cursor to signify clickable */
 }
 
+/* Placeholder for medication image */
 .medication-image {
-    width: 12vw;
-    /* Smaller image width */
-    height: 12vw;
-    /* Smaller image height */
-    background-color: #d3d3d3;
-    border-radius: 8px;
+    width: 60px;
+    /* Adjust based on your design */
+    height: 60px;
+    /* Adjust based on your design */
+    background-color: #d0d0d0;
+    /* Placeholder color */
+    border-radius: 10px;
 }
 
+/* Button styling */
 .refill-actions .refill-button {
-    background-color: #000;
-    color: #fff;
+    background-color: #000000;
+    /* Default color for buttons */
+    color: white;
     border: none;
-    border-radius: 8px;
-    padding: 12px;
-    /* Reduced padding */
-    margin: 2vh 0;
-    /* More vertical space between buttons */
-    width: 50vw;
-    /* Reduced button width */
+    border-radius: 10px;
+    padding: 15px 30px;
+    margin-top: 15px;
+    /* Space between buttons */
+    width: 80%;
+    /* Same width as the card for consistency */
     max-width: 250px;
-    /* Smaller max-width for buttons */
-    font-size: 2.5vh;
-    /* Smaller font size for buttons */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    /* Lighter shadow for a more subtle effect */
+    /* Maximum width of the buttons */
+    font-size: 18px;
+    cursor: pointer;
 }
 
+/* Color adjustments for specific buttons */
 .refill-button.confirm {
     background-color: #4CAF50;
-    /* Green color for confirm button */
+    /* Green color for confirm */
 }
 
+.refill-button.later,
+.refill-button.skip {
+    background-color: #000;
+    /* Black color for other actions */
+}
+
+/* Button hover effect */
 .refill-button:hover {
     opacity: 0.8;
 }
