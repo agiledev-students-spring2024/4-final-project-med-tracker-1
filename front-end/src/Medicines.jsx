@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
 import MedicationCard from './MedicationCard';
 import './Medicines.css';
@@ -19,11 +18,6 @@ const Medicines = () => {
         fetchMedications();
     }, [])
     
-    const navigate = useNavigate();
-    const navToEdit = (event) => {
-        event.preventDefault();
-        navigate('./edit-medicine')
-    }
     return(
         <><div className="medications-page">
             <h1 className="page-name">Medicines</h1>
@@ -34,7 +28,6 @@ const Medicines = () => {
                     name={med.name} 
                     pillsLeft={med.pillsLeft} 
                     schedule={med.schedule} 
-                    onClick={navToEdit}
                 />
             ))}
             <NavBar />  
