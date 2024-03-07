@@ -2,7 +2,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Reminder.css';
-import MedicationCard from './MedicationCard';
 
 const Reminder = () => {
     const navigate = useNavigate();
