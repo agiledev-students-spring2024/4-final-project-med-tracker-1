@@ -9,8 +9,8 @@
 
 .exit-button {
     position: absolute;
-    top: 10%;
-    right: 10%;
+    top: 80px;
+    right: 50px;
     width: 70px;
     height: 70px;
     font-size: 27px;
@@ -96,5 +96,64 @@
 }
 
 .med-info .select-dropdown option {
+    font-size: 20px; 
+}
+.set-reminder-page{
+    margin-top: 20%;
+}
+.intake-info{
+    gap: 10px;
+    margin-bottom: 50px;
+}
+.intake-info .form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.intake-info .form-group{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.intake-info .form-group label,
+.intake-info .form-group .input-label {
+    font-size: 40px;
+    margin-bottom: 15px; 
+    max-width: max-content;
+    margin-left: 24%;
+}
+
+.intake-info .form-group input,
+.intake-info .form-group select  {
+    font-size: 30px;
+    padding: 15px;
+    max-width: 500px; 
+    border: 5px solid black;
+    box-sizing: border-box;
+    margin-left: 24%;
+}
+
+.intake-info .form-group input:focus,
+.intake-info .form-group select:focus {
+    background-color: lightgrey;
+    outline: 3px solid #000000; 
+}
+
+.intake-info .form-group input:not(:last-child),
+.intake-info .form-group select:not(:last-child) {
+    margin-right: 10%; 
+}
+
+.intake-info .select-dropdown {
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.intake-info .select-dropdown option {
     font-size: 20px; 
 }

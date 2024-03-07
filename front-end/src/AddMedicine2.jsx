@@ -1,14 +1,15 @@
 import React, {useState} from "react";
 import { useNavigate } from 'react-router-dom'
 import Input from "./Input";
+import './AddMedicine.css'
 
 function Intake(props) {
     const [time, setTime] = useState('');
     const [dose, setDose] = useState('');
     return(
         <div className="intake-info">
-            <p className="input-label">Intake {props.cnt}</p>
             <div className="form-group">
+            <p className="input-label">Intake {props.cnt}</p>
             <label htmlFor="timePicker">Time</label>
             <Input 
                 type="time" 
@@ -50,15 +51,17 @@ function AddMedicine2() {
         event.preventDefault();
         navigate('/medicines')
     }
-    
+
     const handleFormSubmit = (event) => {
         event.preventDefault();
         navigate('/medicines')
     }
 
     return(
-        <div className="set-reminder">
-            <button type="button" onClick={handleExit} className="exit-button">X</button>
+        <>
+        <button type="button" onClick={handleExit} className="exit-button">X</button>
+        <div className="set-reminder-page">
+        <div className="intake-info">
             <form>
                 <div className="form-group">
                     <label htmlFor="frequency">Frequency of Intake</label>
@@ -74,7 +77,6 @@ function AddMedicine2() {
                     <option value="Other">Other</option>
                     </select>
                 </div>
-                <div className="opt-input">
                     {[1,2].includes(frequency) ? (
                         <br></br>
                     ) : (
@@ -89,25 +91,26 @@ function AddMedicine2() {
                             />
                         </div>
                     )}
-                </div>
                 <div className="intake-groups">
                     {[...Array(frequency)].map((_, index) => (
                         <Intake key={index} cnt={index + 1} />
                     ))}
                 </div>
                 <div className="form-group">
-                <label htmlFor="setRefill">Remind to refill when</label>
-                <Input 
-                    type="number" 
-                    id="setRefill" 
-                    value={refillAmt} 
-                    onChange={(e) => setRefillAmt(e.target.value)}
-                />
-                <p className="input-label">pill(s) left</p>
+                    <label htmlFor="setRefill">Remind to refill when</label>
+                    <Input 
+                        type="number" 
+                        id="setRefill" 
+                        value={refillAmt} 
+                        onChange={(e) => setRefillAmt(e.target.value)}
+                    />
+                    <p className="input-label">pill(s) left</p>
                 </div>
                 <button className="clickable-button" type="submit" onClick={handleFormSubmit}>Save</button> 
             </form>
         </div>
+        </div>
+        </>
     )
 }
 
