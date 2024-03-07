@@ -105,6 +105,9 @@
     gap: 10px;
     margin-bottom: 50px;
 }
+.add-medicine-page-2 .set-reminder-page {
+    margin-top: 5%;
+}
 .intake-info .form{
     display: flex;
     flex-direction: column;

@@ -10,6 +10,7 @@ import Medicines from './Medicines'
 import Setting from './Setting'
 import AddMedicine1 from './AddMedicine1'
 import AddMedicine2 from './AddMedicine2'
+import EditMedicine from './EditMedicine'
 import Reminder from './Reminder'
 import Refill from './Refill'
 import ForgetPassword from './ForgetPassword';
@@ -40,6 +41,8 @@ function App() {
               <Route path="/add-medicine-1" element={<AddMedicine1 />} />
               {/* a router for add medicine page two */}
               <Route path="/add-medicine-2" element={<AddMedicine2 />} />
+              {/* a router for edit medicine page */}
+              <Route path="/edit-medicine" element={<EditMedicine />} />
 
               {/* a router for setting page */}
               <Route path="/setting" element={<Setting />} />
