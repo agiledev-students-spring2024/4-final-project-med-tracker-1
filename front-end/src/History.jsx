@@ -19,13 +19,20 @@ function History() {
 
 
     return(
-    <><div className="medications-page">
-    <NavBar />
-        <h1>History</h1>
+    <>
+    <div className="medications-page">
+        <NavBar />
+        <h1 className="page-name">History</h1>
         {medications.map((med) => (
-                <HistoryCard key={med.name} name={med.name} pillsLeft={med.pillsLeft} schedule={med.schedule} date={med.date}/>
-            ))}
-            </div>
+                <HistoryCard 
+                    key={med.name} 
+                    name={med.name} 
+                    pillsLeft={med.pillsLeft} 
+                    schedule={med.schedule} 
+                    date={med.date}
+                />
+        ))}
+    </div>
     </>
     )
 }
