@@ -4,14 +4,28 @@
   margin-bottom: 70px;
 }
 
+.reminder-button {
+  padding: 10px 20px;
+  margin: 0;
+  background-color: #000000;
+  /* Example color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Adjust the position as needed based on your layout */
+}
+
 .clickable-button {
-    color: white;
-    text-decoration: none;
-    background-color: rgba(0, 0, 0, 0.9);
-    font-size: 30px;
-    padding: 20px 0;
-    width: 40%;
-    margin-bottom: 50px;
+  color: white;
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.9);
+  font-size: 30px;
+  padding: 20px 0;
+  width: 40%;
+  margin-bottom: 50px;
 }
 
 .medications-page {
