@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import NavBar from './NavBar';
 import HistoryCard from './HistoryCard'
-import './Medicines.css'
 
 function History() {
     const [medications, setMedications] = useState([]);
@@ -20,18 +19,27 @@ function History() {
 
     return(
     <>
-    <div className="medications-page">
-        <NavBar />
-        <h1 className="page-name">History</h1>
-        {medications.map((med) => (
-                <HistoryCard 
-                    key={med.name} 
-                    name={med.name} 
-                    pillsLeft={med.pillsLeft} 
-                    schedule={med.schedule} 
-                    date={med.date}
-                />
-        ))}
+    <div className="history-page">
+        <div className="half-color-bg">
+            <div className="page-header">
+                <h1 className="title">History</h1>
+                <p className="subtitle">Your history of medicine intakes</p>
+            </div>
+        </div>
+        <div className="body-container">   
+            <div className="medications-container">
+                {medications.map((med) => (
+                        <HistoryCard 
+                            key={med.name} 
+                            name={med.name} 
+                            pillsLeft={med.pillsLeft} 
+                            schedule={med.schedule} 
+                            date={med.date}
+                        />
+                ))}
+            </div>
+            <NavBar />
+        </div>   
     </div>
     </>
     )

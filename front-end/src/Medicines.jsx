@@ -19,19 +19,30 @@ const Medicines = () => {
     }, [])
     
     return(
-        <><div className="medications-page">
+        <div className="medications-page">
+            <div className="half-color-bg">
+                <div className="page-header">
+                    <h1 className="title">Medicines</h1>
+                    <p className="subtitle">A list of all your medicines</p>
+                </div>
+            </div>
+            <div className="body-container">
+                <Link className="add-med-button white-button" to="/add-medicine-1">Add a medicine</Link>
+                <div className="medications-container">
+                    {medications.map((med) => (
+                        <MedicationCard 
+                            key={med.name} 
+                            name={med.name} 
+                            pillsLeft={med.pillsLeft} 
+                            schedule={med.schedule} 
+                        />
+                    ))}
+                </div>
+                <NavBar />  
+            </div>            
             <h1 className="page-name">Medicines</h1>
-            <Link className="clickable-button" to="/add-medicine-1">Add a medicine</Link>
-            {medications.map((med) => (
-                <MedicationCard 
-                    key={med.name} 
-                    name={med.name} 
-                    pillsLeft={med.pillsLeft} 
-                    schedule={med.schedule} 
-                />
-            ))}
-            <NavBar />  
-        </div></>
+
+        </div>
     )
 }
 

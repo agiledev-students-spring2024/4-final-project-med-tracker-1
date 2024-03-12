@@ -1,5 +1,4 @@
 import React from 'react';
-import './HomeCard.css';
 
 const HomeCard = ({name, schedule, dose}) => {
     return (

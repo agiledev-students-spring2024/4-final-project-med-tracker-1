@@ -26,24 +26,34 @@ function Home() {
 
     return (
         <>
-            <div className="medications-page">
-                <NavBar />
-                <h1 className="page-name">Today</h1>
-                <button
-                    className="reminder-button"
-                    onClick={handleReminderButtonClick}
-                    // style={{ position: 'absolute', top: '20px', right: '20px' }}
-                >
-                    Reminder
-                </button>
-                {medications.map((med) => (
-                    <HomeCard
-                        key={med.name}
-                        name={med.name}
-                        schedule={med.schedule}
-                        dose={med.dose} 
-                    />
-                ))}
+            <div className="home-page">
+                <div className="half-color-bg">
+                    <div className="page-header">
+                        <h1 className="title">Hi, Katie!</h1>
+                        <p className="subtitle">February 14, 2024</p>
+                    </div>
+                </div>                
+                {/* <h1 className="page-name">Today</h1> */}
+                <div className="body-container">
+                    {/* <button
+                        className="reminder-button"
+                        onClick={handleReminderButtonClick}
+                        // style={{ position: 'absolute', top: '20px', right: '20px' }}
+                    >
+                        Reminder
+                    </button> */}
+                    <div className="medications-container">
+                        {medications.map((med) => (
+                            <HomeCard
+                                key={med.name}
+                                name={med.name}
+                                schedule={med.schedule}
+                                dose={med.dose} 
+                            />
+                        ))} 
+                    </div>                   
+                    <NavBar />
+                </div>                
             </div>
         </>
     );

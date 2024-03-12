@@ -1,5 +1,4 @@
 import React from 'react';
-import './HistoryCard.css';
 
 const HistoryCard = ({ name, pillsLeft, schedule, date }) => {
     return (

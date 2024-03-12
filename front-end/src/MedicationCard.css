@@ -7,8 +7,7 @@
     border-radius: 8px;
     padding: 20px 25px;
     margin: 20px 0;
-    width: 80%;
-    max-width: 55%;
+    min-width: 70%;
     cursor: pointer;
 }
 

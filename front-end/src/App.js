@@ -1,7 +1,9 @@
 import './App.css';
+import './Global.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import React from 'react'
 
+import Template from './Template'
 import Register from './Register'
 import Login from './Login'
 import Home from './Home'
@@ -23,6 +25,8 @@ function App() {
           <main className="App-main">
 
             <Routes>
+              {/* a router for the template page */}
+              <Route path="/template" element={<Template />} />
               {/* a router for the register page */}
               <Route path="/register" element={<Register />} />
               {/* a router for the login page */}
