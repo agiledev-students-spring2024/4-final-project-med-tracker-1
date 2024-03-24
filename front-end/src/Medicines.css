@@ -1,7 +1,20 @@
-.page-name {
-  font-size: 50px;
-  margin-top: 80px;
-  margin-bottom: 70px;
+
+.home-page .app-logo{
+    position: absolute;
+    right: 100px;
+    top: 150px;
+    width: 180px;
+    height: 180px;
+}
+
+.home-page h2{
+    text-align: left;
+    font-size: 52px;
+    font-family: Helvetica;
+    font-weight: normal;
+    position: relative;
+    top: 50px;
+    left: -160px;
 }
 
 .reminder-button {
@@ -17,25 +30,7 @@
     cursor: pointer;
 }
 
-.clickable-button {
-  color: white;
-  text-decoration: none;
-  background-color: rgba(0, 0, 0, 0.9);
-  font-size: 30px;
-  padding: 20px 0;
-  width: 40%;
-  margin-bottom: 50px;
-}
-
 .add-med-button {
-  color: #08475E;
-  font-size: 30px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  text-decoration: none;
-  background-color: white;
-  border: 1px solid #08475E;
-  border-radius: 10px;
-  min-width: 70%;
-  margin-top: 80px;
+  width: 80%;
+  margin-top: 40px;
 }

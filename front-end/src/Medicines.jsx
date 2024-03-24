@@ -27,7 +27,7 @@ const Medicines = () => {
                 </div>
             </div>
             <div className="body-container">
-                <Link className="add-med-button white-button" to="/add-medicine-1">Add a medicine</Link>
+                <Link className="add-med-button white-btn" to="/add-medicine-1">Add new medicine</Link>
                 <div className="medications-container">
                     {medications.map((med) => (
                         <MedicationCard 

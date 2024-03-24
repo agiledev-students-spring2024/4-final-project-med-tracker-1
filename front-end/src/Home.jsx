@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
 import HomeCard from './HomeCard';
+import logo from './icons/favicon.png'
 import './Medicines.css';
 
 function Home() {
@@ -25,37 +26,36 @@ function Home() {
     };
 
     return (
-        <>
-            <div className="home-page">
-                <div className="half-color-bg">
-                    <div className="page-header">
-                        <h1 className="title">Hi, Katie!</h1>
-                        <p className="subtitle">February 14, 2024</p>
-                    </div>
-                </div>                
-                {/* <h1 className="page-name">Today</h1> */}
-                <div className="body-container">
-                    {/* <button
-                        className="reminder-button"
-                        onClick={handleReminderButtonClick}
-                        // style={{ position: 'absolute', top: '20px', right: '20px' }}
+        <div className="home-page">
+            <div className="half-color-bg">
+                <img className="app-logo" src={logo} alt="app logo"/>
+                <div className="page-header">
+                    <h1 className="title">Hi, Katie!</h1>
+                    <p className="subtitle">February 14, 2024</p>
+                </div>
+            </div>                
+            <div className="body-container">
+                {/* <button
+                    className="reminder-button"
+                    onClick={handleReminderButtonClick}
                     >
                         Reminder
                     </button> */}
-                    <div className="medications-container">
-                        {medications.map((med) => (
-                            <HomeCard
-                                key={med.name}
-                                name={med.name}
-                                schedule={med.schedule}
-                                dose={med.dose} 
-                            />
-                        ))} 
-                    </div>                   
-                    <NavBar />
-                </div>                
-            </div>
-        </>
+                <h2>Today's Medicines</h2>
+                <div className="medications-container">
+                    {medications.map((med) => (
+                        <HomeCard
+                            key={med.name}
+                            name={med.name}
+                            schedule={med.schedule}
+                            dose={med.dose} 
+                        />
+                    ))} 
+                </div>                   
+                <NavBar />
+            </div>                
+        </div>
+
     );
 }
 
