@@ -6,10 +6,11 @@
   padding: 20px;
 }
 
-.login-page .page-name {
-  font-size: 50px;
-  margin-top: 80px;
-  margin-bottom: 100px;
+.login-page .app-logo{
+    margin-top: 360px;
+}
+.login-page .app-title{
+    color: #08475E;
 }
 
 .login-page .clickable-button {

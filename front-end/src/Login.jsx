@@ -1,19 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import logo from './icons/favicon.png'
 import './Login.css';
 
 const Login = () => {
     return (
-        <div className="login-page">
-            <h1 className="page-name">Login</h1>
+        <div className="full-white-bg login-page">
+            <img className="app-logo" src={logo} alt="app logo"/>
+            <h1 className="app-title">Med Tracker</h1>
             <form className="login-form">
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
-                    <input type="username" id="username" aria-describedby="usernameHelp" placeholder="Enter username" />
+                    <input className="input-box" type="username" id="username" aria-describedby="usernameHelp" placeholder="Enter username" />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input type="password" id="password" placeholder="Password" />
+                    <input className="input-box" type="password" id="password" placeholder="Password" />
                 </div>       
             </form>
             <Link to="/home" className="clickable-button">Log in</Link>

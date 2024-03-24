@@ -1,0 +1,34 @@
+.app-intro-pg{
+    display: block;
+    text-align: center;
+}
+.app-intro-pg .app-logo{
+    margin-top: 680px;
+    margin-bottom: 40px;
+}
+.app-intro-pg .app-title{
+  color: white;
+  margin: 0;
+  margin-bottom: 100px;
+}
+
+.app-intro-pg .app-description{
+  font-family: Helvetica;
+  font-size: 40px;
+  font-weight: lighter;
+  color: white;
+  max-width: 50%;
+  margin: auto;
+}
+
+.begin-btn{
+    text-decoration: none;
+    position: absolute;
+    bottom: 60px;
+    right: 60px;
+    font-size: 40px;
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+}

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import React from 'react'
 
 import Template from './Template'
+import AppIntro from './AppIntro'
 import Register from './Register'
 import Login from './Login'
 import Home from './Home'
@@ -27,6 +28,8 @@ function App() {
             <Routes>
               {/* a router for the template page */}
               <Route path="/template" element={<Template />} />
+              {/* a router for the app introduction page */}
+              <Route path="/app-intro" element={<AppIntro />} />                       
               {/* a router for the register page */}
               <Route path="/register" element={<Register />} />
               {/* a router for the login page */}
