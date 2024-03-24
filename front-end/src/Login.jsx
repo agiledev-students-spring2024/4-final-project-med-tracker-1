@@ -8,20 +8,16 @@ const Login = () => {
         <div className="full-white-bg login-page">
             <img className="app-logo" src={logo} alt="app logo"/>
             <h1 className="app-title">Med Tracker</h1>
-            <form className="login-form">
-                <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    <input className="input-box" type="username" id="username" aria-describedby="usernameHelp" placeholder="Enter username" />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input className="input-box" type="password" id="password" placeholder="Password" />
-                </div>       
+            <form className="input-form login-form">
+                <input className="input-box" type="username" id="username" aria-describedby="usernameHelp" placeholder="Username" />
+                <input className="input-box" type="password" id="password" placeholder="Password" />
+                <Link to="/forgetpassword" className="forget-btn">Forget Password?</Link>
+                <Link to="/home" className="blue-btn">Log in</Link>
             </form>
-            <Link to="/home" className="clickable-button">Log in</Link>
-            <br></br><br></br>
-            <Link to="/forgetpassword" className="clickable-button">Forget Password</Link>
-            <Link to="/register" className="clickable-button">Register</Link>      
+            <div className="register-container">
+                <p>Don't have an account?</p>
+                <Link to="/register" className="sign-up-btn">Sign up</Link> 
+            </div> 
         </div>
     );
 }

@@ -1,72 +1,66 @@
-.login-page {
+.login-page, .register-page {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 20px;
+  justify-content: center;
+  align-items: center; 
 }
 
-.login-page .app-logo{
-    margin-top: 360px;
-}
 .login-page .app-title{
     color: #08475E;
+    margin-bottom: 100px;
 }
 
-.login-page .clickable-button {
-    display: block; /* Makes sure it's treated as a block-level element */
-    margin-left: auto;
-    margin-right: auto;
-    color: white;
-    text-decoration: none;
-    background-color: rgba(0, 0, 0, 0.9);
-    font-size: 30px;
-    padding: 20px 0;
-    width: 40%;
-    margin-bottom: 40px;
+.login-page input{
+    margin: 0px;
 }
 
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
-    margin-bottom: 50px;
-    align-items: flex-start;
-    width: 100%;
-}
-
-.login-form .form-group {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; 
-    width: 100%;
-    margin-bottom: 5%;
-}
-
-.login-form .form-group label {
+.login-page .forget-btn {
+    color: #08475E;
     font-size: 40px;
-    margin-bottom: 15px; 
-    max-width: max-content;
-    margin-left: 24%;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 40px;
 }
 
-.login-form .form-group input {
-    font-size: 30px;
-    padding: 15px;
-    max-width: 500px; 
-    border: 5px solid black;
-    box-sizing: border-box;
-    margin-left: 24%;
+.register-container{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 
-.login-form .form-group input:focus {
-    background-color: lightgrey;
-    outline: 3px solid #000000; 
+.register-container p{
+    font-size: 40px;
+    color: #626262;
 }
 
+.register-container .sign-up-btn{
+    text-decoration: none;
+    font-size: 40px;
+    color: #08475E;
+    font-weight: bold;
+    display: inline;
+    margin-left: 20px;
+}
 
-.form-group input:not(:last-child),
-.form-group select:not(:last-child) {
-    margin-right: 10%; 
+.register-page .app-logo{
+    position: absolute;
+    left: 80px;
+    top: 100px;
+    width: 180px;
+    height: 180px;
+}
+.register-page h2{
+    color: #626262;
+    font-size: 65px;
+    font-weight: normal;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+.register-page .app-title{
+    color: #08475E;
+    margin-top: 0px;
+    margin-bottom: 100px;
+}
+.register-page .blue-btn{
+    margin-top: 80px;
 }
