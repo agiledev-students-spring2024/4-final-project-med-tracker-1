@@ -7,14 +7,6 @@
     /* box-sizing: border-box;  */
     position: relative;
 }
-.add-medicine-page-2 {
-    background: white;
-    width: 100%;
-    margin: auto;
-    padding: 20px;
-    box-sizing: border-box; 
-    position: relative;
-}
 
 .add-medicine-page-1-2 .exit-button {
     position: absolute;

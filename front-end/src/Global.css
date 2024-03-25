@@ -24,6 +24,16 @@
   left: 0;
 }
 
+.pop-up-white-bg {
+  background-color: #F0EEEE;
+  min-height: 100%;
+  min-width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 80px;
+}
+
 .page-header {
   position: fixed;
   display: flex;
@@ -89,7 +99,8 @@
   width: 100%;
 }
 
-input{
+input, select, .input-group {
+  background-color: white;
   box-sizing: border-box;
   margin: 0px;
   font-size: 40px;
@@ -97,6 +108,14 @@ input{
   padding: 25px;
   border: 5px solid #08475E;
   border-radius: 25px;
+  cursor: pointer;
+}
+
+.form-group label {
+  display: block;
+  font-size: 40px;
+  margin-bottom: 12px;
+  margin-left: 8px;
 }
 
 .blue-btn{
@@ -128,6 +147,27 @@ input{
   border-radius: 25px;
 }
 
+.round-btn {
+  font-size: 40px;
+  background-color: #08475E;
+  color: white;
+  border-radius: 80px;
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+}
+
+.exit-btn{
+  position: absolute;
+  top: 100px;
+  right: 60px;
+}
+
+.prev-btn {
+  position: absolute;
+  top: 100px;
+  left: 60px;
+}
 
 .medications-container {
   display: flex;
@@ -157,7 +197,8 @@ input{
 }
 
 .medication-info p {
-  background-color: rgb(211, 225, 226);
+  text-align: center;
+  background-color: #D3E1E2;
   color: #333;
   font-size: 30px;
   width: 250px;

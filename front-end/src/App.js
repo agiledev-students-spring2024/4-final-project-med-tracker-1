@@ -11,8 +11,7 @@ import Home from './Home'
 import History from './History'
 import Medicines from './Medicines'
 import Setting from './Setting'
-import AddMedicine1 from './AddMedicine1'
-import AddMedicine2 from './AddMedicine2'
+import {AddMedicine1, AddMedicine2, AddMedicine3} from './AddMedicine'
 import EditMedicine from './EditMedicine'
 import Reminder from './Reminder'
 import ForgetPassword from './ForgetPassword';
@@ -47,6 +46,8 @@ function App() {
               <Route path="/add-medicine-1" element={<AddMedicine1 />} />
               {/* a router for add medicine page two */}
               <Route path="/add-medicine-2" element={<AddMedicine2 />} />
+              {/* a router for add medicine page three */}
+              <Route path="/add-medicine-3" element={<AddMedicine3 />} />
               {/* a router for edit medicine page */}
               <Route path="/edit-medicine" element={<EditMedicine />} />
 

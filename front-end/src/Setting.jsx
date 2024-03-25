@@ -1,6 +1,5 @@
 import React from 'react';
 import NavBar from './NavBar';
-import "./Setting.css" 
 import { Link } from 'react-router-dom';
 
 const Setting = () => {
