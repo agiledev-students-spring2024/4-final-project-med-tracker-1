@@ -1,101 +1,25 @@
-.reminder-page {
-    font-family: Arial, sans-serif;
+.reminder-page .app-title{
+    margin-top: 100px;
+}
+
+.reminder-container{
+    gap: 30px;
+}
+.reminder-btn-container{
+    gap: 30px;
+    margin-top: 100px;
+}
+
+.reminder-page .reminder-info .field-name{
+    font-size: 40px;
+    font-weight: bold;
+    color: #08475E;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    min-height: 100vh;
-    /* Ensures that the flex container takes at least the full height of the viewport */
-    justify-content: center;
-    /* Centers content vertically within the entire page */
 }
 
-.reminder-page .header {
-    width: 100%;
-    margin-bottom: 32px;
-    /* Adjust the space between the header and the cards */
-}
-
-.reminder-page .card {
-    background-color: #f7f7f7;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 10px;
-    /* Adjust space between cards if needed */
-    width: 80%;
-    /* Adjust width to match your design */
-    display: flex;
-    justify-content: space-between;
-    /* Aligns children to the left and right */
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Optional: adds shadow for depth */
-}
-
-.reminder-page .card h2 {
-    font-size: 1.5em;
-    color: #000;
-    text-align: left;
-    /* Ensures text aligns to the left */
-    margin: 0;
-    flex-grow: 1;
-    /* Allows the text to take up available space */
-}
-
-.reminder-page .card .pill div,
-.reminder-page .card .dose div,
-.reminder-page .card .time div {
-    font-size: 1.2em;
+.reminder-page .reminder-info .entry{
+    font-size: 40px;
+    font-weight: normal;
     color: #333;
-    min-width: 100px;
-    text-align: right;
-    /* Aligns secondary information to the right */
-}
-
-.reminder-page .medication h2,
-.reminder-page.dose h2,
-.reminder-page .time h2 {
-    font-size: 1.5em;
-    margin: 0;
-}
-
-.reminder-page .pill-count,
-.reminder-page .dose div,
-.reminder-page .time div {
-    font-size: 1.2em;
-    color: #333;
-}
-
-.reminder-page .buttons {
-    margin-top: 20%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: calc(100% - 40px);
-    /* Ensure the buttons are the same width as the cards */
-}
-
-.reminder-page .clickable-button {
-    background-color: rgba(0, 0, 0, 0.9);
-    color: white;
-    padding: 20px 0;
-    /* Add padding top and bottom */
-    font-size: 1em;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    width: 100%;
-    /* Buttons will expand to the full width available */
-    margin-bottom: 16px;
-    /* Adjust the space between the buttons */
-}
-
-.reminder-page .clickable-button:last-child {
-    margin-bottom: 0;
-    /* Removes bottom margin for the last button */
-}
-
-.reminder-page .clickable-button:active {
-    background-color: #333;
+    padding: 20px;
 }

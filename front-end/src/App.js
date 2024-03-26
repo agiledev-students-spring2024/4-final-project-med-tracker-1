@@ -28,11 +28,11 @@ function App() {
               {/* a router for the template page */}
               <Route path="/template" element={<Template />} />
               {/* a router for the app introduction page */}
-              <Route path="/app-intro" element={<AppIntro />} />                       
+              <Route path="/" element={<AppIntro />} />                       
               {/* a router for the register page */}
               <Route path="/register" element={<Register />} />
               {/* a router for the login page */}
-              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
 
               {/* a router for the home page */}
               <Route path="/home" element={<Home />} />
@@ -58,11 +58,11 @@ function App() {
               <Route path="/reminder" element={<Reminder />} />
               {/* a router for refill reminder page */}
               <Route path="/refill-reminder" element={<RefillReminder />} />
-
-            {/* a router for the forget password page */}
-            <Route path="/forgetpassword" element={<ForgetPassword />} />
-
+              {/* a router for the forget password page */}
+              <Route path="/forgetpassword" element={<ForgetPassword />} />
+              
             </Routes>
+
           </main>
         </Router>
       </div>

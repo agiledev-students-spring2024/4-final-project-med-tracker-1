@@ -9,7 +9,7 @@ const AppIntro = () => {
             <img className="app-logo" src={logo} alt="app logo"/>
             <h1 className="app-title">Med Tracker</h1>
             <p className="app-description">Your Personalized Medicine Management App</p>
-            <Link className="begin-btn" to="/">Begin &gt;</Link>
+            <Link className="begin-btn" to="/login">Begin &gt;</Link>
         </div>
     );
 };
