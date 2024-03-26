@@ -32,9 +32,14 @@
     bottom: 100px;
 }
 
-.add-medicine-page-2 .med-info-form,
-.add-medicine-page-3 .med-info-form {
+.add-medicine-page-2 .med-info-form {
     margin-top: 35%;
+    align-items: flex-start;
+    gap: 80px;
+}
+
+.add-medicine-page-3 .med-info-form {
+    margin-top: 25%;
     align-items: flex-start;
     gap: 80px;
 }
@@ -111,12 +116,21 @@
   margin: 12px;
   padding: 18px 25px;
   cursor: pointer;
-  border: 1px solid #ccc; 
   border-radius: 25px; 
   background-color: rgb(237, 237, 237);
 }
 
+.days li:focus,
+.days li:active,
+.days li.selected {
+  background-color: #D3E1E2;
+}
+
+.days li.unselected {
+    background-color: rgb(237, 237, 237);
+}
 .intake-card {
     padding: 60px 60px;
     margin-top: 40px;
 }
+

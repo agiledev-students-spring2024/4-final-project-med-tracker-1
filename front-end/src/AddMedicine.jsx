@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import Input from "./Input";
 import './AddMedicine.css'
@@ -79,35 +79,6 @@ export const AddMedicine1 = () => {
   );
 }
 
-function Intake(props) {
-    const [time, setTime] = useState('');
-    const [dose, setDose] = useState('');
-    return(
-        <div className="intake-info">
-            <div className="form-group">
-            <p className="input-label">Intake {props.cnt}</p>
-            <label htmlFor="timePicker">Time</label>
-            <Input 
-                type="time" 
-                id="timePicker" 
-                value={time} 
-                step="300"
-                onChange={(e) => setTime(e.target.value)}
-            />
-            </div>
-            <div className="form-group">
-            <label htmlFor="dosePicker">Dose</label>
-            <Input 
-                type="number" 
-                id="dosePicker" 
-                value={dose} 
-                onChange={(e) => setDose(e.target.value)}
-            />
-            </div>
-        </div>
-    )
-}
-
 export const AddMedicine2 = () => {
     const [frequency, setFrequency] = useState('');  
     const [refillAmt, setRefillAmt] = useState('');
@@ -147,8 +118,7 @@ export const AddMedicine2 = () => {
     function SelectDaysOfWeek() {
       const [selectedDays, setSelectedDays] = useState([]);
 
-      const toggleDay = (event, index) => {
-        event.preventDefault()
+      const toggleDay = (index) => {
         setSelectedDays((prevSelectedDays) =>
           prevSelectedDays.includes(index)
             ? prevSelectedDays.filter(d => d !== index) 
@@ -168,8 +138,8 @@ export const AddMedicine2 = () => {
                 key={index} 
                 tabIndex="0" 
                 role="button" 
-                className={selectedDays.includes(index) ? 'selected' : ''} 
-                onClick={(event) => toggleDay(event, index)}
+                className={selectedDays.includes(index) ? 'selected' : 'unselected'} 
+                onClick={() => toggleDay(index)}
                 onKeyDown={(e) => (e.key === 'Enter' ? toggleDay(index) : null)}
               >
                 {day}
@@ -178,6 +148,23 @@ export const AddMedicine2 = () => {
           </ul>
         </div>
       );
+    }
+
+    function SelectNumIntake() {
+      const [numIntake, setNumIntake] = useState('');
+      return(
+        <div className="interval-of-intake">
+          <label>Select Number of Intakes Per Day</label>
+          <div className="input-group">
+            <Input 
+              type="number" 
+              min="1" value={numIntake} 
+              onChange={e => setNumIntake(e.target.value)} 
+            />
+            <span>intake(s)</span>
+          </div>
+        </div>    
+      ) 
     }
 
     return(
@@ -239,6 +226,11 @@ export const AddMedicine2 = () => {
                   <SelectDaysOfWeek/>
                 )}               
               </div> 
+              <div className="form-group frequency-of-intake num-intake-input">
+                {frequency !== 'as-needed' && (
+                  <SelectNumIntake />
+                )}            
+              </div> 
               <button className="blue-btn next-btn" type="submit" onClick={handleFormSubmit}>Next</button> 
             </form>
           </div>
@@ -247,68 +239,81 @@ export const AddMedicine2 = () => {
 }
 
 export const AddMedicine3 = () => {
-  const [intakeList, setIntakeList] = useState([]);
-  const navigate = useNavigate(); 
+  const [intakeList, setIntakeList] = useState(Array(3).fill().map(() => ({dose: '', time: ''})));
+  const navigate = useNavigate();
+
   const handleExit = (event) => {
-      event.preventDefault();
-      navigate('/medicines')
-  }    
+    event.preventDefault();
+    navigate('/medicines');
+  };
+
   const navPrev = (event) => {
     event.preventDefault();
-    navigate('/add-medicine-2')
-  }
+    navigate('/add-medicine-2');
+  };
 
-  const NewIntake = (props) => {
-    const [dose, setDose] = useState('');
-    const [time, setTime] = useState('')
-    return(
-      <div className="intake-card medication-card input-form">
-          <div className="form-group refill-input">
-            <label htmlFor="dose">Dose</label>
-            <div className="input-group">
-              <Input
-                type="number"
-                id="dose"
-                placeholder="1"
-                value={dose}
-                onChange={(e) => setDose(e.target.value)} />
-              <span className="input-label">{props.unit}</span>
-            </div>
-          </div>
-          <div className="form-group intake-time">
-            <label htmlFor="time">Time</label>
-            <Input
-              type="time"
-              id="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)} />
-          </div>
-
-          
-      </div>
-    )
-  }
-  const handleAddIntake = () => {
-    setIntakeList(prevIntakeList => [...prevIntakeList, {}]);
-  }
+  const updateDose = (index, doseVal) => {
+    setIntakeList(prevIntakeList =>
+      prevIntakeList.map((intake, i) =>
+        i === index ? { dose: doseVal, time: intake.time } : intake
+      )
+    );
+  };
   
+  const updateTime = (index, timeVal) => {
+    setIntakeList(prevIntakeList =>
+      prevIntakeList.map((intake, i) =>
+        i === index ? { dose: intake.dose, time: timeVal } : intake
+      )
+    );
+  };
+
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    navigate('/medicines')
-  }
-  return(
+    navigate('/medicines');
+  };
+
+  const Intake = ({ index, intake, unit }) => {
+    return (
+      <div className="intake-card medication-card input-form">
+        <div className="form-group refill-input">
+          <label htmlFor={`dose-${index}`}>Dose</label>
+          <div className="input-group">
+            <Input
+              type="number"
+              id={`dose-${index}`}
+              placeholder="1"
+              value={intake.dose}
+              onChange={e => updateDose(index, e.target.value)}
+            />
+            <span className="input-label">{unit}</span>
+          </div>
+        </div>
+        <div className="form-group intake-time">
+          <label htmlFor={`time-${index}`}>Time</label>
+          <Input
+            type="time"
+            id={`time-${index}`}
+            value={intake.time}
+            onChange={e => updateTime(index, e.target.value)}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  return (
     <div className="add-medicine-page-3 full-color-bg">
       <div className="pop-up-white-bg med-input-container">
         <button className="round-btn exit-btn" type="button" onClick={handleExit}>X</button>
         <button className="round-btn prev-btn" type="button" onClick={navPrev}>&lt;</button>
-        <form className="intake-list-container med-info-form">
-          <button className="white-btn" type="button" onClick={handleAddIntake}>Add One Intake</button>
-            {intakeList.map((index) => (
-              <NewIntake key={index} unit="pill(s)"/>
-            ))}
-          <button className="blue-btn next-btn" type="submit" onClick={handleFormSubmit}>Save</button>
-        </form>  
+        <form className="intake-list-container med-info-form" onSubmit={handleFormSubmit}>
+          {intakeList.map((intake, index) => (
+            <Intake key={index} index={index} intake={intake} unit="pill(s)" />
+          ))}
+          <button className="blue-btn next-btn" type="submit">Save</button>
+        </form>
       </div>
     </div>
-  )
-}
+  );
+};

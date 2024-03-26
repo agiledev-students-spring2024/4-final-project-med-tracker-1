@@ -84,7 +84,7 @@
   font-weight: lighter;
 }
 
-.input-form{
+.input-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -93,6 +93,11 @@
   margin-top: 20px;
   margin-bottom: 50px;
   width: 80%;
+}
+
+.settings-form {
+  margin-top: 80px;
+  gap: 60px;
 }
 
 .input-form .form-group{

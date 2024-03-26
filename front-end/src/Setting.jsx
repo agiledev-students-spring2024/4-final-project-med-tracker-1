@@ -1,12 +1,23 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import NavBar from './NavBar';
 import { Link } from 'react-router-dom';
 
 const Setting = () => {
+    const [settings, setSettings] = useState('');
+    useEffect(() => {
+        const fetchSettings = async() => {
+            const updatedSettings = { 
+                firstName: 'Katie', 
+                username: 'ky7821@nyu.edu', 
+                password: 'katie0918'
+            };
+            setSettings(updatedSettings)
+        }
+        fetchSettings();
+    }, [])
+
     return(
-        <>
-        <NavBar />
-        <div className="setting-page login-page"> 
+        <div className="setting-page"> 
             <div className="half-color-bg">
                 <div className="page-header">
                     <h1 className="title">Setting</h1>
@@ -14,30 +25,28 @@ const Setting = () => {
                 </div>
             </div>
             <div className="body-container">
-                <form className="login-form">
+                <form className="input-form settings-form">
                     <div className="form-group">
-                        <label htmlFor="username">Username</label>
-                        <input type="username" id="username" placeholder="Enter username" />
+                        <label htmlFor="firstName">Preferred first name</label>
+                        <input type="firstName" id="firstName" placeholder={settings.firstName} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="emergencycontact">Emergency contact</label>
-                        <input type="name" id="name" placeholder="Enter contact name" />
-                        <input type="phone" id="phone" placeholder="Enter contact phone number" />
+                        <label htmlFor="username">Username (Email)</label>
+                        <input type="username" id="username" placeholder={settings.username} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" placeholder="Enter password" />
+                        <input type="password" id="password" placeholder={settings.password} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Confirm password</label>
                         <input type="password" id="confirm-password" placeholder="Password" />
                     </div>
-                    <Link to="/home" className="clickable-button">Save</Link>
+                    <Link to="/home" className="blue-btn">Save</Link>
                 </form>
                 <NavBar />
             </div>
         </div>
-        </>
     )
 }
 
