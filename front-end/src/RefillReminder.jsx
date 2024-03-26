@@ -1,25 +1,56 @@
-import React from 'react';
-import './RefillReminder.css'; // make sure to create a corresponding CSS file
+import React, {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const RefillReminder = () => {
+const RefillCard = ({ name, photo, unit, totalAmt}) => {
     // Logic for handling reminders could be added here
-
     return (
-        <div className="refill-reminder">
-            <h1>Time to Refill</h1>
-            <div className="medication-card">
-                <h2>Zinc</h2>
-                <div className="medication-details">
-                    <button className="pill-count">10 pill(s) left</button>
-                    <div className="medication-image"></div>
-                </div>
+        <div className="medication-card">
+            <div className="medication-info">
+                <h1>{name}</h1>
+                <p>{totalAmt} {unit} left</p>
             </div>
-            <div className="refill-actions">
-                <button className="refill-button confirm">Confirm</button>
-                <button className="refill-button later">Later</button>
-                <button className="refill-button skip">Skip</button>
+            <div className="medication-image" url={photo}>
+                {/* Placeholder for medication image */}
             </div>
         </div>
+    );
+};
+
+const RefillReminder = () => {
+    const [med, setMed] = useState('')
+    useEffect(() => {
+        const fetchMed = async() => {
+            // use intake.medName to find information regarding the medication
+            const updatedMed = { medName: 'Zinc', photo: 'photoURL', unit: 'pill(s)', totalAmt: 35}
+            setMed(updatedMed);
+        }
+        fetchMed();
+    }, [])
+    const navigate = useNavigate();
+
+    const handleButtonClick = () => {
+        navigate('/home'); // This will navigate to the home route
+    };
+
+    return (
+        <div className="refill-reminder full-color-bg">
+            <div className="pop-up-white-bg register-page">
+                <h1 className="app-title">Time to Refil</h1>
+                <div className="reminder-container medications-container">
+                    <RefillCard 
+                        name={med.medName}
+                        photo={med.photo}
+                        unit={med.unit}
+                        totalAmt={med.totalAmt}
+                    />
+                </div>
+                <div className="reminder-btn-container medications-container">
+                    <button onClick={handleButtonClick} className="blue-btn">Confirm</button>
+                    <button onClick={handleButtonClick} className="white-btn">Later</button>
+                    <button onClick={handleButtonClick} className="white-btn">Skip</button>
+                </div>    
+            </div>
+        </div >
     );
 };
 

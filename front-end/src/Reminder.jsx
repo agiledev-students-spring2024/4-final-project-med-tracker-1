@@ -9,7 +9,6 @@ const ReminderCard = ({ name, photo, unit, totalAmt, dose, time }) => {
                 <div className="medication-info">
                     <h1>{name}</h1>
                     <p>{totalAmt} {unit} left</p>
-                    {/* <p>{time}</p> */}
                 </div>
                 <div className="medication-image" url={photo}>
                     {/* Placeholder for medication image */}
