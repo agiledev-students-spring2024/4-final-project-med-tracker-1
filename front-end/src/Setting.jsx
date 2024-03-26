@@ -42,7 +42,7 @@ const Setting = () => {
                         <label htmlFor="password">Confirm password</label>
                         <input type="password" id="confirm-password" placeholder="Password" />
                     </div>
-                    <Link to="/home" className="blue-btn">Save</Link>
+                    <Link to="/home" className="save-btn blue-btn">Save</Link>
                 </form>
                 <NavBar />
             </div>
