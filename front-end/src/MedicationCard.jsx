@@ -6,7 +6,7 @@ const MedicationCard = ({ name, pillsLeft, schedule }) => {
     const navToEdit = (event, name) => {
         event.preventDefault();
         // send the med name to backend
-        navigate('/edit-medicine')
+        navigate('/edit-medicine-1')
     }
     return (
         <div className="medication-card" 

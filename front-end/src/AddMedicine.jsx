@@ -106,10 +106,6 @@ export const AddMedicine2 = () => {
     fetchMedicine();
   }, []); 
 
-  const handleFrequency = value => {
-    setFrequency(value)
-  }
-
   const handleExit = (event) => {
       event.preventDefault();
       navigate('/medicines')
@@ -125,12 +121,11 @@ export const AddMedicine2 = () => {
       medName: med.medName, 
       refillAmt: refillAmt, 
       frequency: frequency,
-      ...(frequency === 'regular' && { interval: interval }),
-      ...(frequency === 'specific' && { daysOfWeek: selectedDays }),
-      ...(frequency !== 'as-needed' && { numIntake: numIntake })
+      interval: interval,
+      selectedDays: selectedDays,
+      numIntake: numIntake
     }
     console.log(newMedInfo);
-    console.log(newMedInfo.daysOfWeek);
     navigate('/add-medicine-3')
   }
 
@@ -227,8 +222,8 @@ export const AddMedicine2 = () => {
                   tabIndex="0" 
                   role="button" 
                   className={frequency === 'regular' ? 'active' : ''}
-                  onClick={() => handleFrequency('regular')}
-                  onKeyDown={(e) => (e.key === 'Enter' ? handleFrequency('regular') : null)}
+                  onClick={() => setFrequency('regular')}
+                  onKeyDown={(e) => (e.key === 'Enter' ? setFrequency('regular') : null)}
                 >
                   Regular interval
                 </li>
@@ -236,8 +231,8 @@ export const AddMedicine2 = () => {
                   tabIndex="0" 
                   role="button" 
                   className={frequency === 'specific' ? 'active' : ''}
-                  onClick={() => handleFrequency('specific')}
-                  onKeyDown={(e) => (e.key === 'Enter' ? handleFrequency('specific') : null)}
+                  onClick={() => setFrequency('specific')}
+                  onKeyDown={(e) => (e.key === 'Enter' ? setFrequency('specific') : null)}
                 >
                   Specific days of week
                 </li>
@@ -245,8 +240,8 @@ export const AddMedicine2 = () => {
                   tabIndex="0" 
                   role="button" 
                   className={frequency === 'as-needed' ? 'active' : ''}
-                  onClick={() => handleFrequency('as-needed')}
-                  onKeyDown={(e) => (e.key === 'Enter' ? handleFrequency('as-needed') : null)}
+                  onClick={() => setFrequency('as-needed')}
+                  onKeyDown={(e) => (e.key === 'Enter' ? setFrequency('as-needed') : null)}
                 >
                   As needed
                 </li>
@@ -284,6 +279,8 @@ export const AddMedicine3 = () => {
       unit: "pill(s)",
       refillAmt: 10,
       frequency: 'specific',
+      interval: '',
+      selectedDays: [2, 4],
       numIntake: 2
     }
     setMed(updatedMed);
@@ -326,7 +323,8 @@ export const AddMedicine3 = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    console.log(intakeList);
+    const newMedInfo = {medName: med.medName, intakeList: intakeList};
+    console.log(newMedInfo);
     navigate('/medicines');
   };
 
