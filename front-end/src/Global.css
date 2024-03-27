@@ -96,17 +96,6 @@
   width: 80%;
 }
 
-.settings-form {
-  margin-top: 80px;
-  gap: 60px;
-}
-
-.settings-form .save-btn {
-  position: absolute;
-  width: 80%;
-  bottom: 300px;
-}
-
 .input-form .form-group{
   width: 100%;
 }
@@ -232,4 +221,10 @@ input, select, .input-group {
   align-items: center;
   border-radius: 25px;
   margin: 30px 50px 30px 30px;
+}
+
+.error-message {
+  color: red;
+  font-size: 40px;
+  margin: 10px 0;
 }

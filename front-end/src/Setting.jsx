@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import NavBar from './NavBar';
 import { Link } from 'react-router-dom';
+import './Setting.css'
 
 const Setting = () => {
     const [settings, setSettings] = useState('');
@@ -32,17 +33,10 @@ const Setting = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="username">Username (Email)</label>
-                        <input type="username" id="username" placeholder={settings.username} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input type="password" id="password" placeholder={settings.password} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Confirm password</label>
-                        <input type="password" id="confirm-password" placeholder="Password" />
+                        <input type="username" id="username" defaultValue={settings.username} />
                     </div>
                     <Link to="/home" className="save-btn blue-btn">Save</Link>
+                    <Link to="/forget-password" className="white-btn">Change password</Link>
                 </form>
                 <NavBar />
             </div>
