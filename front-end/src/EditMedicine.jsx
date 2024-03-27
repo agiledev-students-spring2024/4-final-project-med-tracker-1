@@ -33,7 +33,7 @@ function Intake(props) {
   )
 }
 
-function EditMedicine(){
+export const EditMedicine = () => {
   const [medName, setMedName] = useState('');
   const [totalAmount, setTotalAmount] = useState('');
   const [unit, setUnit] = useState('');    
@@ -173,6 +173,4 @@ function EditMedicine(){
         </>
 
         )
-        }
-
-        export default EditMedicine;
+}

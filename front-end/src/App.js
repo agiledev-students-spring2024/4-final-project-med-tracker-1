@@ -12,7 +12,7 @@ import History from './History'
 import Medicines from './Medicines'
 import Setting from './Setting'
 import {AddMedicine1, AddMedicine2, AddMedicine3} from './AddMedicine'
-import EditMedicine from './EditMedicine'
+import {EditMedicine} from './EditMedicine'
 import Reminder from './Reminder'
 import {ForgetPassword, ResetPassword} from './ForgetPassword';
 import RefillReminder from './RefillReminder';
