@@ -232,3 +232,9 @@ input, select, .input-group {
   border-radius: 25px;
   margin: 30px 50px 30px 30px;
 }
+
+.error-message {
+  color: red;
+  font-size: 40px;
+  margin: 10px 0;
+}

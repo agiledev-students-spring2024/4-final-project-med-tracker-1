@@ -64,3 +64,11 @@
 .register-page .blue-btn{
     margin-top: 80px;
 }
+
+.forget-password-page h2{
+    font-size: 55px;
+}
+
+.forget-password-page .app-title{
+    margin-bottom: 200px;
+}
