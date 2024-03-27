@@ -69,7 +69,6 @@
     outline: none;
 }
 
-
 .frequency-of-intake .options {
   list-style: none;
   background-color: white;
@@ -127,10 +126,15 @@
 }
 
 .days li.unselected {
-    background-color: rgb(237, 237, 237);
+  background-color: rgb(237, 237, 237);
 }
 .intake-card {
-    padding: 60px 60px;
-    margin-top: 40px;
+  padding: 60px 60px;
+  margin-top: 40px;
 }
 
+.edit-medicine-page-1 .med-image {
+  width: 75%;
+  margin-top: 27%;
+  margin-bottom: 60px;
+}

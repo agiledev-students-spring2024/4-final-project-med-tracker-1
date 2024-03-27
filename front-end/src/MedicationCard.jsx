@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 
 const MedicationCard = ({ name, pillsLeft, schedule }) => {
     const navigate = useNavigate();
-    const navToEdit = (event) => {
+    const navToEdit = (event, name) => {
         event.preventDefault();
-        navigate('/edit-medicine')
+        // send the med name to backend
+        navigate('/edit-medicine-1')
     }
     return (
-        <div className="medication-card" onClick={navToEdit}>
+        <div className="medication-card" 
+            onClick={event => navToEdit(event, name)}
+        >
             <div className="medication-info">
                 <h1>{name}</h1>
                 <p>{pillsLeft} pill(s) left</p>

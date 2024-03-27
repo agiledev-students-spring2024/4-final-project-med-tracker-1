@@ -41,7 +41,6 @@ const Medicines = () => {
                 <NavBar />  
             </div>            
             <h1 className="page-name">Medicines</h1>
-
         </div>
     )
 }
