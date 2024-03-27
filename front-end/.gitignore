@@ -12,7 +12,7 @@
 /build
 
 # misc
-.DS_Store
+.DS_Storet
 # .env.local
 # .env.development.local
 # .env.test.local

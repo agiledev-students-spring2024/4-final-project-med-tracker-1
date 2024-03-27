@@ -91,10 +91,10 @@ build/
 .pnp.js
 
 # dotconfig artifacts
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# .env.local
+# .env.development.local
+# .env.test.local
+# .env.production.local
 
 # TypeScript v1 declaration files
 typings/
