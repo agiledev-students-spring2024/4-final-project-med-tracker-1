@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import NavBar from './NavBar';
 import MedicationCard from './MedicationCard';
@@ -6,14 +7,20 @@ import './Medicines.css';
 
 const Medicines = () => {
     const [medications, setMedications] = useState([]);
+    const [error, setError] = useState('');
+
     useEffect(() => {
-        const fetchMedications = async() => {
-            const updatedMeds = [
-                { name: 'Midol', pillsLeft: 26, schedule: 'Once daily' },
-                { name: 'Vitamin C', pillsLeft: 15, schedule: 'Take as Needed' },
-                { name: 'Zinc', pillsLeft: 10, schedule: 'Once daily' },
-            ];
-            setMedications(updatedMeds)
+        const fetchMedications = () => {
+            axios
+                .get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicines`)
+                .then(response => {
+                    const updatedMedList = response.data.medList;
+                    setMedications(updatedMedList)
+                })
+                .catch(err => {
+                    const errMsg = JSON.stringify(err, null, 2) // convert error object to a string
+                    setError(errMsg)
+                })
         }
         fetchMedications();
     }, [])
@@ -31,12 +38,15 @@ const Medicines = () => {
                 <div className="medications-container">
                     {medications.map((med) => (
                         <MedicationCard 
-                            key={med.name} 
-                            name={med.name} 
-                            pillsLeft={med.pillsLeft} 
-                            schedule={med.schedule} 
+                            key={med.medID} 
+                            name={med.medName} 
+                            pillsLeft={med.totalAmt}
+                            unit={med.unit} 
+                            frequency={med.frequency}
+                            interval={med.interval} 
                         />
                     ))}
+                    {error && <p className="error-message">{error}</p>} 
                 </div>
                 <NavBar />  
             </div>            
