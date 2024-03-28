@@ -3,7 +3,7 @@ const app = require('./app')
 require('dotenv').config({ silent: true }) // load environmental variables from a hidden file named .env
 
 // which port to listen for HTTP(S) requests
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3000
 
 // call a function to start listening to the port
 const listener = app.listen(port, function () {
