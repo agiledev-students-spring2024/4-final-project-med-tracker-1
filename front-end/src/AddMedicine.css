@@ -26,11 +26,11 @@
     width: 75%;
 }
 
-.med-info-form .next-btn {
+/* .med-info-form .next-btn {
     position: absolute;
     width: 75%;
     bottom: 100px;
-}
+} */
 
 .add-medicine-page-2 .med-info-form {
     margin-top: 35%;
@@ -47,7 +47,7 @@
 .input-label {
     font-size: 40px;
     color: #333;
-    margin-left: 55%; 
+    margin-left: 40px; 
 }
 
 .refill-input .input-group {
@@ -68,7 +68,6 @@
 .input-group input[type="number"]:focus {
     outline: none;
 }
-
 
 .frequency-of-intake .options {
   list-style: none;
@@ -127,10 +126,16 @@
 }
 
 .days li.unselected {
-    background-color: rgb(237, 237, 237);
+  background-color: rgb(237, 237, 237);
 }
 .intake-card {
-    padding: 60px 60px;
-    margin-top: 40px;
+  padding: 60px 60px;
+  margin-top: 40px;
 }
 
+
+.edit-medicine-page-1 .med-image {
+  width: 75%;
+  margin-top: 27%;
+  margin-bottom: 60px;
+}
