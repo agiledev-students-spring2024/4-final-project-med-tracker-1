@@ -71,19 +71,31 @@ const medList = [
         selectedDays: [],
         numIntake: 0,
         intakeList: []
-    }
-    // {
-    //     medName: "Fish Oil", 
-    //     photo: 'photoURL', 
-    //     totalAmt: 38, 
-    //     unit: "pill(s)",
-    //     refillAmt: 10,
-    //     frequency: 'specific',
-    //     interval: '',
-    //     selectedDays: [2, 4],
-    //     numIntake: 1,
-    //     intakeList: [{dose: 2, time: '20:30'}]
-    // }   
+    },
+    {
+        medName: "Fish Oil", 
+        photo: 'photoURL', 
+        totalAmt: 38, 
+        unit: "pill(s)",
+        refillAmt: 10,
+        frequency: 'specific',
+        interval: '',
+        selectedDays: [2, 4],
+        numIntake: 1,
+        intakeList: [{dose: 2, time: '20:30'}]
+    },
+    {
+        medName: "Vitamin C", 
+        photo: 'photoURL', 
+        totalAmt: 38, 
+        unit: "pill(s)",
+        refillAmt: 10,
+        frequency: 'specific',
+        interval: '',
+        selectedDays: [2, 4],
+        numIntake: 1,
+        intakeList: [{dose: 2, time: '20:30'}]
+    }      
 ];
 
 let currMedID = null;
@@ -94,8 +106,7 @@ app.get('/home', (req, res) => {
       { name: 'Zestril', pillsLeft: 94, schedule: '7:30PM', date: 'Mar 27th', dose:1 },
       { name: 'Zestril', pillsLeft: 93, schedule: '12:00PM', date: 'Mar 28th', dose:1},
       { name: 'Zestril', pillsLeft: 92, schedule: '7:30PM', date: 'Mar 28th', dose:1},
-      { name: 'Midol', pillsLeft: 38, schedule: '11:00PM', date: 'Mar 27th',dose:1},
-      
+      { name: 'Midol', pillsLeft: 38, schedule: '11:00PM', date: 'Mar 27th',dose:1},    
     ];
 
     const now = new Date();
