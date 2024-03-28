@@ -1,34 +1,51 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom'
 import './AddMedicine.css'
 
 export const EditMed1 = () => {
-  const [med, setMed] = useState('')
+  const [med, setMed] = useState({})
   const [totalAmt, setTotalAmt] = useState('');
   const [unit, setUnit] = useState('pill(s)'); 
+  const [error, setError] = useState('');
+  const { medID } = useParams();
 
-  const fetchMedications = () => {
-    const updatedMed = {medName: "Zinc", photo: 'photoURL', totalAmt: 35, unit: "pill(s)"};
-    setMed(updatedMed);
+  const fetchMed = async() => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+      setMed(response.data.med);
+      console.log(response.data.med);
+    } catch (error) {
+      console.error("Failed to fetch medication details", error);
+    }
   }
 
   useEffect(() => {
-    fetchMedications();
-  }, [])
+    fetchMed();
+  }, [medID])
 
   useEffect(() => {
-    setTotalAmt(med.totalAmt);
-    setUnit(med.unit);
+    setUnit(med.unit || '')
   }, [med])
 
   const navigate = useNavigate();
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    const medicine = {medName: med.medName, photo: med.photo, totalAmt: totalAmt, unit: unit};
-    // send the medicine info to the backend and save
-    console.log(medicine);
-    navigate('/edit-medicine-2')
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();;
+    // send the updated med info to the backend and save
+    let medToUpdate = {}
+    if(totalAmt !== '')
+      medToUpdate.totalAmt = totalAmt;
+    if(unit !== '')
+      medToUpdate.unit = unit;
+
+    try {
+        const response = await axios.put(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/update/${medID}`, medToUpdate);
+        console.log("Update successful", response.data.med);
+        navigate(`/edit-medicine-2/${medID}`);
+    } catch (error) {
+        setError("Failed to update medication", error);
+    }
   }
 
   const handleExit = (event) => {
@@ -76,14 +93,18 @@ export const EditMed1 = () => {
               <option value="ml">mL</option>
             </select>
           </div>
-        <button type="submit" className="blue-btn next-btn">Next</button>
-      </form>  
+          {error && <p className="error-message">{error}</p>} 
+          <button type="submit" className="blue-btn next-btn">Next</button>
+        </form>  
       </div>
     </div>
   );
 }
 
 export const EditMed2 = () => {
+  const { medID } = useParams();
+  const [error, setError] = useState('')
+
   const [med, setMed] = useState('');
   const [refillAmt, setRefillAmt] = useState('');
   const [frequency, setFrequency] = useState('');  
@@ -93,31 +114,26 @@ export const EditMed2 = () => {
   const navigate = useNavigate();
 
   // fetch the medicine info filled in page one from backend
-  const fetchMedicine = () => {
-    const updatedMed = {
-      medName: "Zinc", 
-      photo: 'photoURL', 
-      totalAmt: 35, 
-      unit: "pill(s)",
-      refillAmt: 10,
-      frequency: 'specific',
-      interval: '',
-      selectedDays: [2, 4],
-      numIntake: 2
+  const fetchMed = async() => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+      setMed(response.data.med);
+      console.log(response.data.med);
+    } catch (error) {
+      console.error("Failed to fetch medication details", error);
     }
-    setMed(updatedMed);
   }
 
   useEffect(() => {
-    fetchMedicine();
-  }, []); 
+    fetchMed();
+  }, [medID])
 
   useEffect(() => {
-    setRefillAmt(med.refillAmt);
-    setFrequency(med.frequency);
-    setInterval(med.interval);
-    setSelectedDays(med.selectedDays);
-    setNumIntake(med.numIntake);
+    setRefillAmt(med.refillAmt || '');
+    setFrequency(med.frequency || '');
+    setInterval(med.interval || '');
+    setSelectedDays(med.selectedDays|| []);
+    setNumIntake(med.numIntake|| '');
   }, [med])
 
   const handleExit = (event) => {
@@ -129,18 +145,35 @@ export const EditMed2 = () => {
     navigate('/edit-medicine-1')
   }
 
-  const handleFormSubmit = (event) => {
+  // function filterEmptyProperties(obj) {
+  //   return Object.entries(obj).reduce((accumulator, [key, value]) => {
+  //     // Check if the value is not an empty string or an empty array
+  //     if (value !== '' && !(
+  //         Array.isArray(value) && value.length === 0
+  //       )) {
+  //       accumulator[key] = value;
+  //     }
+  //     return accumulator;
+  //   }, {});
+  // }
+
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const newMedInfo = {
-      medName: med.medName, 
+    const medToUpdate = filterEmptyProperties({
       refillAmt: refillAmt, 
       frequency: frequency,
       interval: interval,
       selectedDays: selectedDays,
       numIntake: numIntake
+    })
+
+    try {
+        const response = await axios.put(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/update/${medID}`, medToUpdate);
+        console.log("Update successful", response.data.med);
+        navigate(`/edit-medicine-3/${medID}`);
+    } catch (error) {
+        setError("Failed to update medication", error);
     }
-    console.log(newMedInfo);
-    navigate('/edit-medicine-3')
   }
 
   function SelectInterval() {
@@ -277,6 +310,7 @@ export const EditMed2 = () => {
                 <SelectNumIntake />
               )}            
             </div> 
+            {error && <p className="error-message">{error}</p>} 
             <button className="blue-btn next-btn" type="submit" onClick={handleFormSubmit}>Next</button> 
           </form>
         </div>
@@ -285,36 +319,43 @@ export const EditMed2 = () => {
 }
 
 export const EditMed3 = () => {  
-  const [med, setMed] = useState('');
+  const {medID} = useParams();
+  const [med, setMed] = useState({ intakeList: [], numIntake: 0 });
   const [intakeList, setIntakeList] = useState([]);
-  // fetch the medicine info filled in page one from backend
-  const fetchMedicine = () => {
-    const updatedIntakeList = [
-      {dose: 2, time: '09:00'},
-      {dose: 1, time: '20:00'}
-    ]
-    const updatedMed = {
-      medName: "Zinc", 
-      photo: 'photoURL', 
-      totalAmt: 35, 
-      unit: "pill(s)",
-      refillAmt: 10,
-      frequency: 'specific',
-      interval: '',
-      selectedDays: [2, 4],
-      numIntake: 2,
-      intakeList: updatedIntakeList
+  const [error, setError] = useState('')
+
+  // fetch the medicine info from backend
+  const fetchMed = async() => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+      setMed(response.data.med);
+      console.log(response.data.med);
+    } catch (error) {
+      console.error("Failed to fetch medication details", error);
     }
-    setMed(updatedMed);
   }
 
   useEffect(() => {
-    fetchMedicine();
-  }, []); 
+    fetchMed();
+  }, [medID])
 
   useEffect(() => {
-    setIntakeList(med.intakeList)
-  }, [med])
+    if(Number(med.numIntake) === med.intakeList.length){
+      setIntakeList(med.intakeList || [])
+    } else {
+      setIntakeList(Array(med.numIntake).fill().map(() => ({ dose: '', time: '' })))
+    }
+  }, [med.numIntake, med.intakeList])
+
+  // useEffect(() => {
+  //   if(med.intakeList && numIntake >= 0)
+  //     // console.log(intakeList.length)
+  //     setIntakeList(
+  //       (numIntake === med.intakeList.length) ?
+  //       (med.intakeList || []) :
+  //       Array(numIntake).fill().map(() => ({ dose: '', time: '' }))
+  //     )
+  // }, [numIntake])
 
   const navigate = useNavigate();
 
@@ -344,12 +385,20 @@ export const EditMed3 = () => {
     );
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
     const newMedInfo = {medName: med.medName, intakeList: intakeList};
-    // send newMedInfo to backend
-    console.log(newMedInfo);
-    navigate('/medicines');
+    const medToUpdate = filterEmptyProperties({
+      intakeList: intakeList
+    })
+
+    try {
+        const response = await axios.put(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/update/${medID}`, medToUpdate);
+        console.log("Update successful", response.data.med);
+        navigate(`/medicines`);
+    } catch (error) {
+        setError("Failed to update medication", error);
+    }
   };
 
   const Intake = ({ index, intake, unit }) => {
@@ -389,9 +438,22 @@ export const EditMed3 = () => {
           {intakeList && intakeList.map((intake, index) => (
             <Intake key={index} index={index} intake={intake} unit="pill(s)" />
           ))}
+          {error && <p className="error-message">{error}</p>} 
           <button className="blue-btn next-btn" type="submit">Save</button>
         </form>
       </div>
     </div>
   );
 };
+
+function filterEmptyProperties(obj) {
+  return Object.entries(obj).reduce((accumulator, [key, value]) => {
+    // Check if the value is not an empty string or an empty array
+    if (value !== '' && !(
+        Array.isArray(value) && value.length === 0
+      )) {
+      accumulator[key] = value;
+    }
+    return accumulator;
+  }, {});
+}

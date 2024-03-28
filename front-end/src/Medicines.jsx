@@ -24,6 +24,10 @@ const Medicines = () => {
         }
         fetchMedications();
     }, [])
+
+    useEffect(() => {
+        console.log(medications)
+    }, [medications])
     
     return(
         <div className="medications-page">
@@ -39,6 +43,7 @@ const Medicines = () => {
                     {medications.map((med) => (
                         <MedicationCard 
                             key={med.medID} 
+                            medID={med.medID}
                             name={med.medName} 
                             pillsLeft={med.totalAmt}
                             unit={med.unit} 
