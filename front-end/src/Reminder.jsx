@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Reminder.css';
 
@@ -10,8 +10,8 @@ const ReminderCard = ({ name, photo, unit, totalAmt, dose, time }) => {
                     <h1>{name}</h1>
                     <p>{totalAmt} {unit} left</p>
                 </div>
-                <div className="medication-image" url={photo}>
-                    {/* Placeholder for medication image */}
+                <div className="medication-image" style={{ backgroundImage: `url(${photo})` }}>
+                    {/* Image is set as background */}
                 </div>
             </div>
             <div className="reminder-info medication-card">
@@ -30,24 +30,45 @@ const Reminder = () => {
     const [intake, setIntake] = useState('');
     const [med, setMed] = useState('');
     useEffect(() => {
-        const fetchIntake = async() => {
+        const fetchIntake = async () => {
             const updatedIntake = { medName: 'Zinc', dose: 1, time: '08:00' };
-            setIntake(updatedIntake)
+            setIntake(updatedIntake);
         }
         fetchIntake();
-    }, [])
+    }, []);
+
     useEffect(() => {
-        const fetchMed = async() => {
-            // use intake.medName to find information regarding the medication
-            const updatedMed = { medName: 'Zinc', photo: 'photoURL', unit: 'pill(s)', totalAmt: 35}
+        const fetchMed = async () => {
+            const updatedMed = { medName: 'Zinc', photo: 'photoURL', unit: 'pill(s)', totalAmt: 35 };
             setMed(updatedMed);
         }
         fetchMed();
-    }, [intake])
+    }, [intake]);
+
     const navigate = useNavigate();
 
-    const handleButtonClick = () => {
-        navigate('/home'); // This will navigate to the home route
+    // Helper function to handle all intake actions
+    const handleIntakeAction = async (actionType) => {
+        const serverURL = process.env.REACT_APP_SERVER_HOSTNAME; // Use environment variable for the server URL
+
+        const response = await fetch(`${serverURL}/api/${actionType}-intake`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                medName: intake.medName,
+                action: actionType,
+                dose: intake.dose,
+                time: intake.time,
+            }),
+        });
+
+        if (response.ok) {
+            navigate('/home');
+        } else {
+            console.error(`Failed to ${actionType} intake`);
+        }
     };
 
     return (
@@ -55,7 +76,7 @@ const Reminder = () => {
             <div className="pop-up-white-bg register-page">
                 <h1 className="app-title">Take {intake.medName}</h1>
                 <div className="reminder-container medications-container">
-                    <ReminderCard 
+                    <ReminderCard
                         name={intake.medName}
                         photo={med.photo}
                         unit={med.unit}
@@ -65,10 +86,10 @@ const Reminder = () => {
                     />
                 </div>
                 <div className="reminder-btn-container medications-container">
-                    <button onClick={handleButtonClick} className="blue-btn">Confirm</button>
-                    <button onClick={handleButtonClick} className="white-btn">Later</button>
-                    <button onClick={handleButtonClick} className="white-btn">Skip</button>
-                </div>    
+                    <button onClick={() => handleIntakeAction('confirm')} className="blue-btn">Confirm</button>
+                    <button onClick={() => handleIntakeAction('later')} className="white-btn">Later</button>
+                    <button onClick={() => handleIntakeAction('skip')} className="white-btn">Skip</button>
+                </div>
             </div>
         </div >
     );
