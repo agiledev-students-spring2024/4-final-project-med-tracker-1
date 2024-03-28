@@ -1,5 +1,5 @@
 // import the express app
-const server = require('./app')
+const app = require('./app');
 require('dotenv').config({ silent: true }) // load environmental variables from a hidden file named .env
 
 // which port to listen for HTTP(S) requests
