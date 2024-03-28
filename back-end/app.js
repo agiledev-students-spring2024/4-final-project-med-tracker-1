@@ -1,19 +1,61 @@
-require('dotenv').config({ silent: true }); // load environmental variables from .env
-const express = require('express');
-const cors = require('cors');
-const app = express();
+require('dotenv').config({ silent: true }) // load environmental variables from .env
+const express = require('express')
+const cors = require('cors')
+const app = express()
 
-app.use(cors());
+app.use(cors())
+app.use(express.json()) // decode JSON-formatted incoming POST data
+app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
+
+const medList = [
+    {
+        medName: "Zestril", 
+        photo: 'photoURL', 
+        totalAmt: 96, 
+        unit: "mg",
+        refillAmt: 10,
+        frequency: 'regular',
+        interval: '1',
+        selectedDays: [],
+        numIntake: 2,
+        intakeList: [{dose: 5, time: '12:00'}, {dose: 5, time: '19:30'}]
+    }, 
+    {
+        medName: "Midol", 
+        photo: 'photoURL', 
+        totalAmt: 40, 
+        unit: "mg",
+        refillAmt: 5,
+        frequency: 'as-needed',
+        interval: '',
+        selectedDays: [],
+        numIntake: 0,
+        intakeList: []        
+    }
+    // {
+    //     medName: "Fish Oil", 
+    //     photo: 'photoURL', 
+    //     totalAmt: 38, 
+    //     unit: "pill(s)",
+    //     refillAmt: 10,
+    //     frequency: 'specific',
+    //     interval: '',
+    //     selectedDays: [2, 4],
+    //     numIntake: 1,
+    //     intakeList: [{dose: 2, time: '20:30'}]
+    // }   
+];
+
+
+let currMedID = null;
 
 app.get('/home', (req, res) => {
     const medications = [
-      { name: 'Midol', pillsLeft: 26, schedule: '10:00PM', date: 'Mar 27th' },
-      { name: 'Midol', pillsLeft: 26, schedule: '9:00PM', date: 'Mar 28th' },
-      { name: 'Midol', pillsLeft: 26, schedule: '8:00PM', date: 'Mar 29th' },
-      { name: 'Vitamin C', pillsLeft: 15, schedule: '9:00PM', date: 'Mar 28th' },
-      { name: 'Vitamin C', pillsLeft: 15, schedule: '11:00PM', date: 'Mar 28th' },
-      { name: 'Zinc', pillsLeft: 10, schedule: '8:00AM', date: 'Feb 12th' },
-      { name: 'Zinc', pillsLeft: 10, schedule: '8:00AM', date: 'Apr 12th' },
+      { name: 'Zestril', pillsLeft: 95, schedule: '12:00PM', date: 'Mar 27th', dose:1 },
+      { name: 'Zestril', pillsLeft: 94, schedule: '7:30PM', date: 'Mar 27th', dose:1 },
+      { name: 'Zestril', pillsLeft: 93, schedule: '12:00PM', date: 'Mar 28th', dose:1},
+      { name: 'Zestril', pillsLeft: 92, schedule: '7:30PM', date: 'Mar 28th', dose:1},
+      { name: 'Midol', pillsLeft: 38, schedule: '11:00PM', date: 'Mar 27th',dose:1},
       
     ];
   
@@ -57,13 +99,12 @@ app.get('/home', (req, res) => {
 
 app.get('/history', (req, res) => {
     const medications = [
-        { name: 'Midol', pillsLeft: 26, schedule: '9:00PM', date: 'Mar 27th' },
-        { name: 'Midol', pillsLeft: 26, schedule: '8:00PM', date: 'Mar 28th' },
-        { name: 'Midol', pillsLeft: 26, schedule: '7:00PM', date: 'Mar 29th' },
-        { name: 'Vitamin C', pillsLeft: 15, schedule: '9:00PM', date: 'Mar 28th' },
-        { name: 'Vitamin C', pillsLeft: 15, schedule: '11:00PM', date: 'Mar 28th' },
-        { name: 'Zinc', pillsLeft: 10, schedule: '8:00AM', date: 'Feb 12th' },
-        { name: 'Zinc', pillsLeft: 10, schedule: '8:00AM', date: 'Apr 12th' },
+        { name: 'Zestril', pillsLeft: 95, schedule: '12:00PM', date: 'Mar 27th', dose:1 },
+        { name: 'Zestril', pillsLeft: 94, schedule: '7:30PM', date: 'Mar 27th', dose:1 },
+        { name: 'Zestril', pillsLeft: 93, schedule: '12:00PM', date: 'Mar 28th', dose:1},
+        { name: 'Zestril', pillsLeft: 92, schedule: '7:30PM', date: 'Mar 28th', dose:1},
+        { name: 'Midol', pillsLeft: 38, schedule: '11:00PM', date: 'Mar 27th',dose:1},
+        
     ];
   
     const now = new Date();
@@ -95,5 +136,112 @@ app.get('/history', (req, res) => {
 
     res.json(medicationsTaken);
 });
+
+// a route to handle fetch all medicines
+app.get('/medicines', (req, res) => {
+    try {
+      return res.json({
+        medList: medList, // return the med saved
+        status: 'all good',
+      })
+    } catch (err) {
+      console.error(err)
+      return res.status(400).json({
+        error: err,
+        status: 'Failed to load your list of medicines',
+      })
+    } 
+  })
+  
+  // a route to handle saving the data on add-medicine-1 form
+  app.post('/add-medicine-1/save', async(req, res) => {
+    // try to save the new medicine to the database
+    try {
+      const med = {
+          medID: medList.length,
+          medName: req.body.medName, 
+          photo: req.body.photo, 
+          totalAmt: req.body.totalAmt, 
+          unit: req.body.unit
+      }
+      medList[med.medID] = med;
+      currMedID = med.medID;
+      return res.json({
+        med: med, // return the message we just saved
+        status: 'all good',
+      })
+    } catch (err) {
+      console.error(err)
+      return res.status(400).json({
+        error: err,
+        status: 'failed to save the message to the database',
+      })
+    }    
+  })
+  
+  // a route to handle fetch medicine
+  app.get('/current-medicine', async (req, res) => {
+    try {
+      const med = medList[currMedID]
+      return res.json({
+        med: med, // return the med saved
+        status: 'all good',
+      })
+    } catch (err) {
+      console.error(err)
+      return res.status(400).json({
+        error: err,
+        status: 'failed to get the currently editing medicine',
+      })
+    }    
+  })
+  
+  // a route to handle saving the data on add-medicine-2 form
+  app.post('/add-medicine-2/save', async(req, res) => {
+    // try to save the new medicine to the database
+    try {
+      const medID = req.body.medID;
+      const med = medList[medID];
+      const newMedInfo = {
+        refillAmt: req.body.refillAmt, 
+        frequency: req.body.frequency,
+        interval: req.body.interval,
+        selectedDays: req.body.selectedDays,
+        numIntake: req.body.numIntake        
+      }
+      medList[medID] = {...med, ...newMedInfo};
+      return res.json({
+        med: medList[medID], // return the medicine just saved
+        status: 'all good',
+      })
+    } catch (err) {
+      console.error(err)
+      return res.status(400).json({
+        error: err,
+        status: 'failed to save the message to the database',
+      })
+    }    
+  })
+  
+  // a route to handle saving the data on add-medicine-3 form
+  app.post('/add-medicine-3/save', async(req, res) => {
+    // try to save the new medicine to the database
+    try {
+      const medID = req.body.medID;
+      const med = medList[medID];
+      const intakeList = req.body.intakeList;
+      medList[medID] = {...med, intakeList: intakeList};
+      return res.json({
+        med: medList[medID], // return the medicine just saved
+        status: 'all good',
+      })
+    } catch (err) {
+      console.error(err)
+      return res.status(400).json({
+        error: err,
+        status: 'failed to save the message to the database',
+      })
+    }    
+  })
 
 module.exports = app;
