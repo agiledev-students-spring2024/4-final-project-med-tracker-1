@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
 import './AddMedicine.css'
 
 
@@ -8,6 +9,7 @@ export const AddMedicine1 = () => {
   const [totalAmount, setTotalAmount] = useState('');
   const [unit, setUnit] = useState('pill(s)');    
   const [mockPhotoUrl, setMockPhotoUrl] = useState('');
+  const [error, setError] = useState('')
   const navigate = useNavigate();
 
   const handlePhotoChange = () => {
@@ -19,9 +21,18 @@ export const AddMedicine1 = () => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const medicine = {medName: medName, photo: mockPhotoUrl, totalAmt: totalAmount, unit: unit};
-    // send the medicine info to the backend and save
-    console.log(medicine);
-    navigate('/add-medicine-2')
+    // send the medicine info to the backend and save    
+    axios
+      // post a new medicine to server
+      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-1/save`, medicine)
+      .then(response => {
+        console.log(response.data.med)
+        navigate('/add-medicine-2')
+      })
+      .catch(err => {
+        console.log(err)
+        setError(`Error with saving the data! ${err}`)
+      })
   }
 
   const handleExit = (event) => {
@@ -81,27 +92,38 @@ export const AddMedicine1 = () => {
               <option value="ml">mL</option>
             </select>
           </div>
+        {error && <p className="error-message">{error}</p>} 
         <button type="submit" className="blue-btn next-btn">Next</button>
-      </form>  
+      </form>
       </div>
     </div>
   );
 }
 
 export const AddMedicine2 = () => {
-  const [med, setMed] = useState('');
+  const [med, setMed] = useState({});
   const [frequency, setFrequency] = useState('');  
-  const [refillAmt, setRefillAmt] = useState('');
-  const [interval, setInterval] = useState('');
+  const [refillAmt, setRefillAmt] = useState(0);
+  const [interval, setInterval] = useState(0);
   const [selectedDays, setSelectedDays] = useState([]);
-  const [numIntake, setNumIntake] = useState('');
+  const [numIntake, setNumIntake] = useState(0);
+  const [error, setError] = useState('')
   const navigate = useNavigate();
 
-  // fetch the medicine info filled in page one from backend
+  // fetch the currently editing medicine info from backend
   const fetchMedicine = () => {
-    const updatedMed = {medName: "Zinc", photo: 'photoURL', totalAmt: 35, unit: "pill(s)"}
-    setMed(updatedMed);
+    axios
+    .get(`${process.env.REACT_APP_SERVER_HOSTNAME}/current-medicine`)
+    .then(response => {
+      const updatedMed = response.data.med
+      setMed(updatedMed)
+    })
+    .catch(err => {
+      const errMsg = JSON.stringify(err, null, 2) // convert error object to a string
+      setError(errMsg)
+    })
   }
+
   useEffect(() => {
     fetchMedicine();
   }, []); 
@@ -118,15 +140,24 @@ export const AddMedicine2 = () => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const newMedInfo = {
-      medName: med.medName, 
+      medID: med.medID, 
       refillAmt: refillAmt, 
       frequency: frequency,
       interval: interval,
       selectedDays: selectedDays,
       numIntake: numIntake
     }
-    console.log(newMedInfo);
-    navigate('/add-medicine-3')
+    axios
+      // post new medicine information and send to back end
+      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/save`, newMedInfo)
+      .then(response => {
+        console.log(response.data.med)
+        navigate('/add-medicine-3')
+      })
+      .catch(err => {
+        console.log(err)
+        setError(`Error with saving the data! ${err}`)
+      })
   }
 
   function SelectInterval() {
@@ -197,7 +228,7 @@ export const AddMedicine2 = () => {
     ) 
   }
   return(
-      <div className="add-medicine-page-2 full-color-bg">
+      {med} && <div className="add-medicine-page-2 full-color-bg">
         <div className="pop-up-white-bg med-input-container">
           <button className="round-btn exit-btn" type="button" onClick={handleExit}>X</button>
           <button className="round-btn prev-btn" type="button" onClick={navPrev}>&lt;</button>
@@ -212,7 +243,7 @@ export const AddMedicine2 = () => {
                       placeholder="10"
                       onChange={(e) => setRefillAmt(e.target.value)}
                   />
-                  <span className="input-label">pill(s) left</span>
+                  <span className="input-label">{med.unit} left</span>
                 </div>
             </div>
             <div className="form-group frequency-of-intake">
@@ -260,6 +291,7 @@ export const AddMedicine2 = () => {
                 <SelectNumIntake />
               )}            
             </div> 
+            {error && <p className="error-message">{error}</p>} 
             <button className="blue-btn next-btn" type="submit" onClick={handleFormSubmit}>Next</button> 
           </form>
         </div>
@@ -268,30 +300,33 @@ export const AddMedicine2 = () => {
 }
 
 export const AddMedicine3 = () => {  
-  const [med, setMed] = useState('');
+  const [med, setMed] = useState({});
+  const [numIntake, setNumIntake] = useState(0);
   const [intakeList, setIntakeList] = useState([]);
-  // fetch the medicine info filled in page one from backend
+  const [error, setError] = useState('')
+
+  // fetch the medicine info filled in previous pages from backend
   const fetchMedicine = () => {
-    const updatedMed = {
-      medName: "Zinc", 
-      photo: 'photoURL', 
-      totalAmt: 35, 
-      unit: "pill(s)",
-      refillAmt: 10,
-      frequency: 'specific',
-      interval: '',
-      selectedDays: [2, 4],
-      numIntake: 2
-    }
-    setMed(updatedMed);
+    axios
+    .get(`${process.env.REACT_APP_SERVER_HOSTNAME}/current-medicine`)
+    .then(response => {
+      const updatedMed = response.data.med;
+      setMed(updatedMed)
+      setNumIntake(Number(updatedMed.numIntake))
+    })
+    .catch(err => {
+      const errMsg = JSON.stringify(err, null, 2) // convert error object to a string
+      setError(errMsg)
+    })
   }
+
   useEffect(() => {
     fetchMedicine();
   }, []); 
 
   useEffect(() => {
-    setIntakeList(Array(med.numIntake).fill().map(() => ({dose: '', time: ''})))
-  }, [med])
+    setIntakeList(Array(numIntake).fill().map(() => ({ dose: '', time: '' })));
+  }, [numIntake]);
 
   const navigate = useNavigate();
 
@@ -323,9 +358,19 @@ export const AddMedicine3 = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    const newMedInfo = {medName: med.medName, intakeList: intakeList};
-    console.log(newMedInfo);
-    navigate('/medicines');
+    const newMedInfo = {medID: med.medID, intakeList: intakeList};
+    axios
+      // post new medicine information and send to back end
+      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-3/save`, newMedInfo)
+      .then(response => {
+        console.log('saved med=======')
+        console.log(response.data.med)
+        navigate('/medicines')
+      })
+      .catch(err => {
+        console.log(err)
+        setError(`Error with saving the data! ${err}`)
+      })
   };
 
   const Intake = ({ index, intake, unit }) => {
@@ -363,9 +408,10 @@ export const AddMedicine3 = () => {
         <button className="round-btn exit-btn" type="button" onClick={handleExit}>X</button>
         <button className="round-btn prev-btn" type="button" onClick={navPrev}>&lt;</button>
         <form className="intake-list-container med-info-form" onSubmit={handleFormSubmit}>
-          {intakeList[0] && intakeList.map((intake, index) => (
-            <Intake key={index} index={index} intake={intake} unit="pill(s)" />
+          {intakeList.length > 0 && intakeList.map((intake, index) => (
+            <Intake key={index} index={index} intake={intake} unit={med.unit} />
           ))}
+          {error && <p className="error-message">{error}</p>} 
           <button className="blue-btn next-btn" type="submit">Save</button>
         </form>
       </div>

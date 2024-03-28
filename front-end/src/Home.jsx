@@ -11,11 +11,8 @@ function Home() {
 
     useEffect(() => {
         const fetchMedications = async () => {
-            const updatedMeds = [
-                { name: 'Midol', schedule: '8:00AM', dose: 1 },
-                { name: 'Vitamin C', schedule: '8:00AM', dose: 1},
-                { name: 'Zinc',  schedule: '8:00AM', dose: 1},
-            ];
+            const response = await fetch(`${process.env.REACT_APP_SERVER_HOSTNAME}/home`);
+            const updatedMeds = await response.json();
             setMedications(updatedMeds);
         };
         fetchMedications();
