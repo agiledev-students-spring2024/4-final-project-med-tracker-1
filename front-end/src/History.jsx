@@ -4,14 +4,14 @@ import HistoryCard from './HistoryCard'
 
 function History() {
     const [medications, setMedications] = useState([]);
-    // useEffect(() => {
-    //     const fetchMedications = async() => {
-    //         const response = await fetch('http://localhost:3001/history');
-    //         const data = await response.json();
-    //         setMedications(data);
-    //     }
-    //     fetchMedications();
-    // }, []);
+    useEffect(() => {
+        const fetchMedications = async () => {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_HOSTNAME}/history`);
+            const updatedMeds = await response.json();
+            setMedications(updatedMeds);
+        };
+        fetchMedications();
+    }, [])
 
 
     return(
