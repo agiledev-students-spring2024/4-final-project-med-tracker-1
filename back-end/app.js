@@ -1,6 +1,7 @@
-require('dotenv').config({ silent: true }) // load environmental variables from .env
-const express = require('express')
-const cors = require('cors')
+require('dotenv').config({ silent: true }); // load environmental variables from .env
+const express = require('express');
+const cors = require('cors');
+const app = express();
 
 const app = express()
 
@@ -54,8 +55,8 @@ let currMedID = null;
 
 app.get('/home', (req, res) => {
     const medications = [
-      { name: 'Midol', pillsLeft: 26, schedule: '8:00PM', date: 'Mar 27th' },
-      { name: 'Vitamin C', pillsLeft: 15, schedule: '6:00PM', date: 'Mar 27th' },
+      { name: 'Midol', pillsLeft: 26, schedule: '10:00PM', date: 'Mar 27th' },
+      { name: 'Vitamin C', pillsLeft: 15, schedule: '11:00PM', date: 'Mar 27th' },
       { name: 'Zinc', pillsLeft: 10, schedule: '8:00AM', date: 'Apr 12th' },
     ];
   
