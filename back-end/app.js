@@ -8,7 +8,48 @@ app.use(cors())
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
 
-const medList = [];
+const medList = [
+    {
+        medName: "Zestril", 
+        photo: 'photoURL', 
+        totalAmt: 96, 
+        unit: "mg",
+        refillAmt: 10,
+        frequency: 'regular',
+        interval: '1',
+        selectedDays: [],
+        numIntake: 2,
+        intakeList: [{dose: 5, time: '12:00'}, {dose: 5, time: '19:30'}]
+    }, 
+    {
+        medName: "Midol", 
+        photo: 'photoURL', 
+        totalAmt: 40, 
+        unit: "mg",
+        refillAmt: 5,
+        frequency: 'as-needed',
+        interval: '',
+        selectedDays: [],
+        numIntake: 0,
+        intakeList: []        
+    }
+    // {
+    //     medName: "Fish Oil", 
+    //     photo: 'photoURL', 
+    //     totalAmt: 38, 
+    //     unit: "pill(s)",
+    //     refillAmt: 10,
+    //     frequency: 'specific',
+    //     interval: '',
+    //     selectedDays: [2, 4],
+    //     numIntake: 1,
+    //     intakeList: [{dose: 2, time: '20:30'}]
+    // }   
+];
+
+
+
+
 let currMedID = null;
 
 app.get('/home', (req, res) => {
@@ -55,6 +96,22 @@ app.get('/home', (req, res) => {
 
     res.json(medicationsToTake);
 });
+
+// a route to handle fetch all medicines
+app.get('/medicines', (req, res) => {
+  try {
+    return res.json({
+      medList: medList, // return the med saved
+      status: 'all good',
+    })
+  } catch (err) {
+    console.error(err)
+    return res.status(400).json({
+      error: err,
+      status: 'Failed to load your list of medicines',
+    })
+  } 
+})
 
 // a route to handle saving the data on add-medicine-1 form
 app.post('/add-medicine-1/save', async(req, res) => {
