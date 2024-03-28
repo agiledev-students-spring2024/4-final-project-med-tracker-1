@@ -11,7 +11,7 @@ function Home() {
 
     useEffect(() => {
         const fetchMedications = async () => {
-            const response = await fetch('http://localhost:3001/home');
+            const response = await fetch(`${process.env.REACT_APP_SERVER_HOSTNAME}/home`);
             const updatedMeds = await response.json();
             setMedications(updatedMeds);
         };

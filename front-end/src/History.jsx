@@ -5,14 +5,11 @@ import HistoryCard from './HistoryCard'
 function History() {
     const [medications, setMedications] = useState([]);
     useEffect(() => {
-        const fetchMedications = async() => {
-            const updatedMeds = [
-                { name: 'Midol', pillsLeft: 26, schedule: '8:00AM', date:'Feb 12th' },
-                { name: 'Vitamin C', pillsLeft: 15, schedule: '8:00AM', date:'Feb 12th' },
-                { name: 'Zinc', pillsLeft: 10, schedule: '8:00AM', date:'Feb 12th'},
-            ];
-            setMedications(updatedMeds)
-        }
+        const fetchMedications = async () => {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_HOSTNAME}/history`);
+            const updatedMeds = await response.json();
+            setMedications(updatedMeds);
+        };
         fetchMedications();
     }, [])
 

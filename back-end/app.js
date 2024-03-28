@@ -2,17 +2,16 @@ require('dotenv').config({ silent: true }); // load environmental variables from
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const PORT = 3001;
 
 app.use(cors());
 
 app.get('/home', (req, res) => {
     const medications = [
-      { name: 'Midol', pillsLeft: 26, schedule: '6:00PM', date: 'Mar 26th' },
-      { name: 'Midol', pillsLeft: 26, schedule: '7:00PM', date: 'Mar 27th' },
-      { name: 'Midol', pillsLeft: 26, schedule: '8:00PM', date: 'Mar 28th' },
-      { name: 'Vitamin C', pillsLeft: 15, schedule: '9:00PM', date: 'Mar 27th' },
-      { name: 'Vitamin C', pillsLeft: 15, schedule: '11:00PM', date: 'Mar 27th' },
+      { name: 'Midol', pillsLeft: 26, schedule: '10:00PM', date: 'Mar 27th' },
+      { name: 'Midol', pillsLeft: 26, schedule: '9:00PM', date: 'Mar 28th' },
+      { name: 'Midol', pillsLeft: 26, schedule: '8:00PM', date: 'Mar 29th' },
+      { name: 'Vitamin C', pillsLeft: 15, schedule: '9:00PM', date: 'Mar 28th' },
+      { name: 'Vitamin C', pillsLeft: 15, schedule: '11:00PM', date: 'Mar 28th' },
       { name: 'Zinc', pillsLeft: 10, schedule: '8:00AM', date: 'Feb 12th' },
       { name: 'Zinc', pillsLeft: 10, schedule: '8:00AM', date: 'Apr 12th' },
       
@@ -58,11 +57,11 @@ app.get('/home', (req, res) => {
 
 app.get('/history', (req, res) => {
     const medications = [
-        { name: 'Midol', pillsLeft: 26, schedule: '6:00PM', date: 'Mar 26th' },
-        { name: 'Midol', pillsLeft: 26, schedule: '7:00PM', date: 'Mar 27th' },
+        { name: 'Midol', pillsLeft: 26, schedule: '9:00PM', date: 'Mar 27th' },
         { name: 'Midol', pillsLeft: 26, schedule: '8:00PM', date: 'Mar 28th' },
-        { name: 'Vitamin C', pillsLeft: 15, schedule: '9:00PM', date: 'Mar 27th' },
-        { name: 'Vitamin C', pillsLeft: 15, schedule: '11:00PM', date: 'Mar 27th' },
+        { name: 'Midol', pillsLeft: 26, schedule: '7:00PM', date: 'Mar 29th' },
+        { name: 'Vitamin C', pillsLeft: 15, schedule: '9:00PM', date: 'Mar 28th' },
+        { name: 'Vitamin C', pillsLeft: 15, schedule: '11:00PM', date: 'Mar 28th' },
         { name: 'Zinc', pillsLeft: 10, schedule: '8:00AM', date: 'Feb 12th' },
         { name: 'Zinc', pillsLeft: 10, schedule: '8:00AM', date: 'Apr 12th' },
     ];
@@ -97,7 +96,4 @@ app.get('/history', (req, res) => {
     res.json(medicationsTaken);
 });
 
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+module.exports = app;
