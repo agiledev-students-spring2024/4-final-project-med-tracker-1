@@ -178,6 +178,8 @@ input, select, .input-group {
   width: 80%;
   gap: 60px;
   margin-top: 60px;
+  max-height: 61vh;
+  overflow-y: auto;
 }
 
 .medication-card {
