@@ -140,7 +140,6 @@ export const AddMedicine2 = () => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const newMedInfo = {
-      medID: med.medID, 
       refillAmt: refillAmt, 
       frequency: frequency,
       interval: interval,
@@ -301,7 +300,7 @@ export const AddMedicine2 = () => {
 
 export const AddMedicine3 = () => {  
   const [med, setMed] = useState({});
-  const [numIntake, setNumIntake] = useState(0);
+  const [numIntake, setNumIntake] = useState('');
   const [intakeList, setIntakeList] = useState([]);
   const [error, setError] = useState('')
 
