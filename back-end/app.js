@@ -2,9 +2,11 @@
 require('dotenv').config({ silent: true }) // load environmental variables from .env
 const express = require('express')
 const cors = require('cors')
+const multer = require('multer')
 const app = express()
 
 app.use(cors())
+app.use(express.static('public'))
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
 
@@ -15,6 +17,17 @@ const mockUser = {
   password: 'password123',
   firstname: 'Yvette'
 };
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, '/pubilc/med-images')
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.filename}`)
+  }
+})
+
+const upload = multer({storage: storage})
 
 app.post('/api/register', (req, res) => {
   const { username, password, firstname } = req.body; 
@@ -49,7 +62,7 @@ const medList = [
     {
         medID: 0,
         medName: "Zestril",
-        photo: 'photoURL',
+        photo: '1712007021822_zestril.jpeg',
         totalAmt: 96,
         unit: "mg",
         refillAmt: 10,
@@ -62,7 +75,7 @@ const medList = [
     {
         medID: 1,
         medName: "Midol",
-        photo: 'photoURL',
+        photo: '1712009434896_midol.jpeg',
         totalAmt: 40,
         unit: "pill(s)",
         refillAmt: 5,
@@ -74,7 +87,7 @@ const medList = [
     },
     {
         medName: "Fish Oil", 
-        photo: 'photoURL', 
+        photo: '1712009213743_fish_oil.jpeg', 
         totalAmt: 38, 
         unit: "pill(s)",
         refillAmt: 10,
@@ -86,7 +99,7 @@ const medList = [
     },
     {
         medName: "Vitamin C", 
-        photo: 'photoURL', 
+        photo: '1712009536243_vitaminC.jpeg', 
         totalAmt: 38, 
         unit: "pill(s)",
         refillAmt: 10,
@@ -202,7 +215,30 @@ app.get('/medicines', (req, res) => {
       })
     } 
   })
-  
+
+// a route to handle photo-upload
+app.post('/photo-upload', upload.single('file'), async(req, res) => {
+  try{
+    if (req.file) {
+      return res.json({
+        photo: req.file,
+        status: 'all good'
+      })
+    } else {
+      return res.json({
+        photo: req.file,
+        status: 'failed to save uploaded image'
+      })
+    }
+  } catch (err) {
+    console.error(err)
+    return res.status(400).json({
+      error: err,
+      status: 'failed to save the image to database',
+    })
+  } 
+})
+
 // a route to handle saving the data on add-medicine-1 form
 app.post('/add-medicine-1/save', async(req, res) => {
   // try to save the new medicine to the database
@@ -224,7 +260,7 @@ app.post('/add-medicine-1/save', async(req, res) => {
     console.error(err)
     return res.status(400).json({
       error: err,
-      status: 'failed to save the message to the database',
+      status: 'failed to save the medicine info to the database',
     })
   }    
 })
