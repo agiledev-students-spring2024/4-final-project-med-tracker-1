@@ -20,10 +20,10 @@ const mockUser = {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '/pubilc/med-images')
+    cb(null, 'public/med-images')
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.filename}`)
+    cb(null, `${Date.now()}_${file.originalname}`)
   }
 })
 
@@ -220,6 +220,7 @@ app.get('/medicines', (req, res) => {
 app.post('/photo-upload', upload.single('file'), async(req, res) => {
   try{
     if (req.file) {
+      console.log(req.file)
       return res.json({
         photo: req.file,
         status: 'all good'

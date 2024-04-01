@@ -16,7 +16,7 @@ export const AddMedicine1 = () => {
   const uploadPhoto = (event) => {
     event.preventDefault();
     const formData = new FormData()
-    formData.append("image", photo)
+    formData.append("file", photo)
     axios
       .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/photo-upload`, formData)
       .then(response => {
