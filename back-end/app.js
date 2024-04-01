@@ -320,7 +320,7 @@ app.post('/api/skip-intake', (req, res) => {
 let medicationIntakeActions = []; // Store medication intake actions
 
 // Route to handle confirming medication intake
-app.post('/api/confirm-medication-intake', (req, res) => {
+app.post('/api/refill-confirm', (req, res) => {
     try {
         const { medName, dose, time } = req.body;
         const action = 'confirm';
@@ -335,7 +335,7 @@ app.post('/api/confirm-medication-intake', (req, res) => {
 });
 
 // Route to handle postponing medication intake
-app.post('/api/later-medication-intake', (req, res) => {
+app.post('/api/refill-later', (req, res) => {
     try {
         const { medName, dose, time } = req.body;
         const action = 'postpone';
@@ -350,7 +350,7 @@ app.post('/api/later-medication-intake', (req, res) => {
 });
 
 // Route to handle skipping medication intake
-app.post('/api/skip-medication-intake', (req, res) => {
+app.post('/api/refill-skip', (req, res) => {
     try {
         const { medName, dose, time } = req.body;
         const action = 'skip';
