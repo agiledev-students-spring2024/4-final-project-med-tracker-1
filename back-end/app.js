@@ -11,38 +11,38 @@ app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming P
 let users = {};
 
 const mockUser = {
-  username: 'user@example.com',
-  password: 'password123',
-  firstname: 'Yvette'
+    username: 'user@example.com',
+    password: 'password123',
+    firstname: 'Yvette'
 };
 
 app.post('/api/register', (req, res) => {
-  const { username, password, firstname } = req.body; 
+    const { username, password, firstname } = req.body;
 
-  if (!username || !password || !firstname) {
-    return res.status(400).send({ success: false, message: "Username, password, and first name are required." });
-  }
+    if (!username || !password || !firstname) {
+        return res.status(400).send({ success: false, message: "Username, password, and first name are required." });
+    }
 
-  if (users[username] || (mockUser.username === username)) {
-    return res.status(409).send({ success: false, message: "User already exists." });
-  }
+    if (users[username] || (mockUser.username === username)) {
+        return res.status(409).send({ success: false, message: "User already exists." });
+    }
 
-  users[username] = { username, password, firstname }; 
-  res.send({ success: true, message: "Registration successful." });
+    users[username] = { username, password, firstname };
+    res.send({ success: true, message: "Registration successful." });
 });
 
 app.post('/api/login', (req, res) => {
-  const { username, password } = req.body;
+    const { username, password } = req.body;
 
-  if (username === mockUser.username && password === mockUser.password) {
-    return res.send({ success: true, message: `Login successful with mock user: ${mockUser.firstname}.` });
-  }
+    if (username === mockUser.username && password === mockUser.password) {
+        return res.send({ success: true, message: `Login successful with mock user: ${mockUser.firstname}.` });
+    }
 
-  if (users[username] && users[username].password === password) {
-    return res.send({ success: true, message: `Login successful with registered user: ${users[username].firstname}.` });
-  }
+    if (users[username] && users[username].password === password) {
+        return res.send({ success: true, message: `Login successful with registered user: ${users[username].firstname}.` });
+    }
 
-  res.status(401).send({ success: false, message: "Invalid credentials." });
+    res.status(401).send({ success: false, message: "Invalid credentials." });
 });
 
 const medList = [
@@ -102,11 +102,12 @@ let currMedID = null;
 
 app.get('/home', (req, res) => {
     const medications = [
-      { name: 'Zestril', pillsLeft: 95, schedule: '12:00PM', date: 'Mar 27th', dose:1 },
-      { name: 'Zestril', pillsLeft: 94, schedule: '7:30PM', date: 'Mar 27th', dose:1 },
-      { name: 'Zestril', pillsLeft: 93, schedule: '12:00PM', date: 'Mar 28th', dose:1},
-      { name: 'Zestril', pillsLeft: 92, schedule: '7:30PM', date: 'Mar 28th', dose:1},
-      { name: 'Midol', pillsLeft: 38, schedule: '11:00PM', date: 'Mar 27th',dose:1},    
+        { name: 'Zestril', pillsLeft: 95, schedule: '12:00PM', date: 'Mar 27th', dose: 1 },
+        { name: 'Zestril', pillsLeft: 94, schedule: '7:30PM', date: 'Mar 27th', dose: 1 },
+        { name: 'Zestril', pillsLeft: 93, schedule: '12:00PM', date: 'Mar 28th', dose: 1 },
+        { name: 'Zestril', pillsLeft: 92, schedule: '7:30PM', date: 'Mar 28th', dose: 1 },
+        { name: 'Midol', pillsLeft: 38, schedule: '11:00PM', date: 'Mar 27th', dose: 1 },
+
     ];
 
     const now = new Date();
@@ -149,39 +150,39 @@ app.get('/home', (req, res) => {
 
 app.get('/history', (req, res) => {
     const medications = [
-        { name: 'Zestril', pillsLeft: 95, schedule: '12:00PM', date: 'Mar 27th', dose:1 },
-        { name: 'Zestril', pillsLeft: 94, schedule: '7:30PM', date: 'Mar 27th', dose:1 },
-        { name: 'Zestril', pillsLeft: 93, schedule: '12:00PM', date: 'Mar 28th', dose:1},
-        { name: 'Zestril', pillsLeft: 92, schedule: '7:30PM', date: 'Mar 28th', dose:1},
-        { name: 'Midol', pillsLeft: 38, schedule: '11:00PM', date: 'Mar 27th',dose:1},
-        
+        { name: 'Zestril', pillsLeft: 95, schedule: '12:00PM', date: 'Mar 27th', dose: 1 },
+        { name: 'Zestril', pillsLeft: 94, schedule: '7:30PM', date: 'Mar 27th', dose: 1 },
+        { name: 'Zestril', pillsLeft: 93, schedule: '12:00PM', date: 'Mar 28th', dose: 1 },
+        { name: 'Zestril', pillsLeft: 92, schedule: '7:30PM', date: 'Mar 28th', dose: 1 },
+        { name: 'Midol', pillsLeft: 38, schedule: '11:00PM', date: 'Mar 27th', dose: 1 },
+
     ];
-  
+
     const now = new Date();
     let medicationsTaken = [];
 
     medications.forEach(medication => {
-      const dateParts = medication.date.match(/(\w+)\s(\d+)[a-z]{2}/);
-      const month = dateParts[1];
-      const day = parseInt(dateParts[2]);
-      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      const monthNumber = monthNames.indexOf(month);
-      const medicationDate = new Date(now.getFullYear(), monthNumber, day);
-  
-      if (medicationDate < now || (medicationDate.toDateString() === now.toDateString())) {
-        const scheduleParts = medication.schedule.match(/(\d+):(\d+)(AM|PM)/);
-        let hours = parseInt(scheduleParts[1]);
-        const minutes = parseInt(scheduleParts[2]);
-        const isPM = scheduleParts[3] === 'PM';
-  
-        if (isPM && hours < 12) hours += 12;
-        if (!isPM && hours === 12) hours = 0;
+        const dateParts = medication.date.match(/(\w+)\s(\d+)[a-z]{2}/);
+        const month = dateParts[1];
+        const day = parseInt(dateParts[2]);
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const monthNumber = monthNames.indexOf(month);
+        const medicationDate = new Date(now.getFullYear(), monthNumber, day);
 
-        const medicationDateTime = new Date(now.getFullYear(), monthNumber, day, hours, minutes);
-        if (medicationDateTime <= now) {
-          medicationsTaken.push(medication);
+        if (medicationDate < now || (medicationDate.toDateString() === now.toDateString())) {
+            const scheduleParts = medication.schedule.match(/(\d+):(\d+)(AM|PM)/);
+            let hours = parseInt(scheduleParts[1]);
+            const minutes = parseInt(scheduleParts[2]);
+            const isPM = scheduleParts[3] === 'PM';
+
+            if (isPM && hours < 12) hours += 12;
+            if (!isPM && hours === 12) hours = 0;
+
+            const medicationDateTime = new Date(now.getFullYear(), monthNumber, day, hours, minutes);
+            if (medicationDateTime <= now) {
+                medicationsTaken.push(medication);
+            }
         }
-      }
     });
 
     res.json(medicationsTaken);
@@ -190,10 +191,10 @@ app.get('/history', (req, res) => {
 // a route to handle fetch all medicines
 app.get('/medicines', (req, res) => {
     try {
-      return res.json({
-        medList: medList, // return the med saved
-        status: 'all good',
-      })
+        return res.json({
+            medList: medList, // return the med saved
+            status: 'all good',
+        })
     } catch (err) {
       console.error(err)
       return res.status(400).json({
@@ -375,5 +376,53 @@ app.post('/api/skip-intake', (req, res) => {
         res.status(500).json({ message: 'An error occurred while skipping intake.' });
     }
 });
+let medicationIntakeActions = []; // Store medication intake actions
+
+// Route to handle confirming medication intake
+app.post('/api/refill-confirm', (req, res) => {
+    try {
+        const { medName, dose, time } = req.body;
+        const action = 'confirm';
+
+        medicationIntakeActions.push({ medName, action, dose, time, timestamp: new Date() });
+        console.log('Medication intake actions:', medicationIntakeActions);
+        res.status(200).json({ message: 'Medication intake confirmed', medName, dose, time });
+    } catch (error) {
+        console.error('Error confirming medication intake:', error);
+        res.status(500).json({ message: 'An error occurred while confirming medication intake.' });
+    }
+});
+
+// Route to handle postponing medication intake
+app.post('/api/refill-later', (req, res) => {
+    try {
+        const { medName, dose, time } = req.body;
+        const action = 'postpone';
+
+        medicationIntakeActions.push({ medName, action, dose, time, timestamp: new Date() });
+        console.log('Medication intake actions:', medicationIntakeActions);
+        res.status(200).json({ message: 'Medication intake postponed', medName, dose, time });
+    } catch (error) {
+        console.error('Error postponing medication intake:', error);
+        res.status(500).json({ message: 'An error occurred while postponing medication intake.' });
+    }
+});
+
+// Route to handle skipping medication intake
+app.post('/api/refill-skip', (req, res) => {
+    try {
+        const { medName, dose, time } = req.body;
+        const action = 'skip';
+
+        medicationIntakeActions.push({ medName, action, dose, time, timestamp: new Date() });
+        console.log('Medication intake actions:', medicationIntakeActions);
+        res.status(200).json({ message: 'Medication intake skipped', medName, dose, time });
+    } catch (error) {
+        console.error('Error skipping medication intake:', error);
+        res.status(500).json({ message: 'An error occurred while skipping medication intake.' });
+    }
+});
+
+
 
 module.exports = app
