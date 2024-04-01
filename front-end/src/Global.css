@@ -214,7 +214,7 @@ input, select, .input-group {
   margin-bottom: 20px;
 }
 
-.medication-image {
+.medication-card .medication-image {
   width: 260px;
   height: 260px;
   background-color: #d3d3d3;

@@ -11,26 +11,48 @@
     align-items: center;
     width: 75%;
     margin-top: 27%;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
 }
 
+.photo-upload input[type="file"]{
+  height: max-content;
+  margin-bottom: 20px;
+}
+
+input::file-selector-button {
+  font-weight: normal;
+  color: #08475E;
+  background-color: #D3E1E2;
+  padding: 15px;
+  border: 2px solid #08475E;
+  border-radius: 25px;
+  margin-right: 10px;
+}
+
+/* input::file-selector-button {
+  font-weight: normal;
+  color: white;
+  background-color: #08475E;
+  padding: 15px;
+  border-radius: 25px;
+  margin-right: 20px;
+} */
+
 .med-image {
-    width: 100%;
-    height: 735px;
-    background-color: lightgray;
-    border-radius: 40px;
-    margin-bottom: 50px;
+  width: 100%;
+  height: 735px;
+  border: 5px solid #08475E;
+  border-radius: 40px;
+  margin-bottom: 30px;
+}
+
+.img-placeholder {
+  background-color: #D3E1E2;
 }
 
 .med-info-form {
     width: 75%;
 }
-
-/* .med-info-form .next-btn {
-    position: absolute;
-    width: 75%;
-    bottom: 100px;
-} */
 
 .add-medicine-page-2 .med-info-form {
     margin-top: 35%;

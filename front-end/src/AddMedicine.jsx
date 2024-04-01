@@ -8,19 +8,31 @@ export const AddMedicine1 = () => {
   const [medName, setMedName] = useState('');
   const [totalAmount, setTotalAmount] = useState('');
   const [unit, setUnit] = useState('pill(s)');    
-  const [mockPhotoUrl, setMockPhotoUrl] = useState('');
-  const [error, setError] = useState('')
+  const [photo, setPhoto] = useState();
+  const [imageURL, setImageURL] = useState();
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handlePhotoChange = () => {
-    const randomImageId = Math.floor(Math.random() * 1000); 
-    const picsumUrl = `https://picsum.photos/200`;
-    setMockPhotoUrl(picsumUrl);
+  const uploadPhoto = (event) => {
+    event.preventDefault();
+    const formData = new FormData()
+    formData.append("file", photo)
+    axios
+      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/photo-upload`, formData)
+      .then(response => {
+        console.log('sent photo to backend')
+        console.log(response.data.photo.filename)
+        setImageURL(response.data.photo.filename)
+      })
+      .catch(err => {
+        console.log(err)
+        setError(`Error with saving the data! ${err}`)
+      })
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    const medicine = {medName: medName, photo: mockPhotoUrl, totalAmt: totalAmount, unit: unit};
+    const medicine = {medName: medName, photo: imageURL, totalAmt: totalAmount, unit: unit};
     // send the medicine info to the backend and save    
     axios
       // post a new medicine to server
@@ -44,15 +56,16 @@ export const AddMedicine1 = () => {
       <div className="pop-up-white-bg med-input-container">
         <button type="button" onClick={handleExit} className="round-btn exit-btn">X</button>
         <form className="photo-upload">
-          {mockPhotoUrl ? (
-            <img className="med-image" src={mockPhotoUrl} alt="Uploaded" />
+          {imageURL ? (
+            <img className="med-image" src={`${process.env.REACT_APP_SERVER_HOSTNAME}/med-images/${imageURL}`} alt="Uploaded"  />
           ) : (
-            <div className="med-image"></div>
+            <div className="med-image img-placeholder"></div>
           )}
+          <input className="white-btn" type="file" onChange={e => setPhoto(e.target.files[0])}/>
           <button 
             type="submit" 
-            className="white-btn" 
-            onClick={handlePhotoChange}
+            className="blue-btn" 
+            onClick={uploadPhoto}
           >
             Upload Photo
           </button>
