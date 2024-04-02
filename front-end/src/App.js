@@ -45,9 +45,9 @@ function App() {
               {/* a router for add medicine page one */}
               <Route path="/add-medicine-1" element={<AddMedicine1 />} />
               {/* a router for add medicine page two */}
-              <Route path="/add-medicine-2" element={<AddMedicine2 />} />
+              <Route path="/add-medicine-2/:medID" element={<AddMedicine2 />} />
               {/* a router for add medicine page three */}
-              <Route path="/add-medicine-3" element={<AddMedicine3 />} />
+              <Route path="/add-medicine-3/:medID" element={<AddMedicine3 />} />
               {/* a router for edit medicine page */}
               <Route path="/edit-medicine-1/:medID" element={<EditMed1 />} />
               {/* a router for edit medicine page */}

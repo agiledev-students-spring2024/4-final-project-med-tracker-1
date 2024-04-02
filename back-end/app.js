@@ -86,6 +86,7 @@ const medList = [
         intakeList: []
     },
     {
+        medID: 2,
         medName: "Fish Oil", 
         photo: '1712009213743_fish_oil.jpeg', 
         totalAmt: 38, 
@@ -98,6 +99,7 @@ const medList = [
         intakeList: [{dose: 2, time: '20:30'}]
     },
     {
+        medID: 3,
         medName: "Vitamin C", 
         photo: '1712009536243_vitaminC.jpeg', 
         totalAmt: 38, 
@@ -285,40 +287,13 @@ app.get('/current-medicine', async (req, res) => {
 })
 
 // a route to handle saving the data on add-medicine-2 form
-app.post('/add-medicine-2/save', async(req, res) => {
+app.post('/add-medicine-2/:medID/save', async(req, res) => {
   // try to save the new medicine to the database
   try {
-    const medID = req.body.medID;
+    const { medID } = req.params; 
     const med = medList[medID];
-    const newMedInfo = {
-      refillAmt: req.body.refillAmt, 
-      frequency: req.body.frequency,
-      interval: req.body.interval,
-      selectedDays: req.body.selectedDays,
-      numIntake: req.body.numIntake        
-    }
+    const newMedInfo = req.body;
     medList[medID] = {...med, ...newMedInfo};
-    return res.json({
-      med: medList[medID], // return the medicine just saved
-      status: 'all good',
-    })
-  } catch (err) {
-    console.error(err)
-    return res.status(400).json({
-      error: err,
-      status: 'failed to save the message to the database',
-    })
-  }    
-})
-
-// a route to handle saving the data on add-medicine-3 form
-app.post('/add-medicine-3/save', async(req, res) => {
-  // try to save the new medicine to the database
-  try {
-    const medID = req.body.medID;
-    const med = medList[medID];
-    const intakeList = req.body.intakeList;
-    medList[medID] = {...med, intakeList: intakeList};
     return res.json({
       med: medList[medID], // return the medicine just saved
       status: 'all good',
