@@ -442,11 +442,13 @@ export const AddMedicine3 = () => {
       <div className="pop-up-white-bg med-input-container">
         <button className="round-btn exit-btn" type="button" onClick={handleExit}>X</button>
         <button className="round-btn prev-btn" type="button" onClick={navPrev}>&lt;</button>
-        <form className="intake-list-container med-info-form" onSubmit={handleFormSubmit}>
+        <form className="med-info-form" onSubmit={handleFormSubmit}>
+          <div className="intake-list-container">
           {intakeList.length > 0 && intakeList.map((intake, index) => (
             <Intake key={index} index={index} intake={intake} unit={med.unit} />
           ))}
           {error && <p className="error-message">{error}</p>} 
+          </div>
           <button className="blue-btn next-btn" type="submit">Save</button>
         </form>
       </div>

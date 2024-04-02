@@ -161,18 +161,6 @@ export const EditMed2 = () => {
     navigate('/edit-medicine-1')
   }
 
-  // function filterEmptyProperties(obj) {
-  //   return Object.entries(obj).reduce((accumulator, [key, value]) => {
-  //     // Check if the value is not an empty string or an empty array
-  //     if (value !== '' && !(
-  //         Array.isArray(value) && value.length === 0
-  //       )) {
-  //       accumulator[key] = value;
-  //     }
-  //     return accumulator;
-  //   }, {});
-  // }
-
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const medToUpdate = filterEmptyProperties({
@@ -336,7 +324,7 @@ export const EditMed2 = () => {
 
 export const EditMed3 = () => {  
   const {medID} = useParams();
-  const [med, setMed] = useState({ intakeList: [], numIntake: 0 });
+  const [med, setMed] = useState({});
   const [intakeList, setIntakeList] = useState([]);
   const [error, setError] = useState('')
 
@@ -344,34 +332,20 @@ export const EditMed3 = () => {
   const fetchMed = async() => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
-      setMed(response.data.med);
-      console.log(response.data.med);
+      const updatedMed = response.data.med;
+      setMed(updatedMed);
+      if(Number(updatedMed.numIntake) == updatedMed.intakeList.length)
+        setIntakeList(updatedMed.intakeList)
+      else 
+        setIntakeList(Array(Number(updatedMed.numIntake)).fill().map(() => ({ dose: '', time: '' })) || [])
     } catch (error) {
-      console.error("Failed to fetch medication details", error);
+      setError("Failed to fetch medication details", error);
     }
   }
 
   useEffect(() => {
     fetchMed();
-  }, [medID])
-
-  useEffect(() => {
-    if(Number(med.numIntake) === med.intakeList.length){
-      setIntakeList(med.intakeList || [])
-    } else {
-      setIntakeList(Array(med.numIntake).fill().map(() => ({ dose: '', time: '' })))
-    }
-  }, [med.numIntake, med.intakeList])
-
-  // useEffect(() => {
-  //   if(med.intakeList && numIntake >= 0)
-  //     // console.log(intakeList.length)
-  //     setIntakeList(
-  //       (numIntake === med.intakeList.length) ?
-  //       (med.intakeList || []) :
-  //       Array(numIntake).fill().map(() => ({ dose: '', time: '' }))
-  //     )
-  // }, [numIntake])
+  }, [])
 
   const navigate = useNavigate();
 
