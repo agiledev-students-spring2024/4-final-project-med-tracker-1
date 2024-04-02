@@ -11,16 +11,17 @@ import Home from './Home'
 import History from './History'
 import Medicines from './Medicines'
 import Setting from './Setting'
-import {AddMedicine1, AddMedicine2, AddMedicine3} from './AddMedicine'
-import {EditMed1, EditMed2, EditMed3} from './EditMedicine'
+import { AddMedicine1, AddMedicine2, AddMedicine3 } from './AddMedicine'
+import { EditMed1, EditMed2, EditMed3 } from './EditMedicine'
 import Reminder from './Reminder'
-import {ForgetPassword, ResetPassword} from './ForgetPassword';
+import { ForgetPassword, ResetPassword } from './ForgetPassword';
 import RefillReminder from './RefillReminder';
 
 function App() {
   return (
     <>
       <div className="App">
+
         <Router>
           <main className="App-main">
 
@@ -28,7 +29,7 @@ function App() {
               {/* a router for the template page */}
               <Route path="/template" element={<Template />} />
               {/* a router for the app introduction page */}
-              <Route path="/" element={<AppIntro />} />                       
+              <Route path="/" element={<AppIntro />} />
               {/* a router for the register page */}
               <Route path="/register" element={<Register />} />
               {/* a router for the login page */}
@@ -64,10 +65,10 @@ function App() {
               {/* a router for refill reminder page */}
               <Route path="/refill-reminder" element={<RefillReminder />} />
 
-            {/* a router for the forget password page */}
-            <Route path="/forget-password" element={<ForgetPassword />} />
-            {/* a router for the reset password page */}
-            <Route path="/reset-password" element={<ResetPassword />} />
+              {/* a router for the forget password page */}
+              <Route path="/forget-password" element={<ForgetPassword />} />
+              {/* a router for the reset password page */}
+              <Route path="/reset-password" element={<ResetPassword />} />
             </Routes>
 
           </main>

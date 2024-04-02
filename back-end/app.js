@@ -26,6 +26,8 @@ app.get('/api/user-settings', (req, res) => {
 });
 app.post('/api/update-settings', (req, res) => {
     const { firstName } = req.body;
+    mockUser2.firstName = firstName;
+
 
     // Assuming you have a way to identify the current user (e.g., session, JWT token)
     // Update the user's first name in your data store
