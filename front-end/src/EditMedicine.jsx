@@ -52,13 +52,28 @@ export const EditMed1 = () => {
     event.preventDefault();
     navigate('/medicines')
   }
+  const deleteMed = (event) => {
+    event.preventDefault();
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`)
+      .then(response => {
+        console.log(response.data.status)
+        navigate('/medicines')
+      })
+      .catch(err => {
+        console.log(err)
+        setError(`Failed to exit the add medicine page! \n${err}`)
+      })
+  }
   return (
     <div className="edit-medicine-page-1 add-medicine-page-1 full-color-bg">
       <div className="pop-up-white-bg med-input-container">
         <button type="button" onClick={handleExit} className="round-btn exit-btn">X</button>
-        <div className="med-image">
-            {/* Placeholder for medication image */}
-        </div>
+        {med.photo ? (
+          <img className="med-image" src={`${process.env.REACT_APP_SERVER_HOSTNAME}/med-images/${med.photo}`} alt="Uploaded"  />
+        ) : (
+          <div className="med-image img-placeholder"></div>
+        )}
         <form className="input-form med-info-form" onSubmit={handleFormSubmit}>
           <div className="form-group">
             <label htmlFor="medName">Name</label>
@@ -94,6 +109,7 @@ export const EditMed1 = () => {
             </select>
           </div>
           {error && <p className="error-message">{error}</p>} 
+          <button type="button" onClick={e => deleteMed(e)} className="white-btn next-btn">Delete</button>
           <button type="submit" className="blue-btn next-btn">Next</button>
         </form>  
       </div>

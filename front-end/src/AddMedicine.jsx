@@ -5,6 +5,7 @@ import './AddMedicine.css'
 
 
 export const AddMedicine1 = () => {
+  const [medID, setMedID] = useState()
   const [medName, setMedName] = useState('');
   const [totalAmount, setTotalAmount] = useState('');
   const [unit, setUnit] = useState('pill(s)');    
@@ -38,8 +39,9 @@ export const AddMedicine1 = () => {
       // post a new medicine to server
       .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-1/save`, medicine)
       .then(response => {
-        const medID = response.data.med.medID
-        navigate(`/add-medicine-2/${medID}`)
+        const newMedID = response.data.med.medID
+        setMedID(newMedID)
+        navigate(`/add-medicine-2/${newMedID}`)
       })
       .catch(err => {
         console.log(err)
@@ -49,7 +51,20 @@ export const AddMedicine1 = () => {
 
   const handleExit = (event) => {
     event.preventDefault();
-    navigate('/medicines')
+    if(medID){
+      axios
+        .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`)
+        .then(response => {
+          console.log(response.data.status)
+          navigate('/medicines')
+        })
+        .catch(err => {
+          console.log(err)
+          setError(`Failed to exit the add medicine page! \n${err}`)
+        })
+    }
+    else
+      navigate('/medicines')
   }
   return (
     <div className="add-medicine-page-1 full-color-bg">
@@ -128,6 +143,7 @@ export const AddMedicine2 = () => {
   const fetchMed = async() => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+      console.log('fetched med: ', response.data.med)
       setMed(response.data.med);
     } catch (error) {
       setError("Failed to fetch medication details", error);
@@ -139,8 +155,17 @@ export const AddMedicine2 = () => {
   }, []); 
 
   const handleExit = (event) => {
-      event.preventDefault();
-      navigate('/medicines')
+    event.preventDefault();
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`)
+      .then(response => {
+        console.log(response.data.status)
+        navigate('/medicines')
+      })
+      .catch(err => {
+        console.log(err)
+        setError(`Failed to exit the add medicine page! \n${err}`)
+      })
   }    
   const navPrev = (event) => {
     event.preventDefault();
@@ -334,7 +359,16 @@ export const AddMedicine3 = () => {
 
   const handleExit = (event) => {
     event.preventDefault();
-    navigate('/medicines');
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`)
+      .then(response => {
+        console.log(response.data.status)
+        navigate('/medicines')
+      })
+      .catch(err => {
+        console.log(err)
+        setError(`Failed to exit the add medicine page! \n${err}`)
+      })
   };
 
   const navPrev = (event) => {
