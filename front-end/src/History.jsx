@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import HistoryCard from './HistoryCard'
+import './Medicines.css'
 
 function History() {
     const [medications, setMedications] = useState([]);

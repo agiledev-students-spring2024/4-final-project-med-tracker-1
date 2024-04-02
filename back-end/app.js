@@ -2,9 +2,11 @@
 require('dotenv').config({ silent: true }) // load environmental variables from .env
 const express = require('express')
 const cors = require('cors')
+const multer = require('multer')
 const app = express()
 
 app.use(cors())
+app.use(express.static('public'))
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
 
@@ -34,6 +36,17 @@ app.post('/api/update-settings', (req, res) => {
 
     res.json({ message: 'Settings updated successfully' });
 });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/med-images')
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`)
+  }
+})
+
+const upload = multer({storage: storage})
 
 app.post('/api/register', (req, res) => {
     const { username, password, firstname } = req.body;
@@ -66,8 +79,9 @@ app.post('/api/login', (req, res) => {
 
 const medList = [
     {
+        medID: 0,
         medName: "Zestril",
-        photo: 'photoURL',
+        photo: '1712007021822_zestril.jpeg',
         totalAmt: 96,
         unit: "mg",
         refillAmt: 10,
@@ -78,29 +92,42 @@ const medList = [
         intakeList: [{ dose: 5, time: '12:00' }, { dose: 5, time: '19:30' }]
     },
     {
+        medID: 1,
         medName: "Midol",
-        photo: 'photoURL',
+        photo: '1712009434896_midol.jpeg',
         totalAmt: 40,
-        unit: "mg",
+        unit: "pill(s)",
         refillAmt: 5,
         frequency: 'as-needed',
         interval: '',
         selectedDays: [],
         numIntake: 0,
         intakeList: []
-    }
-    // {
-    //     medName: "Fish Oil", 
-    //     photo: 'photoURL', 
-    //     totalAmt: 38, 
-    //     unit: "pill(s)",
-    //     refillAmt: 10,
-    //     frequency: 'specific',
-    //     interval: '',
-    //     selectedDays: [2, 4],
-    //     numIntake: 1,
-    //     intakeList: [{dose: 2, time: '20:30'}]
-    // }   
+    },
+    {
+        medName: "Fish Oil", 
+        photo: '1712009213743_fish_oil.jpeg', 
+        totalAmt: 38, 
+        unit: "pill(s)",
+        refillAmt: 10,
+        frequency: 'specific',
+        interval: '',
+        selectedDays: [2, 4],
+        numIntake: 1,
+        intakeList: [{dose: 2, time: '20:30'}]
+    },
+    {
+        medName: "Vitamin C", 
+        photo: '1712009536243_vitaminC.jpeg', 
+        totalAmt: 38, 
+        unit: "pill(s)",
+        refillAmt: 10,
+        frequency: 'specific',
+        interval: '',
+        selectedDays: [2, 4],
+        numIntake: 1,
+        intakeList: [{dose: 2, time: '20:30'}]
+    }      
 ];
 
 let currMedID = null;
@@ -201,105 +228,174 @@ app.get('/medicines', (req, res) => {
             status: 'all good',
         })
     } catch (err) {
-        console.error(err)
-        return res.status(400).json({
-            error: err,
-            status: 'Failed to load your list of medicines',
-        })
+      console.error(err)
+      return res.status(400).json({
+        error: err,
+        status: 'Failed to load your list of medicines',
+      })
+    } 
+  })
+
+// a route to handle photo-upload
+app.post('/photo-upload', upload.single('file'), async(req, res) => {
+  try{
+    if (req.file) {
+      console.log(req.file)
+      return res.json({
+        photo: req.file,
+        status: 'all good'
+      })
+    } else {
+      return res.json({
+        photo: req.file,
+        status: 'failed to save uploaded image'
+      })
     }
+  } catch (err) {
+    console.error(err)
+    return res.status(400).json({
+      error: err,
+      status: 'failed to save the image to database',
+    })
+  } 
 })
 
 // a route to handle saving the data on add-medicine-1 form
-app.post('/add-medicine-1/save', async (req, res) => {
-    // try to save the new medicine to the database
-    try {
-        const med = {
-            medID: medList.length,
-            medName: req.body.medName,
-            photo: req.body.photo,
-            totalAmt: req.body.totalAmt,
-            unit: req.body.unit
-        }
-        medList[med.medID] = med;
-        currMedID = med.medID;
-        return res.json({
-            med: med, // return the message we just saved
-            status: 'all good',
-        })
-    } catch (err) {
-        console.error(err)
-        return res.status(400).json({
-            error: err,
-            status: 'failed to save the message to the database',
-        })
+app.post('/add-medicine-1/save', async(req, res) => {
+  // try to save the new medicine to the database
+  try {
+    const med = {
+        medID: medList.length,
+        medName: req.body.medName, 
+        photo: req.body.photo, 
+        totalAmt: req.body.totalAmt, 
+        unit: req.body.unit
     }
+    medList[med.medID] = med;
+    currMedID = med.medID;
+    return res.json({
+      med: med, // return the message we just saved
+      status: 'all good',
+    })
+  } catch (err) {
+    console.error(err)
+    return res.status(400).json({
+      error: err,
+      status: 'failed to save the medicine info to the database',
+    })
+  }    
 })
 
 // a route to handle fetch medicine
 app.get('/current-medicine', async (req, res) => {
-    try {
-        const med = medList[currMedID]
-        return res.json({
-            med: med, // return the med saved
-            status: 'all good',
-        })
-    } catch (err) {
-        console.error(err)
-        return res.status(400).json({
-            error: err,
-            status: 'failed to get the currently editing medicine',
-        })
-    }
+  try {
+    const med = medList[currMedID]
+    return res.json({
+      med: med, // return the med saved
+      status: 'all good',
+    })
+  } catch (err) {
+    console.error(err)
+    return res.status(400).json({
+      error: err,
+      status: 'failed to get the currently editing medicine',
+    })
+  }    
 })
 
 // a route to handle saving the data on add-medicine-2 form
-app.post('/add-medicine-2/save', async (req, res) => {
-    // try to save the new medicine to the database
-    try {
-        const medID = req.body.medID;
-        const med = medList[medID];
-        const newMedInfo = {
-            refillAmt: req.body.refillAmt,
-            frequency: req.body.frequency,
-            interval: req.body.interval,
-            selectedDays: req.body.selectedDays,
-            numIntake: req.body.numIntake
-        }
-        medList[medID] = { ...med, ...newMedInfo };
-        return res.json({
-            med: medList[medID], // return the medicine just saved
-            status: 'all good',
-        })
-    } catch (err) {
-        console.error(err)
-        return res.status(400).json({
-            error: err,
-            status: 'failed to save the message to the database',
-        })
+app.post('/add-medicine-2/save', async(req, res) => {
+  // try to save the new medicine to the database
+  try {
+    const medID = req.body.medID;
+    const med = medList[medID];
+    const newMedInfo = {
+      refillAmt: req.body.refillAmt, 
+      frequency: req.body.frequency,
+      interval: req.body.interval,
+      selectedDays: req.body.selectedDays,
+      numIntake: req.body.numIntake        
     }
+    medList[medID] = {...med, ...newMedInfo};
+    return res.json({
+      med: medList[medID], // return the medicine just saved
+      status: 'all good',
+    })
+  } catch (err) {
+    console.error(err)
+    return res.status(400).json({
+      error: err,
+      status: 'failed to save the message to the database',
+    })
+  }    
 })
 
 // a route to handle saving the data on add-medicine-3 form
-app.post('/add-medicine-3/save', async (req, res) => {
-    // try to save the new medicine to the database
-    try {
-        const medID = req.body.medID;
-        const med = medList[medID];
-        const intakeList = req.body.intakeList;
-        medList[medID] = { ...med, intakeList: intakeList };
-        return res.json({
-            med: medList[medID], // return the medicine just saved
-            status: 'all good',
-        })
-    } catch (err) {
-        console.error(err)
-        return res.status(400).json({
-            error: err,
-            status: 'failed to save the message to the database',
-        })
-    }
+app.post('/add-medicine-3/save', async(req, res) => {
+  // try to save the new medicine to the database
+  try {
+    const medID = req.body.medID;
+    const med = medList[medID];
+    const intakeList = req.body.intakeList;
+    medList[medID] = {...med, intakeList: intakeList};
+    return res.json({
+      med: medList[medID], // return the medicine just saved
+      status: 'all good',
+    })
+  } catch (err) {
+    console.error(err)
+    return res.status(400).json({
+      error: err,
+      status: 'failed to save the message to the database',
+    })
+  }    
 })
 
+app.get('/medicine/:medID', (req, res) => {
+  try {
+    const {medID} = req.params;
+    const foundMed = medList[medID];
+    return res.json({
+      med: foundMed, // return the medicine just saved
+      status: 'all good',
+    })
+  } catch (err) {
+    console.error(err)
+    return res.status(400).json({
+      error: err,
+      status: 'failed to save the message to the database',
+    })
+  }   
+})
+
+app.put('/medicine/update/:medID', (req, res) => {
+  try{  
+    const { medID } = req.params; 
+    const updates = req.body; 
+
+    const med = medList[medID];
+    
+    if (!med) {
+      return res.status(404).send({ message: 'Medicine not found' });
+    }
+    
+    for (const key in updates) {
+      if (med.hasOwnProperty(key)) {
+        med[key] = updates[key];
+      }
+    }
+    medList[medID] = med
+    return res.json({
+      med: medList[medID],
+      status: 'all good'
+    })
+  } catch (error) {
+      return res.status(400).json({
+        error: err,
+        status: 'failed to save the message to the database',
+      })
+  }
+});
 let medicationActions = []; // Assuming this is declared somewhere in your code
 
 app.post('/api/confirm-intake', (req, res) => {

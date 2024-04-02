@@ -33,3 +33,11 @@
   width: 80%;
   margin-top: 40px;
 }
+
+.medications-page .medications-container{
+    max-height: 62vh;
+}
+
+.history-page .medications-container{
+    max-height: 69vh;
+}
