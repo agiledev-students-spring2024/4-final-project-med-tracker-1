@@ -51,6 +51,7 @@ function Home() {
             <div className="body-container">
                 <h2>Today's Medicines</h2>
                 <div className="medications-container">
+                    {error && <p className="error-message">{error}</p>} 
                     {intakeListToTake.map((intake) => (
                         <HomeCard
                             key={intake.medID + intake.time}
