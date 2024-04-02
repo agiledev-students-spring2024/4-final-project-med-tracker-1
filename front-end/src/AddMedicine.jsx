@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 import './AddMedicine.css'
 
 
 export const AddMedicine1 = () => {
+  const [medID, setMedID] = useState()
   const [medName, setMedName] = useState('');
   const [totalAmount, setTotalAmount] = useState('');
   const [unit, setUnit] = useState('pill(s)');    
@@ -38,8 +39,9 @@ export const AddMedicine1 = () => {
       // post a new medicine to server
       .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-1/save`, medicine)
       .then(response => {
-        console.log(response.data.med)
-        navigate('/add-medicine-2')
+        const newMedID = response.data.med.medID
+        setMedID(newMedID)
+        navigate(`/add-medicine-2/${newMedID}`)
       })
       .catch(err => {
         console.log(err)
@@ -49,7 +51,20 @@ export const AddMedicine1 = () => {
 
   const handleExit = (event) => {
     event.preventDefault();
-    navigate('/medicines')
+    if(medID){
+      axios
+        .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`)
+        .then(response => {
+          console.log(response.data.status)
+          navigate('/medicines')
+        })
+        .catch(err => {
+          console.log(err)
+          setError(`Failed to exit the add medicine page! \n${err}`)
+        })
+    }
+    else
+      navigate('/medicines')
   }
   return (
     <div className="add-medicine-page-1 full-color-bg">
@@ -114,6 +129,8 @@ export const AddMedicine1 = () => {
 }
 
 export const AddMedicine2 = () => {
+  const { medID } = useParams();
+
   const [med, setMed] = useState({});
   const [frequency, setFrequency] = useState('');  
   const [refillAmt, setRefillAmt] = useState(0);
@@ -123,27 +140,32 @@ export const AddMedicine2 = () => {
   const [error, setError] = useState('')
   const navigate = useNavigate();
 
-  // fetch the currently editing medicine info from backend
-  const fetchMedicine = () => {
-    axios
-    .get(`${process.env.REACT_APP_SERVER_HOSTNAME}/current-medicine`)
-    .then(response => {
-      const updatedMed = response.data.med
-      setMed(updatedMed)
-    })
-    .catch(err => {
-      const errMsg = JSON.stringify(err, null, 2) // convert error object to a string
-      setError(errMsg)
-    })
+  const fetchMed = async() => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+      console.log('fetched med: ', response.data.med)
+      setMed(response.data.med);
+    } catch (error) {
+      setError("Failed to fetch medication details", error);
+    }
   }
 
   useEffect(() => {
-    fetchMedicine();
+    fetchMed();
   }, []); 
 
   const handleExit = (event) => {
-      event.preventDefault();
-      navigate('/medicines')
+    event.preventDefault();
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`)
+      .then(response => {
+        console.log(response.data.status)
+        navigate('/medicines')
+      })
+      .catch(err => {
+        console.log(err)
+        setError(`Failed to exit the add medicine page! \n${err}`)
+      })
   }    
   const navPrev = (event) => {
     event.preventDefault();
@@ -161,10 +183,9 @@ export const AddMedicine2 = () => {
     }
     axios
       // post new medicine information and send to back end
-      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/save`, newMedInfo)
-      .then(response => {
-        console.log(response.data.med)
-        navigate('/add-medicine-3')
+      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/${medID}/save`, newMedInfo)
+      .then(() => {
+        navigate(`/add-medicine-3/${medID}`)
       })
       .catch(err => {
         console.log(err)
@@ -312,39 +333,42 @@ export const AddMedicine2 = () => {
 }
 
 export const AddMedicine3 = () => {  
+  const { medID } = useParams();
   const [med, setMed] = useState({});
-  const [numIntake, setNumIntake] = useState('');
+  const [numIntake, setNumIntake] = useState(0);
   const [intakeList, setIntakeList] = useState([]);
   const [error, setError] = useState('')
 
   // fetch the medicine info filled in previous pages from backend
-  const fetchMedicine = () => {
-    axios
-    .get(`${process.env.REACT_APP_SERVER_HOSTNAME}/current-medicine`)
-    .then(response => {
+  const fetchMed = async() => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
       const updatedMed = response.data.med;
-      setMed(updatedMed)
-      setNumIntake(Number(updatedMed.numIntake))
-    })
-    .catch(err => {
-      const errMsg = JSON.stringify(err, null, 2) // convert error object to a string
-      setError(errMsg)
-    })
+      setMed(updatedMed);
+      setIntakeList(Array(Number(updatedMed.numIntake)).fill().map(() => ({ dose: '', time: '' })) || [])
+    } catch (error) {
+      setError("Failed to fetch medication details", error);
+    }
   }
 
   useEffect(() => {
-    fetchMedicine();
+    fetchMed();
   }, []); 
-
-  useEffect(() => {
-    setIntakeList(Array(numIntake).fill().map(() => ({ dose: '', time: '' })));
-  }, [numIntake]);
 
   const navigate = useNavigate();
 
   const handleExit = (event) => {
     event.preventDefault();
-    navigate('/medicines');
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`)
+      .then(response => {
+        console.log(response.data.status)
+        navigate('/medicines')
+      })
+      .catch(err => {
+        console.log(err)
+        setError(`Failed to exit the add medicine page! \n${err}`)
+      })
   };
 
   const navPrev = (event) => {
@@ -370,13 +394,12 @@ export const AddMedicine3 = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    const newMedInfo = {medID: med.medID, intakeList: intakeList};
+    const newMedInfo = {intakeList: intakeList};
     axios
       // post new medicine information and send to back end
-      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-3/save`, newMedInfo)
+      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/${med.medID}/save`, newMedInfo)
       .then(response => {
-        console.log('saved med=======')
-        console.log(response.data.med)
+        console.log('final med: ', response.data.med)
         navigate('/medicines')
       })
       .catch(err => {
