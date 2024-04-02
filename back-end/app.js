@@ -271,7 +271,8 @@ app.post('/add-medicine-1/save', async(req, res) => {
         medName: req.body.medName, 
         photo: req.body.photo, 
         totalAmt: req.body.totalAmt, 
-        unit: req.body.unit
+        unit: req.body.unit,
+        date: new Date()
     }
     medList.push(med);
     return res.json({
