@@ -15,6 +15,23 @@ const mockUser = {
     password: 'password123',
     firstname: 'Yvette'
 };
+const mockUser2 = {
+    firstName: 'Katie',
+    username: 'ky7821@nyu.edu',
+    password: 'katie0918'
+}
+app.get('/api/user-settings', (req, res) => {
+    console.log(mockUser2);
+    res.json(mockUser2);
+});
+app.post('/api/update-settings', (req, res) => {
+    const { firstName } = req.body;
+
+    // Assuming you have a way to identify the current user (e.g., session, JWT token)
+    // Update the user's first name in your data store
+
+    res.json({ message: 'Settings updated successfully' });
+});
 
 app.post('/api/register', (req, res) => {
     const { username, password, firstname } = req.body;
