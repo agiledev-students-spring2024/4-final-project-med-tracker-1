@@ -84,6 +84,7 @@ const medList = [
         photo: '1712007021822_zestril.jpeg',
         totalAmt: 96,
         unit: "mg",
+        date: new Date("2024-03-24T15:46:48.535Z"),
         refillAmt: 10,
         frequency: 'regular',
         interval: '1',
@@ -97,6 +98,7 @@ const medList = [
         photo: '1712009434896_midol.jpeg',
         totalAmt: 40,
         unit: "pill(s)",
+        date: new Date("2024-03-14T15:46:48.535Z"),
         refillAmt: 5,
         frequency: 'as-needed',
         interval: '',
@@ -110,12 +112,13 @@ const medList = [
         photo: '1712009213743_fish_oil.jpeg', 
         totalAmt: 38, 
         unit: "pill(s)",
+        date: new Date("2024-03-14T15:46:48.535Z"),
         refillAmt: 10,
         frequency: 'specific',
         interval: '',
-        selectedDays: [2, 4],
+        selectedDays: [0, 2, 4],
         numIntake: 1,
-        intakeList: [{dose: 2, time: '20:30'}]
+        intakeList: [{dose: 2, time: '14:30'}]
     },
     {
         medID: 3,
@@ -123,63 +126,61 @@ const medList = [
         photo: '1712009536243_vitaminC.jpeg', 
         totalAmt: 38, 
         unit: "pill(s)",
+        date: new Date("2024-03-14T15:46:48.535Z"),
         refillAmt: 10,
         frequency: 'specific',
         interval: '',
-        selectedDays: [2, 4],
+        selectedDays: [3, 5, 6],
         numIntake: 1,
-        intakeList: [{dose: 2, time: '20:30'}]
+        intakeList: [{dose: 1, time: '17:30'}]
     }      
 ];
 
-let currMedID = null;
-
 app.get('/home', (req, res) => {
-    const medications = [
-        { name: 'Zestril', pillsLeft: 95, schedule: '12:00PM', date: 'Mar 27th', dose: 1 },
-        { name: 'Zestril', pillsLeft: 94, schedule: '7:30PM', date: 'Mar 27th', dose: 1 },
-        { name: 'Zestril', pillsLeft: 93, schedule: '12:00PM', date: 'Mar 28th', dose: 1 },
-        { name: 'Zestril', pillsLeft: 92, schedule: '7:30PM', date: 'Mar 28th', dose: 1 },
-        { name: 'Midol', pillsLeft: 38, schedule: '11:00PM', date: 'Mar 27th', dose: 1 },
+  const intakeListToTake = [];
+  function medToTake(med) {
+    const currDate = new Date();
+    if(med.frequency === 'regular'){
+      daysDiff = Math.floor((currDate - med.date)/(1000 * 60 * 60 * 24))
+      if(daysDiff % Number(med.interval) === 0)
+        return true;
+      else
+        return false;
+    } 
+    else if (med.frequency === 'specific') {
+      currDay = Number(currDate.getDay());
+      if(med.selectedDays.includes(currDay))
+        return true;
+      else
+        return false;
+    } 
+    else { // med.frequency === 'as-needed'
+      return false;
+    }
+  }
 
-    ];
-
-    const now = new Date();
-    let medicationsToTake = [];
-
-    medications.forEach(medication => {
-        const dateParts = medication.date.match(/(\w+)\s(\d+)[a-z]{2}/);
-        const month = dateParts[1];
-        const day = parseInt(dateParts[2]);
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const monthNumber = monthNames.indexOf(month);
-        const medicationDate = new Date(now.getFullYear(), monthNumber, day);
-
-        if (medicationDate.getFullYear() === now.getFullYear() &&
-            medicationDate.getMonth() === now.getMonth() &&
-            medicationDate.getDate() === now.getDate()) {
-            const scheduleParts = medication.schedule.match(/(\d+):(\d+)(AM|PM)/);
-            let hours = parseInt(scheduleParts[1]);
-            const minutes = parseInt(scheduleParts[2]);
-            const isPM = scheduleParts[3] === 'PM';
-
-            if (isPM && hours < 12) hours += 12;
-            if (!isPM && hours === 12) hours = 0;
-
-            if (now.getHours() < hours || (now.getHours() === hours && now.getMinutes() < minutes)) {
-                medicationsToTake.push({ ...medication, hours, minutes });
-            }
-        }
-    });
-
-    medicationsToTake.sort((a, b) => {
-        if (a.hours === b.hours) {
-            return a.minutes - b.minutes;
-        }
-        return a.hours - b.hours;
-    });
-
-    res.json(medicationsToTake);
+  function addIntake(med) {
+    med.intakeList.forEach((intake) => {
+      const newIntake = {...intake, ...med}
+      intakeListToTake.push(newIntake)
+    })    
+  }
+  try {
+    const medListToTake = medList.filter(med => medToTake(med));
+    medListToTake.forEach(med => addIntake(med));
+    intakeListToTake.sort((a, b) => a.time.localeCompare(b.time))
+    console.log('intakeListToTake: ', intakeListToTake);    
+    return res.json({
+        intakeListToTake: intakeListToTake, // return the list of med to take today
+        status: 'all good',
+    })
+  } catch (err) {
+    console.error(err)
+    return res.status(400).json({
+      error: err,
+      status: 'Failed to load your list of medicines',
+    })
+  } 
 });
 
 app.get('/history', (req, res) => {
@@ -271,7 +272,8 @@ app.post('/add-medicine-1/save', async(req, res) => {
         medName: req.body.medName, 
         photo: req.body.photo, 
         totalAmt: req.body.totalAmt, 
-        unit: req.body.unit
+        unit: req.body.unit,
+        date: new Date()
     }
     medList.push(med);
     return res.json({
@@ -308,23 +310,6 @@ app.delete('/delete-med/:medID', async(req, res) => {
     })
   }
 })
-
-// // a route to handle fetch medicine
-// app.get('/current-medicine', async (req, res) => {
-//   try {
-//     const med = medList[currMedID]
-//     return res.json({
-//       med: med, // return the med saved
-//       status: 'all good',
-//     })
-//   } catch (err) {
-//     console.error(err)
-//     return res.status(400).json({
-//       error: err,
-//       status: 'failed to get the currently editing medicine',
-//     })
-//   }    
-// })
 
 // a route to handle saving the data on add-medicine-2 form
 app.post('/add-medicine-2/:medID/save', async(req, res) => {

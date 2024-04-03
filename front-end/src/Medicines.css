@@ -16,6 +16,10 @@
     left: -160px;
 }
 
+.home-page .medication-card .medication-info p{
+    width: 250px;
+}
+
 .reminder-button {
     position: absolute;
     top: 40px;

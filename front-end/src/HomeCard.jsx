@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HomeCard = ({name, schedule, dose}) => {
+const HomeCard = ({name, photoURL, schedule, dose}) => {
     return (
         <div className="medication-card">
             <div className="medication-info">
@@ -8,9 +8,11 @@ const HomeCard = ({name, schedule, dose}) => {
                 <p>{schedule}</p>
                 <p>{dose} pill(s)</p>
             </div>
-            <div className="medication-image">
-                {/* Placeholder for medication image */}
-            </div>
+            {photoURL ? (
+                <img className="medication-image" src={`${process.env.REACT_APP_SERVER_HOSTNAME}/med-images/${photoURL}`} alt="med image"/>
+            ) : (
+                <div className="medication-image">{/* Placeholder */}</div>
+            )}
         </div>
     );
 };
