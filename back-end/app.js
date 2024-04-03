@@ -49,19 +49,24 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage})
 
 app.post('/api/register', (req, res) => {
-    const { username, password, firstname } = req.body;
+  const { username, password, firstname, confirmPassword } = req.body;
 
-    if (!username || !password || !firstname) {
-        return res.status(400).send({ success: false, message: "Username, password, and first name are required." });
-    }
+  if (!username || !password || !firstname) {
+      return res.status(400).send({ success: false, message: "Username, password, and first name are required." });
+  }
 
-    if (users[username] || (mockUser.username === username)) {
-        return res.status(409).send({ success: false, message: "User already exists." });
-    }
+  if (password !== confirmPassword) {
+      return res.status(409).send({ success: false, message: "Passwords do not match." });
+  }
 
-    users[username] = { username, password, firstname };
-    res.send({ success: true, message: "Registration successful." });
+  if (users[username] || (mockUser.username === username)) {
+      return res.status(409).send({ success: false, message: "User already exists." });
+  }
+
+  users[username] = { username, password, firstname };
+  res.send({ success: true, message: "Registration successful." });
 });
+
 
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
