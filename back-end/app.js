@@ -168,8 +168,7 @@ app.get('/home', (req, res) => {
   try {
     const medListToTake = medList.filter(med => medToTake(med));
     medListToTake.forEach(med => addIntake(med));
-    intakeListToTake.sort((a, b) => a.time.localeCompare(b.time))
-    console.log('intakeListToTake: ', intakeListToTake);    
+    intakeListToTake.sort((a, b) => a.time.localeCompare(b.time))   
     return res.json({
         intakeListToTake: intakeListToTake, // return the list of med to take today
         status: 'all good',
@@ -183,45 +182,70 @@ app.get('/home', (req, res) => {
   } 
 });
 
+
 app.get('/history', (req, res) => {
-    const medications = [
-        { name: 'Zestril', pillsLeft: 95, schedule: '12:00PM', date: 'Mar 27th', dose: 1 },
-        { name: 'Zestril', pillsLeft: 94, schedule: '7:30PM', date: 'Mar 27th', dose: 1 },
-        { name: 'Zestril', pillsLeft: 93, schedule: '12:00PM', date: 'Mar 28th', dose: 1 },
-        { name: 'Zestril', pillsLeft: 92, schedule: '7:30PM', date: 'Mar 28th', dose: 1 },
-        { name: 'Midol', pillsLeft: 38, schedule: '11:00PM', date: 'Mar 27th', dose: 1 },
+    const endDate = new Date().toISOString().split('T')[0]; // Use today as the end date
 
-    ];
+    function generateDetailedPastIntakeRecords(med, endDate) {
+        let detailedIntakeRecords = [];
+        const startDate = new Date(med.date);
+        endDate = new Date(endDate);
 
-    const now = new Date();
-    let medicationsTaken = [];
+        let pillsLeft = med.totalAmt;
 
-    medications.forEach(medication => {
-        const dateParts = medication.date.match(/(\w+)\s(\d+)[a-z]{2}/);
-        const month = dateParts[1];
-        const day = parseInt(dateParts[2]);
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const monthNumber = monthNames.indexOf(month);
-        const medicationDate = new Date(now.getFullYear(), monthNumber, day);
-
-        if (medicationDate < now || (medicationDate.toDateString() === now.toDateString())) {
-            const scheduleParts = medication.schedule.match(/(\d+):(\d+)(AM|PM)/);
-            let hours = parseInt(scheduleParts[1]);
-            const minutes = parseInt(scheduleParts[2]);
-            const isPM = scheduleParts[3] === 'PM';
-
-            if (isPM && hours < 12) hours += 12;
-            if (!isPM && hours === 12) hours = 0;
-
-            const medicationDateTime = new Date(now.getFullYear(), monthNumber, day, hours, minutes);
-            if (medicationDateTime <= now) {
-                medicationsTaken.push(medication);
+        for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            let dCopy = new Date(d); 
+            if (med.frequency === 'regular') {
+                const daysDiff = Math.floor((dCopy - startDate) / (1000 * 60 * 60 * 24));
+                if (daysDiff % Number(med.interval) === 0) {
+                    med.intakeList.forEach(intake => {
+                        if(pillsLeft >= intake.dose){
+                            pillsLeft -= intake.dose;
+                            detailedIntakeRecords.push({
+                                name: med.medName,
+                                date: dCopy.toISOString().split('T')[0],
+                                schedule: intake.time, 
+                                dose: intake.dose,
+                                pillsLeft, 
+                                photoURL: med.photo
+                            });
+                        }
+                    });
+                }
+            } else if (med.frequency === 'specific') {
+                if (med.selectedDays.includes(dCopy.getDay())) {
+                    med.intakeList.forEach(intake => {
+                        if(pillsLeft >= intake.dose){
+                            pillsLeft -= intake.dose;
+                            detailedIntakeRecords.push({
+                                name: med.medName,
+                                date: dCopy.toISOString().split('T')[0],
+                                schedule: intake.time, 
+                                dose: intake.dose,
+                                pillsLeft,
+                                photoURL: med.photo
+                            });
+                        }
+                    });
+                }
             }
+            // avoid infinite loop
+            d = dCopy;
         }
-    });
 
-    res.json(medicationsTaken);
+        return detailedIntakeRecords;
+    }
+
+    try {
+        const detailedMedRecords = medList.flatMap(med => generateDetailedPastIntakeRecords(med, endDate));
+        
+        res.json(detailedMedRecords);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
 });
+
 
 // a route to handle fetch all medicines
 app.get('/medicines', (req, res) => {
