@@ -26,16 +26,16 @@ git clone https://github.com/agiledev-students-spring2024/4-final-project-med-tr
 Then navigate to the the front-end directory, install dependencies and run the project.
 
 ```
-*** 4-final-project-med-tracker-1 % cd front-end/
-*** front-end % npm install
-*** front-end % npm start
+4-final-project-med-tracker-1 % cd front-end/
+front-end % npm install
+front-end % npm start
 ```
 and follow the same steps to run the Med Tracker's back-end.
 
 ```
-*** 4-final-project-med-tracker-1 % cd back-end/
-*** back-end % npm install
-*** back-end % npm start
+4-final-project-med-tracker-1 % cd back-end/
+back-end % npm install
+back-end % npm start
 ```
 
 Open a new terminal in the back-end directory and run ``` npm test ``` to start testing.
