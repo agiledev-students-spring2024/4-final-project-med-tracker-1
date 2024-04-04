@@ -28,8 +28,9 @@ function History() {
                     <div className="medications-container">
                         {medications.map((med) => (
                             <HistoryCard
-                                key={med.name}
+                                key={`${med.name}-${med.pillsLeft}`}
                                 name={med.name}
+                                photoURL={med.photo}
                                 pillsLeft={med.pillsLeft}
                                 schedule={med.schedule}
                                 date={med.date}
