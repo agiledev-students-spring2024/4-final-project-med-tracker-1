@@ -4,14 +4,17 @@
   "description": "The back-end of your project will live in this directory.",
   "main": "server.js",
   "scripts": {
-    "test": "c8 mocha"
+    "test": "mocha",
+    "coverage": "c8 mocha"
   },
   
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "c8": "^9.1.0",
+    "chai": "^4.4.0",
     "chai-http": "^4.4.0",
-    "chai": "^4.3.4",
+    "mocha": "^10.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
