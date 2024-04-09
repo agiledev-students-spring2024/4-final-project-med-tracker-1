@@ -10,6 +10,18 @@ app.use(express.static('public'))
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
 
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('Successfully connected to MongoDB Atlas!');
+}).catch((error) => {
+  console.error('Connection error:', error.message);
+});
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 let users = {};
 
 const mockUser = {
