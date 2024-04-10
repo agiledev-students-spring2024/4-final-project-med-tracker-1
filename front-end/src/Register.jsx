@@ -20,13 +20,13 @@ const Register = () => {
         }
 
         try {
-            const response = await fetch(`${process.env.FRONT_END_URI}/api/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password, firstname }),
-            });
+           const response = await fetch(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/register`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, password, firstname }),
+});
 
             const data = await response.json();
             if (response.ok) {
