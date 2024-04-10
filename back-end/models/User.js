@@ -1,3 +1,8 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema
+
+
+
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -12,7 +17,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    medList: [{
+/*     medList: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Medication'
     }],
@@ -23,8 +28,8 @@ const userSchema = new mongoose.Schema({
     historyList: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'History'
-    }]
-});
+    }] */
+}, { collection: 'userinfo' }) ;
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
