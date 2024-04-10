@@ -9,25 +9,25 @@ const Register = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const firstname = document.getElementById('firstName').value; 
+        const firstname = document.getElementById('firstName').value;
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirm-password').value;
-    
+
         if (password !== confirmPassword) {
             setError("Passwords do not match.");
             return;
         }
-    
+
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/register`, {
+            const response = await fetch(`${process.env.FRONT_END_URI}/api/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password, firstname, confirmPassword }),
+                body: JSON.stringify({ username, password, firstname }),
             });
-    
+
             const data = await response.json();
             if (response.ok) {
                 navigate('/login');
@@ -38,8 +38,6 @@ const Register = () => {
             setError("Failed to connect to the server.");
         }
     };
-    
-    
 
     return (
         <div className="full-white-bg register-page">
@@ -56,8 +54,8 @@ const Register = () => {
             {error && <p className="error-message">{error}</p>}
             <div className="register-container">
                 <p>Already have an account?</p>
-                <Link to="/login" className="sign-up-btn">Log in</Link> 
-            </div> 
+                <Link to="/login" className="sign-up-btn">Log in</Link>
+            </div>
         </div>
     );
 };
