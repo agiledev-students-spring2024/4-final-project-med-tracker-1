@@ -3,6 +3,7 @@ require('dotenv').config({ silent: true }) // load environmental variables from 
 const express = require('express')
 const cors = require('cors')
 const multer = require('multer')
+const mongoose = require('mongoose')
 const app = express()
 
 app.use(cors())
