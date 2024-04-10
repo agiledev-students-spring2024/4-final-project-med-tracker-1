@@ -26,9 +26,8 @@ router.post('/register', async (req, res) => {
             preferredFirstName: firstname,
             password: hashedPassword,
         });
-        console.log("User not registered successfully:", user);
         await user.save();
-        console.log("User registered successfully:", user);
+        console.log("Pre registered successfully:", user);
         res.status(201).json({ message: "User registered successfully." });
     } catch (error) {
         console.error("Failed to register user:", error);
