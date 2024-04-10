@@ -3,8 +3,12 @@ require('dotenv').config({ silent: true }) // load environmental variables from 
 const express = require('express')
 const cors = require('cors')
 const multer = require('multer')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');  
+const User = require('./models/User');
 const app = express()
+
+const SECRET_KEY = process.env.SECRET_KEY || 'secretkey';
 
 app.use(cors())
 app.use(express.static('public'))
@@ -13,7 +17,7 @@ app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming P
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 }).then(() => {
   console.log('Successfully connected to MongoDB Atlas!');
 }).catch((error) => {
@@ -22,6 +26,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 
 let users = {};
 
@@ -42,11 +47,6 @@ app.get('/api/user-settings', (req, res) => {
 app.post('/api/update-settings', (req, res) => {
     const { firstName } = req.body;
     mockUser2.firstName = firstName;
-
-
-    // Assuming you have a way to identify the current user (e.g., session, JWT token)
-    // Update the user's first name in your data store
-
     res.json({ message: 'Settings updated successfully' });
 });
 
@@ -61,38 +61,51 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage})
 
-app.post('/api/register', (req, res) => {
+app.post('/api/register', async (req, res) => {
   const { username, password, firstname, confirmPassword } = req.body;
-
-  if (!username || !password || !firstname) {
-      return res.status(400).send({ success: false, message: "Username, password, and first name are required." });
-  }
-
   if (password !== confirmPassword) {
-      return res.status(409).send({ success: false, message: "Passwords do not match." });
+      console.log("Received passwords:", { password, confirmPassword }); 
+      return res.status(400).json({ message: "Passwords do not match." });
   }
-
-  if (users[username] || (mockUser.username === username)) {
-      return res.status(409).send({ success: false, message: "User already exists." });
+  if (!username || !password || !firstname) {
+      return res.status(400).json({ message: "Please fill out all fields." });
   }
-
-  users[username] = { username, password, firstname };
-  res.send({ success: true, message: "Registration successful." });
+  const userExists = await User.findOne({ email: username });
+  if (userExists) {
+      return res.status(400).json({ message: "Username already exists." });
+  }
+  try {
+      const user = new User({
+          email: username,
+          preferredFirstName: firstname,
+          password: password,
+      });
+      await user.save();
+      console.log("Pre registered successfully:", user);
+      res.status(201).json({ message: "User registered successfully." });
+  } catch (error) {
+      console.error("Failed to register user:", error);
+      res.status(500).json({ message: "Failed to register user." });
+  }
 });
 
 
-app.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
-
-    if (username === mockUser.username && password === mockUser.password) {
-        return res.send({ success: true, message: `Login successful with mock user: ${mockUser.firstname}.` });
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body; 
+    try {
+        const user = await User.findOne({ email: email }); 
+        if (!user) {
+            return res.status(401).json({ message: "Invalid credentials." });
+        }
+        const validPassword = password === user.password;
+        if (!validPassword) {
+            return res.status(401).json({ message: "Invalid credentials." });
+        }
+        const token = jwt.sign({ email: user.email }, SECRET_KEY);
+        res.json({ token });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to login." });
     }
-
-    if (users[username] && users[username].password === password) {
-        return res.send({ success: true, message: `Login successful with registered user: ${users[username].firstname}.` });
-    }
-
-    res.status(401).send({ success: false, message: "Invalid credentials." });
 });
 
 const medList = [
