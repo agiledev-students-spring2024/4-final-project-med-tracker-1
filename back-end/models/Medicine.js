@@ -22,7 +22,7 @@ const MedicineSchema = new mongoose.Schema(
         intakeList: [IntakeSchema]
     }
 )
-mongoose.model('Intake', IntakeSchema)
-mongoose.model('Medicine', MedicineSchema)
 
-mongoose.connect('mongodb://localhost/med-tracker');
+const Medicine = mongoose.model('Medicine', MedicineSchema)
+
+module.exports = Medicine
