@@ -8,6 +8,8 @@ const jwt = require('jsonwebtoken');
 const User = require('./models/User');
 const app = express()
 
+const SECRET_KEY = process.env.SECRET_KEY || 'secretkey';
+
 app.use(cors())
 app.use(express.static('public'))
 app.use(express.json()) // decode JSON-formatted incoming POST data
@@ -45,7 +47,6 @@ app.get('/api/user-settings', (req, res) => {
 app.post('/api/update-settings', (req, res) => {
     const { firstName } = req.body;
     mockUser2.firstName = firstName;
-
     res.json({ message: 'Settings updated successfully' });
 });
 
@@ -90,7 +91,6 @@ app.post('/api/register', async (req, res) => {
 
 
 app.post('/api/login', async (req, res) => {
-  con
   const { email, password } = req.body; 
     try {
         const user = await User.findOne({ email: email }); 
