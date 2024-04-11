@@ -6,9 +6,11 @@ const multer = require('multer')
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');  
 const User = require('./models/User');
+const Medicine = require('./models/Medicine')
 const app = express()
 
 const SECRET_KEY = process.env.SECRET_KEY || 'secretkey';
+const expiresIn = process.env.EXPIRE_TIME || '1h';
 
 app.use(cors())
 app.use(express.static('public'))
@@ -101,11 +103,34 @@ app.post('/api/login', async (req, res) => {
         if (!validPassword) {
             return res.status(401).json({ message: "Invalid credentials." });
         }
-        const token = jwt.sign({ email: user.email }, SECRET_KEY);
+        const token = jwt.sign({ email: user.email }, SECRET_KEY, {expiresIn: Math.floor(Date.now() / 1000) + 15 * 60});
         res.json({ token });
     } catch (error) {
         res.status(500).json({ message: "Failed to login." });
     }
+});
+
+// Middleware for verifying the token
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+  if (token == null) {
+    return res.sendStatus(401); 
+  }
+
+  jwt.verify(token, SECRET_KEY, (err, user) => {
+    if (err) {
+      return res.sendStatus(403); 
+    }
+    req.user = user;
+    next(); 
+  });
+};
+
+// Protected route
+app.get('/api/verify-token', verifyToken, (req, res) => {
+  res.json({ message: "Token is valid" });
 });
 
 const medList = [
@@ -292,7 +317,7 @@ app.get('/medicines', (req, res) => {
         status: 'Failed to load your list of medicines',
       })
     } 
-  })
+})
 
 // a route to handle photo-upload
 app.post('/photo-upload', upload.single('file'), async(req, res) => {

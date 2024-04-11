@@ -17,11 +17,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-/*     medList: [{
+    medList: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Medication'
+        ref: 'Medicine'
     }],
-    todayList: [{
+/*    todayList: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Task'
     }],
