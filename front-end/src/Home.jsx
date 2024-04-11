@@ -7,6 +7,7 @@ import './Medicines.css';
 
 function Home() {
     const [userName, setUserName] = useState(''); // Add state to hold the user's name
+    const [date, setDate] = useState('')
     const [intakeListToTake, setIntakeListToTake] = useState([])
     const [error, setError] = useState('')
     
@@ -29,6 +30,7 @@ function Home() {
                 const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/home`);
                 console.log('intakeListToTake: ', response.data.intakeListToTake);
                 setIntakeListToTake(response.data.intakeListToTake)
+                setDate(response.data.currDate)
             } catch (err) {
                 console.log(err);
                 setError(`Failed to fetch medications to take today! \n${err}`);
@@ -45,7 +47,7 @@ function Home() {
                 <div className="page-header">
                     {/* Use the dynamically fetched user's name */}
                     <h1 className="title">Hi, {userName}!</h1>
-                    <p className="subtitle">February 14, 2024</p>
+                    <p className="subtitle">{date}</p>
                 </div>
             </div>
             <div className="body-container">
