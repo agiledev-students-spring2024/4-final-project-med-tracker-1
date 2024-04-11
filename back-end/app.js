@@ -197,10 +197,17 @@ app.get('/home', (req, res) => {
     })    
   }
   try {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
     const medListToTake = medList.filter(med => medToTake(med));
     medListToTake.forEach(med => addIntake(med));
     intakeListToTake.sort((a, b) => a.time.localeCompare(b.time))   
     return res.json({
+        currDate: formattedDate,
         intakeListToTake: intakeListToTake, // return the list of med to take today
         status: 'all good',
     })
