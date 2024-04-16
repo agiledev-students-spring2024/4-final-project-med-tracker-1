@@ -29,6 +29,7 @@ const Login = () => {
 
             try {
                 const data = await response.json();
+                localStorage.setItem("token", data.token);
                 setIsLoggedIn(true);
             } catch (error) {
                 throw new Error("Received non-JSON response from server.");
