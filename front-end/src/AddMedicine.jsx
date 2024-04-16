@@ -148,7 +148,12 @@ export const AddMedicine2 = () => {
 
   const fetchMed = async() => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       console.log('fetched med: ', response.data.med)
       setMed(response.data.med);
     } catch (error) {
@@ -162,8 +167,13 @@ export const AddMedicine2 = () => {
 
   const handleExit = (event) => {
     event.preventDefault();
+    const token = localStorage.getItem("token");
     axios
-      .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`)
+      .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then(response => {
         console.log(response.data.status)
         navigate('/medicines')
@@ -189,7 +199,11 @@ export const AddMedicine2 = () => {
     }
     axios
       // post new medicine information and send to back end
-      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/${medID}/save`, newMedInfo)
+      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/${medID}/save`, newMedInfo, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }
+      })
       .then(() => {
         navigate(`/add-medicine-3/${medID}`)
       })
@@ -348,7 +362,11 @@ export const AddMedicine3 = () => {
   // fetch the medicine info filled in previous pages from backend
   const fetchMed = async() => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }
+      });
       const updatedMed = response.data.med;
       setMed(updatedMed);
       setIntakeList(Array(Number(updatedMed.numIntake)).fill().map(() => ({ dose: '', time: '' })) || [])
@@ -366,7 +384,11 @@ export const AddMedicine3 = () => {
   const handleExit = (event) => {
     event.preventDefault();
     axios
-      .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`)
+      .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }
+      })
       .then(response => {
         console.log(response.data.status)
         navigate('/medicines')
@@ -403,7 +425,11 @@ export const AddMedicine3 = () => {
     const newMedInfo = {intakeList: intakeList};
     axios
       // post new medicine information and send to back end
-      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/${med.medID}/save`, newMedInfo)
+      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/${med.medID}/save`, newMedInfo, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }
+      })
       .then(response => {
         console.log('final med: ', response.data.med)
         navigate('/medicines')

@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const IntakeSchema = new mongoose.Schema(
     {
         dose: Number,
-        time: Date
+        time: String
     }
 )
 const MedicineSchema = new mongoose.Schema(
@@ -25,4 +25,7 @@ const MedicineSchema = new mongoose.Schema(
 
 const Medicine = mongoose.model('Medicine', MedicineSchema)
 
-module.exports = Medicine
+module.exports = {
+    MedicineSchema,
+    Medicine
+}

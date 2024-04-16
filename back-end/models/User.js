@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema
+const { MedicineSchema } = require('./Medicine.js')
+
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -15,10 +16,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    medList: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Medicine'
-    }],
+    medList: [ MedicineSchema ],
 /*    todayList: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Task'

@@ -6,11 +6,11 @@ const multer = require('multer')
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');  
 const User = require('./models/User');
-const Medicine = require('./models/Medicine')
+const { Medicine } = require('./models/Medicine')
 const app = express()
 
 const SECRET_KEY = process.env.SECRET_KEY || 'secretkey';
-const expiresIn = process.env.EXPIRE_TIME || '1h';
+// const expiresIn = process.env.EXPIRE_TIME || '1h';
 
 app.use(cors())
 app.use(express.static('public'))
@@ -366,11 +366,11 @@ app.post('/photo-upload', upload.single('file'), async(req, res) => {
 // a route to handle saving the data on add-medicine-1 form
 app.post('/add-medicine-1/save', verifyToken, async(req, res) => {
   // try to save the new medicine to the database
-  console.log('token verified - in /add-med-1/save')
+  console.log('/add-med-1/save')
   try {
     const user = req.user;
     const med = new Medicine({
-        medID: (user.medList.length === 0) ? 0 : user.medList[medList.length - 1].medID + 1,
+        medID: (user.medList.length === 0) ? 0 : user.medList[user.medList.length - 1].medID + 1,
         medName: req.body.medName, 
         photo: req.body.photo, 
         totalAmt: req.body.totalAmt, 
@@ -378,15 +378,14 @@ app.post('/add-medicine-1/save', verifyToken, async(req, res) => {
         date: new Date()
     })
 
-    const savedMed = await med.save()
-    user.medList.push(savedMed._id);
+    user.medList.push(med);
     await user.save()
     
     // check that the medicine info is properly saved to db
     console.log(user.medList)
 
     return res.json({
-      med: savedMed, // return the message we just saved
+      med: med, // return the message we just saved
       status: 'all good',
     })
   } catch (err) {
@@ -421,46 +420,63 @@ app.delete('/delete-med/:medID', async(req, res) => {
 })
 
 // a route to handle saving the data on add-medicine-2 form
-app.post('/add-medicine-2/:medID/save', async(req, res) => {
-  // try to save the new medicine to the database
+app.post('/add-medicine-2/:medID/save', verifyToken, async(req, res) => {
   try {
+    const user = req.user;
     const { medID } = req.params; 
     const newMedInfo = req.body;
-    const index = medList.findIndex(medicine => medicine.medID == medID)
-    
-    if (index !== -1){
-      const med = medList[index];
-      medList[index] = {...med, ...newMedInfo};
-      return res.json({
-        med: medList[medID], // return the medicine just saved
-        status: 'all good',
-      })
-    } else {
-      return res.json({ status: 'cannot find matched medicine' })
+
+    let found = false;
+    user.medList.forEach(medicine => {
+        if (String(medicine.medID) === medID) {
+            found = true;
+            for (const key in newMedInfo) {
+                if (newMedInfo.hasOwnProperty(key)) {
+                    medicine[key] = newMedInfo[key];
+                }
+            }
+        }
+    });
+
+    if (!found) {
+        return res.status(404).json({ status: 'cannot find matched medicine' });
     }
+
+    // save the updated med to database
+    await user.save();
+    console.log(user.medList)
+
+    return res.json({
+      med: user.medList,
+      status: 'all good',
+    })
 
   } catch (err) {
     console.error(err)
-    return res.status(400).json({
+    return res.status(401).json({
       error: err,
       status: 'failed to save the message to the database',
     })
   }    
 })
 
-app.get('/medicine/:medID', (req, res) => {
+app.get('/medicine/:medID', verifyToken, (req, res) => {
   try {
+    const user = req.user;
     const {medID} = req.params;
-    const index = medList.findIndex(medicine => medicine.medID == medID)
-    if(index !== -1){
-      const foundMed = medList[index];
+    const foundMedArr = user.medList.filter(medicine => {
+      return String(medicine.medID) === medID;
+    });
+
+    if(foundMedArr.length !== 0){
+      const foundMed = foundMedArr[0];
       console.log('foundMed: ', foundMed)
       return res.json({
         med: foundMed,
         status: 'all good',
       })
     } else {
-      return res.status(400).json({
+      return res.status(401).json({
         error: 'no matched medID',
         status: 'failed to find the med using medID',
       })
