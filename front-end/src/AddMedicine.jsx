@@ -35,9 +35,15 @@ export const AddMedicine1 = () => {
     event.preventDefault();
     const medicine = {medName: medName, photo: imageURL, totalAmt: totalAmount, unit: unit};
     // send the medicine info to the backend and save    
+    const token = localStorage.getItem("token")
+    console.log(token)
     axios
       // post a new medicine to server
-      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-1/save`, medicine)
+      .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-1/save`, medicine, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then(response => {
         const newMedID = response.data.med.medID
         setMedID(newMedID)

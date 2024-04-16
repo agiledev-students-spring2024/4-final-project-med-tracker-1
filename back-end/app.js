@@ -116,6 +116,7 @@ const verifyToken = async (req, res, next) => {
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
+    console.log('no token found')
     return res.status(401).send('No token provided');
   }
 
@@ -363,20 +364,29 @@ app.post('/photo-upload', upload.single('file'), async(req, res) => {
 })
 
 // a route to handle saving the data on add-medicine-1 form
-app.post('/add-medicine-1/save', async(req, res) => {
+app.post('/add-medicine-1/save', verifyToken, async(req, res) => {
   // try to save the new medicine to the database
+  console.log('token verified - in /add-med-1/save')
   try {
-    const med = {
-        medID: medList[medList.length - 1].medID + 1,
+    const user = req.user;
+    const med = new Medicine({
+        medID: (user.medList.length === 0) ? 0 : user.medList[medList.length - 1].medID + 1,
         medName: req.body.medName, 
         photo: req.body.photo, 
         totalAmt: req.body.totalAmt, 
         unit: req.body.unit,
         date: new Date()
-    }
-    medList.push(med);
+    })
+
+    const savedMed = await med.save()
+    user.medList.push(savedMed._id);
+    await user.save()
+    
+    // check that the medicine info is properly saved to db
+    console.log(user.medList)
+
     return res.json({
-      med: med, // return the message we just saved
+      med: savedMed, // return the message we just saved
       status: 'all good',
     })
   } catch (err) {
