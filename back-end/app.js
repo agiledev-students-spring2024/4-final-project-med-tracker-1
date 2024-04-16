@@ -111,26 +111,36 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Middleware for verifying the token
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+  const token = authHeader && authHeader.split(' ')[1];
 
-  if (token == null) {
-    return res.sendStatus(401); 
+  if (!token) {
+    return res.status(401).send('No token provided');
   }
 
-  jwt.verify(token, SECRET_KEY, (err, user) => {
-    if (err) {
-      return res.sendStatus(403); 
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const user = await User.findOne({ email: decoded.email });
+
+    if (!user) {
+      return res.status(404).send('User not found');
     }
-    req.user = user;
-    next(); 
-  });
+
+    req.user = user; 
+    next();
+  } catch (err) {
+    if (err.name === 'JsonWebTokenError') {
+      return res.status(403).send('Invalid token'); // Invalid JWT
+    } else {
+      return res.status(500).send('Server error');
+    }
+  }
 };
 
 // Protected route
 app.get('/api/verify-token', verifyToken, (req, res) => {
-  res.json({ message: "Token is valid" });
+  res.json({ message: "Token is valid" , user: req.user});
 });
 
 const medList = [
@@ -311,15 +321,17 @@ app.get('/history', (req, res) => {
 
 
 // a route to handle fetch all medicines
-app.get('/medicines', (req, res) => {
+app.get('/medicines', verifyToken, (req, res) => {
     try {
+        const user = req.user;
+        console.log('req.user', user)
         return res.json({
-            medList: medList, // return the med saved
+            medList: user.medList, // return the med from db
             status: 'all good',
         })
     } catch (err) {
       console.error(err)
-      return res.status(400).json({
+      return res.status(401).json({
         error: err,
         status: 'Failed to load your list of medicines',
       })
