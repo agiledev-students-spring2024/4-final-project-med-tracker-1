@@ -11,8 +11,13 @@ const Medicines = () => {
 
     useEffect(() => {
         const fetchMedications = () => {
+            const token = localStorage.getItem("token");
             axios
-                .get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicines`)
+                .get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicines`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
                 .then(response => {
                     const updatedMedList = response.data.medList;
                     setMedications(updatedMedList)
