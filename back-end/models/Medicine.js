@@ -22,15 +22,18 @@ const MedicineSchema = new mongoose.Schema(
         intakeList: [IntakeSchema]
     }
 )
-const historySchema = new Mongoose.Schema({
+const historySchema = new mongoose.Schema({
     medicine: MedicineSchema,
     Intake: IntakeSchema,
     reminderId: Number
 });
 
 const Medicine = mongoose.model('Medicine', MedicineSchema)
+const History = mongoose.model('History', historySchema)
 
 module.exports = {
     MedicineSchema,
-    Medicine
+    Medicine,
+    historySchema,
+    History
 }
