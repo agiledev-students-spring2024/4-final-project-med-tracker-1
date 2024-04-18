@@ -398,18 +398,19 @@ app.post('/add-medicine-1/save', verifyToken, async(req, res) => {
 })
 
 // a route to handle deleting a medicine
-app.delete('/delete-med/:medID', async(req, res) => {
+app.delete('/delete-med/:medID', verifyToken, async(req, res) => {
   try {
-    const { medID } = req.params; 
-    const index = medList.findIndex(medicine => medicine.medID == medID)
-    if (index !== -1){
-      medList.splice(index, 1)
-      console.log('after deletion: ', medList)
-      return res.json({ status: 'all good' })
-    } 
-    else {
+    const { medID } = req.params;
+    const user = req.user; 
+
+    const index = user.medList.findIndex(medicine => medicine.medID == medID)
+    if (index == -1){
       return res.json({ status: 'cannot find medicine to delete' })
-    }
+    } 
+    user.medList.splice(index, 1)
+    await user.save();
+    console.log('after deletion: ', user.medList)
+    return res.json({ status: 'all good' })
   } catch (err) {
     console.error(err)
     return res.status(400).json({
@@ -490,35 +491,35 @@ app.get('/medicine/:medID', verifyToken, (req, res) => {
   }   
 })
 
-app.put('/medicine/update/:medID', (req, res) => {
-  try{  
-    const { medID } = req.params; 
-    const updates = req.body; 
+// app.put('/medicine/update/:medID', (req, res) => {
+//   try{  
+//     const { medID } = req.params; 
+//     const updates = req.body; 
 
-    const index = medList.findIndex(medicine => medicine.medID == medID)
+//     const index = medList.findIndex(medicine => medicine.medID == medID)
     
-    if (index === -1) {
-      return res.status(404).send({ message: 'Medicine not found' });
-    }
+//     if (index === -1) {
+//       return res.status(404).send({ message: 'Medicine not found' });
+//     }
     
-    const med = medList[index];
-    for (const key in updates) {
-      if (med.hasOwnProperty(key)) {
-        med[key] = updates[key];
-      }
-    }
-    medList[index] = med
-    return res.json({
-      med: medList[index],
-      status: 'all good'
-    })
-  } catch (error) {
-      return res.status(401).json({
-        error: err,
-        status: 'failed to save the updated medicine info to the database',
-      })
-  }
-});
+//     const med = medList[index];
+//     for (const key in updates) {
+//       if (med.hasOwnProperty(key)) {
+//         med[key] = updates[key];
+//       }
+//     }
+//     medList[index] = med
+//     return res.json({
+//       med: medList[index],
+//       status: 'all good'
+//     })
+//   } catch (error) {
+//       return res.status(401).json({
+//         error: err,
+//         status: 'failed to save the updated medicine info to the database',
+//       })
+//   }
+// });
 let medicationActions = []; // Assuming this is declared somewhere in your code
 
 app.post('/api/confirm-intake', (req, res) => {

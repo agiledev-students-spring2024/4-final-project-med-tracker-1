@@ -59,7 +59,11 @@ export const AddMedicine1 = () => {
     event.preventDefault();
     if(medID){
       axios
-        .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`)
+        .delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/delete-med/${medID}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem("token")}`
+          }
+        })
         .then(response => {
           console.log(response.data.status)
           navigate('/medicines')
