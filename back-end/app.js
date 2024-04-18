@@ -17,14 +17,21 @@ app.use(express.static('public'))
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
+// mongoose.connect(process.env.MONGO_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// }).then(() => {
+//   console.log('Successfully connected to MongoDB Atlas!');
+// }).catch((error) => {
+//   console.error('Connection error:', error.message);
+// });
+mongoose.connect(process.env.MONGO_URI)
+.then(() => {
   console.log('Successfully connected to MongoDB Atlas!');
 }).catch((error) => {
   console.error('Connection error:', error.message);
 });
+
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -203,58 +210,48 @@ const medList = [
     }      
 ];
 
-app.get('/home', (req, res) => {
-  const intakeListToTake = [];
-  function medToTake(med) {
-    const currDate = new Date();
-    if(med.frequency === 'regular'){
-      daysDiff = Math.floor((currDate - med.date)/(1000 * 60 * 60 * 24))
-      if(daysDiff % Number(med.interval) === 0)
-        return true;
-      else
-        return false;
-    } 
-    else if (med.frequency === 'specific') {
-      currDay = Number(currDate.getDay());
-      if(med.selectedDays.includes(currDay))
-        return true;
-      else
-        return false;
-    } 
-    else { // med.frequency === 'as-needed'
-      return false;
-    }
-  }
 
-  function addIntake(med) {
-    med.intakeList.forEach((intake) => {
-      const newIntake = {...intake, ...med}
-      intakeListToTake.push(newIntake)
-    })    
-  }
-  try {
-    const currentDate = new Date();
-    const formattedDate = currentDate.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    });
-    const medListToTake = medList.filter(med => medToTake(med));
-    medListToTake.forEach(med => addIntake(med));
-    intakeListToTake.sort((a, b) => a.time.localeCompare(b.time))   
-    return res.json({
-        currDate: formattedDate,
-        intakeListToTake: intakeListToTake, // return the list of med to take today
-        status: 'all good',
-    })
-  } catch (err) {
-    console.error(err)
-    return res.status(400).json({
-      error: err,
-      status: 'Failed to load your list of medicines',
-    })
-  } 
+app.get('/home', verifyToken, async (req, res) => {
+try {
+  const currentDate = new Date();
+  const medListToTake = req.user.medList.filter(med => medToTake(med, currentDate));
+ 
+  if (medListToTake.length === 0) {
+    console.log('No medications to send.');
+}
+
+  return res.json({
+      currDate: currentDate.toLocaleDateString('en-US', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+      }),
+      intakeListToTake: medListToTake,
+  });
+} catch (err) {
+  console.error("Error in /home route: ", err);
+  return res.status(500).json({ error: 'Failed to load your list of medicines', message: err.message });
+}
 });
+
+function medToTake(med, currentDate) {
+  if (med.frequency === 'regular') {
+      const daysDiff = Math.floor((currentDate - med.date) / (1000 * 60 * 60 * 24));
+      return daysDiff % Number(med.interval) === 0;
+  } else if (med.frequency === 'specific') {
+      const currDay = Number(currentDate.getDay());
+      return med.selectedDays.includes(currDay);
+  }
+  return false; // "as-needed" frequency does not automatically schedule med
+}
+
+function addIntake(med, intakeListToTake) {
+  med.intakeList.forEach((intake) => {
+      const newIntake = {...intake, ...med}; // 传递更多需要的药物信息
+      intakeListToTake.push(newIntake);
+  });
+}
+
 
 
 app.get('/history', (req, res) => {
@@ -418,6 +415,7 @@ app.delete('/delete-med/:medID', async(req, res) => {
     })
   }
 })
+
 
 // a route to handle saving the data on add-medicine-2 form
 app.post('/add-medicine-2/:medID/save', verifyToken, async(req, res) => {
