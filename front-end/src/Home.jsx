@@ -24,42 +24,58 @@ function Home() {
             }
         }
 
+        // const fetchIntakeListToTake = async () => {
+        //     const token = localStorage.getItem("token");
+        //     if (!token) {
+        //         console.error('No token found');
+        //         setError('Authentication error: No token found.');
+        //         return;
+        //     }
+        //     try {
+        //         const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/home`, {
+        //             headers: {
+        //                 'Authorization': `Bearer ${token}`
+        //             }
+        //         });
+        //         console.log('intakeListToTake: ', response.data.intakeListToTake);
+
+        //         const updatedData = response.data.intakeListToTake.reduce((acc, med) => {
+        //             const medIntakes = med.intakeList.map(intake => ({
+        //                 ...med,
+        //                 time: intake.time || 'No time set', 
+        //                 dose: `${intake.dose} ${med.unit}` 
+        //             }));
+        //             return acc.concat(medIntakes);
+        //         }, []);
+                
+        //         setIntakeListToTake(updatedData);
+        //         setDate(response.data.currDate);
+        //     } catch (err) {
+        //         console.error(err);
+        //         setError(`Failed to fetch medications to take today! \n${err}`);
+        //     }
+        // };
+
+        // Fetch medications
         const fetchIntakeListToTake = async () => {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                console.error('No token found');
-                setError('Authentication error: No token found.');
-                return;
-            }
             try {
                 const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/home`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${localStorage.getItem("token")}`
                     }
                 });
                 console.log('intakeListToTake: ', response.data.intakeListToTake);
-
-                const updatedData = response.data.intakeListToTake.reduce((acc, med) => {
-                    const medIntakes = med.intakeList.map(intake => ({
-                        ...med,
-                        time: intake.time || 'No time set', 
-                        dose: `${intake.dose} ${med.unit}` 
-                    }));
-                    return acc.concat(medIntakes);
-                }, []);
-                
-                setIntakeListToTake(updatedData);
-                setDate(response.data.currDate);
+                setIntakeListToTake(response.data.intakeListToTake)
+                setDate(response.data.currDate)
             } catch (err) {
-                console.error(err);
+                console.log(err);
                 setError(`Failed to fetch medications to take today! \n${err}`);
             }
         };
 
-
-            fetchUserSettings(); 
-            fetchIntakeListToTake(); 
-        }, []);
+        fetchUserSettings(); 
+        fetchIntakeListToTake(); 
+    }, []);
 
      useEffect(() => {
         console.log("Updated data:", intakeListToTake);

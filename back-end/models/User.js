@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     },
     medList: [MedicineSchema],
     todayList: {
-        todayDate: {type: Date, required: true},
+        todayDate: {type: Date, default: new Date("2024-03-24T15:46:48.535Z")},
         todayIntakeList: [historySchema]
     },
     historyList: [historySchema]
