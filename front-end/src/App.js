@@ -50,11 +50,11 @@ function App() {
               {/* a router for add medicine page three */}
               <Route path="/add-medicine-3" element={<AddMedicine3 />} />
               {/* a router for edit medicine page */}
-              <Route path="/edit-medicine-1" element={<EditMed1 />} />
+              <Route path="/edit-medicine-1/:medID" element={<EditMed1 />} />
               {/* a router for edit medicine page */}
-              <Route path="/edit-medicine-2" element={<EditMed2 />} />
+              <Route path="/edit-medicine-2/:medID" element={<EditMed2 />} />
               {/* a router for edit medicine page */}
-              <Route path="/edit-medicine-3" element={<EditMed3 />} />
+              <Route path="/edit-medicine-3/:medID" element={<EditMed3 />} />
 
 
               {/* a router for setting page */}

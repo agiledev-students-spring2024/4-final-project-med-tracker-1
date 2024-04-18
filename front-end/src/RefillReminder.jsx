@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './RefillReminder.css'; // Assuming you have a separate CSS file for RefillReminder
 
 const RefillCard = ({ name, photo, unit, totalAmt }) => {
     return (
