@@ -7,6 +7,7 @@ const IntakeSchema = new mongoose.Schema(
     }
 )
 const MedicineSchema = new mongoose.Schema(
+    
     {
         medID: Number,
         medName: String,
@@ -28,10 +29,6 @@ const historySchema = new mongoose.Schema({
     reminderId: Number
 });
 
-// const homeSchema = new mongoose.Schema({
-//     medicine: MedicineSchema,
-//     Intake: IntakeSchema,
-// });
 
 const Medicine = mongoose.model('Medicine', MedicineSchema)
 const History = mongoose.model('History', historySchema)
@@ -42,6 +39,4 @@ module.exports = {
     Medicine,
     historySchema,
     History
-    // homeSchema,
-    // Home
 }
