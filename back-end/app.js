@@ -513,9 +513,9 @@ app.put('/medicine/update/:medID', (req, res) => {
       status: 'all good'
     })
   } catch (error) {
-      return res.status(400).json({
+      return res.status(401).json({
         error: err,
-        status: 'failed to save the message to the database',
+        status: 'failed to save the updated medicine info to the database',
       })
   }
 });

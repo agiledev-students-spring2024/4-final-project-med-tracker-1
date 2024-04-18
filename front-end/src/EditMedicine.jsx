@@ -10,13 +10,27 @@ export const EditMed1 = () => {
   const [error, setError] = useState('');
   const { medID } = useParams();
 
+  // const fetchMed = async() => {
+  //   try {
+  //     const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+  //     setMed(response.data.med);
+  //     console.log(response.data.med);
+  //   } catch (error) {
+  //     console.error("Failed to fetch medication details", error);
+  //   }
+  // }
   const fetchMed = async() => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      console.log('fetched med: ', response.data.med)
       setMed(response.data.med);
-      console.log(response.data.med);
     } catch (error) {
-      console.error("Failed to fetch medication details", error);
+      setError("Failed to fetch medication details", error);
     }
   }
 
@@ -39,13 +53,37 @@ export const EditMed1 = () => {
     if(unit !== '')
       medToUpdate.unit = unit;
 
+    // axios
+    //   // post new medicine information and send to back end
+    //   .post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/${medID}/save`, medToUpdate, {
+    //     headers: {
+    //       'Authorization': `Bearer ${localStorage.getItem("token")}`
+    //     }
+    //   })
+    //   .then(() => {
+    //     navigate(`/add-medicine-3/${medID}`)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //     setError(`Error with saving the data! ${err}`)
+    //   })
     try {
-        const response = await axios.put(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/update/${medID}`, medToUpdate);
-        console.log("Update successful", response.data.med);
-        navigate(`/edit-medicine-2/${medID}`);
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/${medID}/save`, medToUpdate, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem("token")}`
+            }
+        })
+      navigate(`/edit-medicine-2/${medID}`);
     } catch (error) {
-        setError("Failed to update medication", error);
+      setError("Failed to update medication", error);
     }
+    // try {
+    //     const response = await axios.put(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/update/${medID}`, medToUpdate);
+    //     console.log("Update successful", response.data.med);
+    //     navigate(`/edit-medicine-2/${medID}`);
+    // } catch (error) {
+    //     setError("Failed to update medication", error);
+    // }
   }
 
   const handleExit = (event) => {
@@ -130,13 +168,26 @@ export const EditMed2 = () => {
   const navigate = useNavigate();
 
   // fetch the medicine info filled in page one from backend
+  // const fetchMed = async() => {
+  //   try {
+  //     const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+  //     setMed(response.data.med);
+  //     console.log(response.data.med);
+  //   } catch (error) {
+  //     console.error("Failed to fetch medication details", error);
+  //   }
+  // }
   const fetchMed = async() => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`,{
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      console.log('fetched med: ', response.data.med)
       setMed(response.data.med);
-      console.log(response.data.med);
     } catch (error) {
-      console.error("Failed to fetch medication details", error);
+      setError("Failed to fetch medication details", error);
     }
   }
 
@@ -172,7 +223,11 @@ export const EditMed2 = () => {
     })
 
     try {
-        const response = await axios.put(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/update/${medID}`, medToUpdate);
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/${medID}/save`, medToUpdate, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem("token")}`
+            }
+        });
         console.log("Update successful", response.data.med);
         navigate(`/edit-medicine-3/${medID}`);
     } catch (error) {
@@ -266,7 +321,7 @@ export const EditMed2 = () => {
                       placeholder={med.refillAmt}
                       onChange={(e) => setRefillAmt(e.target.value)}
                   />
-                  <span className="input-label">pill(s) left</span>
+                  <span className="input-label">{med.unit} left</span>
                 </div>
             </div>
             <div className="form-group frequency-of-intake">
@@ -331,7 +386,11 @@ export const EditMed3 = () => {
   // fetch the medicine info from backend
   const fetchMed = async() => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`);
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${medID}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }
+      });
       const updatedMed = response.data.med;
       setMed(updatedMed);
       if(Number(updatedMed.numIntake) == updatedMed.intakeList.length)
@@ -383,12 +442,24 @@ export const EditMed3 = () => {
     })
 
     try {
-        const response = await axios.put(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/update/${medID}`, medToUpdate);
+        // const response = await axios.put(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/update/${medID}`, medToUpdate);
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/add-medicine-2/${medID}/save`, medToUpdate, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem("token")}`
+            }
+        });
         console.log("Update successful", response.data.med);
         navigate(`/medicines`);
     } catch (error) {
         setError("Failed to update medication", error);
     }
+    // try {
+    //     const response = await axios.put(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/update/${medID}`, medToUpdate);
+    //     console.log("Update successful", response.data.med);
+    //     navigate(`/medicines`);
+    // } catch (error) {
+    //     setError("Failed to update medication", error);
+    // }
   };
 
   const Intake = ({ index, intake, unit }) => {
