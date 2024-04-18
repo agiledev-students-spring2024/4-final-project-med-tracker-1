@@ -94,14 +94,14 @@ function Home() {
                 <h2>Today's Medicines</h2>
                 <div className="medications-container">
                     {error && <p className="error-message">{error}</p>} 
-                    {intakeListToTake.map((intake) => (
+                    {intakeListToTake.map((obj) => (
                         <HomeCard
-                            // key={intake.medID + intake.time}
-                            key={intake._id} 
-                            name={intake.medName}
-                            photoURL={intake.photo}
-                            schedule={intake.time}
-                            dose={intake.dose}
+                            key={obj._id} 
+                            name={obj.medicine.medName}
+                            photoURL={obj.medicine.photo}
+                            schedule={obj.intake.time}
+                            dose={obj.intake.dose}
+                            unit={obj.medicine.unit}
                         />
                     ))}
                 </div>

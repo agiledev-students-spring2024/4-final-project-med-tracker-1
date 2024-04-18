@@ -260,9 +260,11 @@ app.get('/home', verifyToken, async (req, res) => {
       })
     }
 
+    user.todayList.todayIntakeList = []
     const medListToTake = user.medList.filter(med => medToTake(med));
     medListToTake.forEach(med => addIntake(user, med));
-    user.todayList.todayIntakeList.sort((a, b) => a.time.localeCompare(b.time)) 
+    console.log("user.todayList.todayIntakeList", user.todayList.todayIntakeList)
+    user.todayList.todayIntakeList.sort((a, b) => a.intake.time.localeCompare(b.intake.time)) 
     await user.save()  
     return res.json({
         currDate: formattedDate,
