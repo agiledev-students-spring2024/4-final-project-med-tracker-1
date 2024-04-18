@@ -50,7 +50,7 @@ const Reminder = () => {
     // Helper function to handle all intake actions
     const handleIntakeAction = async (actionType) => {
         const serverURL = process.env.REACT_APP_SERVER_HOSTNAME; // Use environment variable for the server URL
-
+        //add a intakeid behind the slash
         const response = await fetch(`${serverURL}/api/${actionType}-intake`, {
             method: 'POST',
             headers: {

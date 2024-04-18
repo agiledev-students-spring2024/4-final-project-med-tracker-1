@@ -210,73 +210,15 @@ const medList = [
     }      
 ];
 
-// app.get('/home', verifyToken, async (req, res) => {
-//   const intakeListToTake = [];
-//   function medToTake(med) {
-//     const currDate = new Date();
-//     if(med.frequency === 'regular'){
-//       daysDiff = Math.floor((currDate - med.date)/(1000 * 60 * 60 * 24))
-//       if(daysDiff % Number(med.interval) === 0)
-//         return true;
-//       else
-//         return false;
-//     } 
-//     else if (med.frequency === 'specific') {
-//       currDay = Number(currDate.getDay());
-//       if(med.selectedDays.includes(currDay))
-//         return true;
-//       else
-//         return false;
-//     } 
-//     else { // med.frequency === 'as-needed'
-//       return false;
-//     }
-//   }
-
-//   function addIntake(med) {
-//     med.intakeList.forEach((intake) => {
-//       const newIntake = {...intake, ...med}
-//       intakeListToTake.push(newIntake)
-//     })    
-//   }
-//   try {
-//     const currentDate = new Date();
-//     const formattedDate = currentDate.toLocaleDateString('en-US', {
-//       day: '2-digit',
-//       month: 'long',
-//       year: 'numeric',
-//     });
-//     await req.user.populate('medList');
-//     const medListToTake = req.user.medList.filter(med => medToTake(med));
-//     // const medListToTake = medList.filter(med => medToTake(med));
-//     medListToTake.forEach(med => addIntake(med));
-//     intakeListToTake.sort((a, b) => a.time.localeCompare(b.time))   
-//     return res.json({
-//         currDate: formattedDate,
-//         intakeListToTake: intakeListToTake, // return the list of med to take today
-//         status: 'all good',
-//     })
-//   } catch (err) {
-//     console.error(err)
-//     return res.status(400).json({
-//       error: err,
-//       status: 'Failed to load your list of medicines',
-//     })
-//   } 
-// });
-
 
 app.get('/home', verifyToken, async (req, res) => {
 try {
-  await req.user.populate('medList');
   const currentDate = new Date();
   const medListToTake = req.user.medList.filter(med => medToTake(med, currentDate));
-
-  // console.log('medListToTake:', medListToTake);  // 确保这里输出预期的药物列表
-
+ 
   if (medListToTake.length === 0) {
-      console.log('No medications to send.');
-  }
+    console.log('No medications to send.');
+}
 
   return res.json({
       currDate: currentDate.toLocaleDateString('en-US', {

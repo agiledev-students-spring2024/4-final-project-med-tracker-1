@@ -97,36 +97,6 @@ function Home() {
             }
         }
 
-        // Fetch medications
-    // const fetchIntakeListToTake = async () => {
-    //     const token = localStorage.getItem('token');
-    //     // console.log("Using token: ", token); 
-    //     if (!token) {
-    //         // console.error('No token found');
-    //         setError('Authentication error: No token found.');
-    //         return;
-    //     }
-    //     try {
-    //         const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/home`, {
-    //             headers: {
-    //                 'Authorization': `Bearer ${token}`
-    //             }
-    //         });
-    //         // console.log('Response from /home:', response.data);  // 检查响应内容
-    //         if (response.data.intakeListToTake && response.data.intakeListToTake.length > 0) {
-
-    //             console.log('Received data:', response.data.intakeListToTake);
-    //             setIntakeListToTake(response.data.intakeListToTake);
-    //             setDate(response.data.currDate);
-    //         } else {
-    //             setError('No medications data received');
-    //             console.log('No medications data received:', response.data);
-    //         }
-    //     } catch (err) {
-    //         console.error('Failed to fetch medications:', err);
-    //         setError(`Failed to fetch medications to take today! \n${err}`);
-    //     }
-    // };
         const fetchIntakeListToTake = async () => {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -178,7 +148,7 @@ function Home() {
                 <h2>Today's Medicines</h2>
                 <div className="medications-container">
                     {error && <p className="error-message">{error}</p>} 
-                    {/* {intakeListToTake.map((intake) => (
+                    {intakeListToTake.map((intake) => (
                         <HomeCard
                             // key={intake.medID + intake.time}
                             key={intake._id} 
@@ -187,20 +157,7 @@ function Home() {
                             schedule={intake.time}
                             dose={intake.dose}
                         />
-                    ))} */}
-                    {intakeListToTake.length > 0 ? (
-                    intakeListToTake.map((intake, index) => (
-                        <HomeCard
-                            key={intake.medID}
-                            name={intake.medName}
-                            photoURL={intake.photo}
-                            schedule={intake.time}
-                            dose={intake.dose}
-                        />
-                    ))
-                ) : (
-                    <p>No medications to display</p>
-                )}
+                    ))}
                 </div>
                 <NavBar />
             </div>

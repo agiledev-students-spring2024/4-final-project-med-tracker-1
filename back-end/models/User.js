@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { MedicineSchema } = require('./Medicine.js')
+const { MedicineSchema, historySchema } = require('./Medicine.js')
 
 
 const userSchema = new mongoose.Schema({
@@ -16,16 +16,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    medList: [ MedicineSchema ],
-/*    todayList: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Task'
-    }],
-    historyList: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'History'
-    }] */
-}, { collection: 'userinfo' }) ;
+    medList: [MedicineSchema],
+    todayList: {
+        todayDate: {type: Date, required: true},
+        todayIntakeList: [historySchema]
+    },
+    historyList: [historySchema]
+}, { collection: 'userinfo' });
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
