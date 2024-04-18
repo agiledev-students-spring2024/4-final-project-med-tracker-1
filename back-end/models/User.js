@@ -17,7 +17,10 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     medList: [MedicineSchema],
-    todayList: [historySchema],
+    todayList: {
+        todayDate: {type: Date, required: true},
+        todayIntakeList: [historySchema]
+    },
     historyList: [historySchema]
 }, { collection: 'userinfo' });
 
