@@ -38,19 +38,14 @@ function Home() {
                     }
                 });
                 console.log('intakeListToTake: ', response.data.intakeListToTake);
-                // const updatedData = response.data.intakeListToTake.map(med => ({
-                //     ...med,
-                //     // 假设每个药品只取第一个intake记录，且确保intakeList有元素
-                //     time: (med.intakeList.length > 0 && med.intakeList[0].time) ? med.intakeList[0].time : 'No time set',
-                //     dose: (med.intakeList.length > 0 && med.intakeList[0].dose) ? `${med.intakeList[0].dose} ${med.unit}` : `0 ${med.unit}`
-                // }));
+
                 const updatedData = response.data.intakeListToTake.reduce((acc, med) => {
                     const medIntakes = med.intakeList.map(intake => ({
                         ...med,
-                        time: intake.time || 'No time set', // 使用 intake 的时间，如果没有则设置默认值
-                        dose: `${intake.dose} ${med.unit}` // 格式化剂量
+                        time: intake.time || 'No time set', 
+                        dose: `${intake.dose} ${med.unit}` 
                     }));
-                    return acc.concat(medIntakes); // 将所有摄入记录累积到累加器数组中
+                    return acc.concat(medIntakes);
                 }, []);
                 
                 setIntakeListToTake(updatedData);

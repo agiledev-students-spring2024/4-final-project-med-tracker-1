@@ -7,6 +7,7 @@ const IntakeSchema = new mongoose.Schema(
     }
 )
 const MedicineSchema = new mongoose.Schema(
+    
     {
         medID: Number,
         medName: String,
