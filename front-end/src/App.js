@@ -45,24 +45,24 @@ function App() {
                 <Route path="/history" element={<History />} />
                 {/* a router for the medicines page */}
                 <Route path="/medicines" element={<Medicines />} />
-                  {/* a router for add medicine page one */}
-                  <Route path="/add-medicine-1" element={<AddMedicine1 />} />
-                  {/* a router for add medicine page two */}
-                  <Route path="/add-medicine-2/:medID" element={<AddMedicine2 />} />
-                  {/* a router for add medicine page three */}
-                  <Route path="/add-medicine-3/:medID" element={<AddMedicine3 />} />
-                  {/* a router for edit medicine page */}
-                  <Route path="/edit-medicine-1/:medID" element={<EditMed1 />} />
-                  {/* a router for edit medicine page */}
-                  <Route path="/edit-medicine-2/:medID" element={<EditMed2 />} />
-                  {/* a router for edit medicine page */}
-                  <Route path="/edit-medicine-3/:medID" element={<EditMed3 />} />
+                {/* a router for add medicine page one */}
+                <Route path="/add-medicine-1" element={<AddMedicine1 />} />
+                {/* a router for add medicine page two */}
+                <Route path="/add-medicine-2/:medID" element={<AddMedicine2 />} />
+                {/* a router for add medicine page three */}
+                <Route path="/add-medicine-3/:medID" element={<AddMedicine3 />} />
+                {/* a router for edit medicine page */}
+                <Route path="/edit-medicine-1/:medID" element={<EditMed1 />} />
+                {/* a router for edit medicine page */}
+                <Route path="/edit-medicine-2/:medID" element={<EditMed2 />} />
+                {/* a router for edit medicine page */}
+                <Route path="/edit-medicine-3/:medID" element={<EditMed3 />} />
 
                 {/* a router for setting page */}
                 <Route path="/setting" element={<Setting />} />
 
                 {/* a router for reminder page */}
-                <Route path="/reminder" element={<Reminder />} />
+                <Route path="/reminder/:_id" element={<Reminder />} />
                 {/* a router for refill reminder page */}
                 <Route path="/refill-reminder" element={<RefillReminder />} />
               </Route>
