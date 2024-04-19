@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
 import HomeCard from './HomeCard';
 import logo from './icons/favicon.png';
@@ -10,102 +11,40 @@ function Home() {
     const [date, setDate] = useState('');
     const [intakeListToTake, setIntakeListToTake] = useState([]);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetch user settings to get the user's name
-        // const fetchUserSettings = async() => {
-        //     const response = await fetch(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/user-settings`);
-        //     if (response.ok) {
-        //         const userSettings = await response.json();
-        //         console.log("User settings fetched:", JSON.stringify(userSettings, null, 2)); // Detailed logging
-        //         setUserName(userSettings.firstName); 
-        //     } else {
-        //         console.error('Failed to fetch user settings');
-        //     }
-        // }
-        const fetchUserSettings = async() => {
+        const fetchUserSettings = async () => {
             const token = localStorage.getItem("token");
             if (!token) {
-                console.error('No token found');
                 setError('Authentication error: No token found.');
                 return;
             }
             try {
                 const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/user-settings`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (response.status === 200) {
-                    const userSettings = response.data;
-                    console.log("User settings fetched:", JSON.stringify(userSettings, null, 2)); // Detailed logging
-                    setUserName(userSettings.firstName); // 使用用户的 firstName
+                    setUserName(response.data.firstName);
                 } else {
-                    console.error('Failed to fetch user settings');
                     setError('Failed to fetch user settings.');
                 }
             } catch (error) {
-                console.error('Failed to fetch user settings:', error);
                 setError('Error fetching user settings: ' + error.message);
             }
         };
 
-        // const fetchIntakeListToTake = async () => {
-        //     const token = localStorage.getItem("token");
-        //     if (!token) {
-        //         console.error('No token found');
-        //         setError('Authentication error: No token found.');
-        //         return;
-        //     }
-        //     try {
-        //         const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/home`, {
-        //             headers: {
-        //                 'Authorization': `Bearer ${token}`
-        //             }
-        //         });
-        //         console.log('intakeListToTake: ', response.data.intakeListToTake);
-
-        //         const updatedData = response.data.intakeListToTake.reduce((acc, med) => {
-        //             const medIntakes = med.intakeList.map(intake => ({
-        //                 ...med,
-        //                 time: intake.time || 'No time set', 
-        //                 dose: `${intake.dose} ${med.unit}` 
-        //             }));
-        //             return acc.concat(medIntakes);
-        //         }, []);
-                
-        //         setIntakeListToTake(updatedData);
-        //         setDate(response.data.currDate);
-        //     } catch (err) {
-        //         console.error(err);
-        //         setError(`Failed to fetch medications to take today! \n${err}`);
-        //     }
-        // };
-
-        // Fetch medications
         const fetchIntakeListToTake = async () => {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/home`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem("token")}`
-                    }
-                });
-                console.log('intakeListToTake: ', response.data.intakeListToTake);
-                setIntakeListToTake(response.data.intakeListToTake)
-                setDate(response.data.currDate)
-            } catch (err) {
-                console.log(err);
-                setError(`Failed to fetch medications to take today! \n${err}`);
-            }
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/home`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
+            });
+            setIntakeListToTake(response.data.intakeListToTake);
+            setDate(response.data.currDate);
         };
 
-        fetchUserSettings(); 
-        fetchIntakeListToTake(); 
+        fetchUserSettings();
+        fetchIntakeListToTake();
     }, []);
-
-     useEffect(() => {
-        console.log("Updated data:", intakeListToTake);
-    }, [intakeListToTake]);
 
     return (
         <div className="home-page">
@@ -119,15 +58,17 @@ function Home() {
             <div className="body-container">
                 <h2>Today's Medicines</h2>
                 <div className="medications-container">
-                    {error && <p className="error-message">{error}</p>} 
-                    {intakeListToTake.map((obj) => (
+                    {error && <p className="error-message">{error}</p>}
+                    {intakeListToTake.map(obj => (
                         <HomeCard
-                            key={obj._id} 
+                            key={obj._id}
+                            _id={obj._id}
                             name={obj.medicine.medName}
                             photoURL={obj.medicine.photo}
                             schedule={obj.intake.time}
                             dose={obj.intake.dose}
                             unit={obj.medicine.unit}
+                            onClick={() => navigate(`/reminder/${obj._id}`)}
                         />
                     ))}
                 </div>

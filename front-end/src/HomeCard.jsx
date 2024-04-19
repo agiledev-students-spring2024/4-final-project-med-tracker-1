@@ -1,25 +1,16 @@
 import React from 'react';
 
-
-const HomeCard = ({ name, photoURL, schedule, dose, unit }) => {
-    name = name || 'Unknown Medicine';
-    photoURL = photoURL || 'default_image.jpg'; 
-    schedule = schedule || 'No schedule defined';
-    dose = dose || '0';
-
+const HomeCard = ({ _id, name, photoURL, schedule, dose, unit, onClick }) => {
     return (
-        <div className="medication-card">
+        <div className="medication-card" onClick={() => onClick(_id)}>
             <div className="medication-info">
                 <h1>{name}</h1>
                 <p>{schedule}</p>
                 <p>{dose} {unit}</p>
             </div>
-            {photoURL ? (
-                <img className="medication-image" src={`${process.env.REACT_APP_SERVER_HOSTNAME}/med-images/${photoURL}`} alt={`${name} medication`}/>
-            ) : (
-                <div className="medication-image">{/* Placeholder */}</div>
-            )}
+            <img className="medication-image" src={photoURL ? `${process.env.REACT_APP_SERVER_HOSTNAME}/med-images/${photoURL}` : 'default_image.jpg'} alt={name} />
         </div>
     );
 };
+
 export default HomeCard;
