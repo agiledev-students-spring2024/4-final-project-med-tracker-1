@@ -25,8 +25,8 @@ const MedicineSchema = new mongoose.Schema(
 )
 const historySchema = new mongoose.Schema({
     medicine: MedicineSchema,
-    Intake: IntakeSchema,
-    reminderId: Number
+    intake: IntakeSchema,
+    // reminderId: Number
 });
 
 

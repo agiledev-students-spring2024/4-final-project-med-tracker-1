@@ -6,7 +6,7 @@ const multer = require('multer')
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');  
 const User = require('./models/User');
-const { Medicine } = require('./models/Medicine')
+const { Medicine, History } = require('./models/Medicine')
 const app = express()
 
 const SECRET_KEY = process.env.SECRET_KEY || 'secretkey';
@@ -210,51 +210,117 @@ const medList = [
     }      
 ];
 
-
 app.get('/home', verifyToken, async (req, res) => {
-  try {
-    const currentDate = new Date();
-    const medListToTake = req.user.medList.filter(med => medToTake(med, currentDate));
-   
-    if (medListToTake.length === 0) {
-      console.log('No medications to send.');
-  }
-  
-    return res.json({
-        currDate: currentDate.toLocaleDateString('en-US', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
-        }),
-        intakeListToTake: medListToTake,
-    });
-  } catch (err) {
-    console.error("Error in /home route: ", err);
-    return res.status(500).json({ error: 'Failed to load your list of medicines', message: err.message });
-  }
-  });
-  
-  function medToTake(med, currentDate) {
-    if (med.frequency === 'regular') {
-        const daysDiff = Math.floor((currentDate - med.date) / (1000 * 60 * 60 * 24));
-        return daysDiff % Number(med.interval) === 0;
-    } else if (med.frequency === 'specific') {
-        const currDay = Number(currentDate.getDay());
-        return med.selectedDays.includes(currDay);
+  function medToTake(med) {
+    const currDate = new Date();
+    if(med.frequency === 'regular'){
+      daysDiff = Math.floor((currDate - med.date)/(1000 * 60 * 60 * 24))
+      if(daysDiff % Number(med.interval) === 0)
+        return true;
+      else
+        return false;
+    } 
+    else if (med.frequency === 'specific') {
+      currDay = Number(currDate.getDay());
+      if(med.selectedDays.includes(currDay))
+        return true;
+      else
+        return false;
+    } 
+    else { // med.frequency === 'as-needed'
+      return false;
     }
-    return false; // "as-needed" frequency does not automatically schedule med
   }
-  
-  function addIntake(med, intakeListToTake) {
+
+  function addIntake(user, med) {
     med.intakeList.forEach((intake) => {
-        const newIntake = {...intake, ...med};
-        intakeListToTake.push(newIntake);
-    });
+      // const newIntake = {...intake, ...med}
+      const newIntake = new History({
+        medicine: med,
+        intake: intake
+      })
+      user.todayList.todayIntakeList.push(newIntake)
+    })    
   }
+  try {
+    const user = req.user;
+    const currDate = new Date();
+
+    const formattedDate = currDate.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
+
+    if(currDate.toLocaleDateString() === user.todayList.todayDate.toLocaleDateString()){
+      return res.json({
+          currDate: formattedDate,
+          intakeListToTake: user.todayList.todayIntakeList, // return the list of med to take today
+          status: 'all good',
+      })
+    }
+
+    user.todayList.todayIntakeList = []
+    const medListToTake = user.medList.filter(med => medToTake(med));
+    medListToTake.forEach(med => addIntake(user, med));
+    console.log("user.todayList.todayIntakeList", user.todayList.todayIntakeList)
+    user.todayList.todayIntakeList.sort((a, b) => a.intake.time.localeCompare(b.intake.time)) 
+    await user.save()  
+    return res.json({
+        currDate: formattedDate,
+        intakeListToTake: user.todayList.todayIntakeList, // return the list of med to take today
+        status: 'all good',
+    })
+  } catch (err) {
+    console.error(err)
+    return res.status(400).json({
+      error: err,
+      status: 'Failed to load your list of medicines',
+    })
+  } 
+});
+
+// app.get('/home', verifyToken, async (req, res) => {
+//   try {
+//     const currentDate = new Date();
+//     const medListToTake = req.user.medList.filter(med => medToTake(med, currentDate));
+   
+//     if (medListToTake.length === 0) {
+//       console.log('No medications to send.');
+//   }
   
-
-
-
+//     return res.json({
+//         currDate: currentDate.toLocaleDateString('en-US', {
+//             day: '2-digit',
+//             month: 'long',
+//             year: 'numeric',
+//         }),
+//         intakeListToTake: medListToTake,
+//     });
+//   } catch (err) {
+//     console.error("Error in /home route: ", err);
+//     return res.status(500).json({ error: 'Failed to load your list of medicines', message: err.message });
+//   }
+//   });
+  
+//   function medToTake(med, currentDate) {
+//     if (med.frequency === 'regular') {
+//         const daysDiff = Math.floor((currentDate - med.date) / (1000 * 60 * 60 * 24));
+//         return daysDiff % Number(med.interval) === 0;
+//     } else if (med.frequency === 'specific') {
+//         const currDay = Number(currentDate.getDay());
+//         return med.selectedDays.includes(currDay);
+//     }
+//     return false; // "as-needed" frequency does not automatically schedule med
+//   }
+  
+//   function addIntake(med, intakeListToTake) {
+//     med.intakeList.forEach((intake) => {
+//         const newIntake = {...intake, ...med};
+//         intakeListToTake.push(newIntake);
+//     });
+//   }
+  
 app.get('/history', (req, res) => {
     const endDate = new Date().toISOString().split('T')[0]; // Use today as the end date
 
