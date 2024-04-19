@@ -15,13 +15,18 @@ const Setting = () => {
         const fetchSettings = async () => {
             try {
                 const serverURL = process.env.REACT_APP_SERVER_HOSTNAME;
-                const response = await fetch(`${serverURL}/api/user-settings`);
+                const token = localStorage.getItem('token'); 
+                const response = await fetch(`${serverURL}/api/user-settings`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}` 
+                    }
+                });
                 if (!response.ok) throw new Error('Failed to fetch');
                 const data = await response.json();
                 setSettings({
                     firstName: data.firstName || '',
                     username: data.username || '',
-                    password: '' // Clearing password for security reasons
+                    password: '' 
                 });
             } catch (error) {
                 console.error('Error fetching user settings:', error);
