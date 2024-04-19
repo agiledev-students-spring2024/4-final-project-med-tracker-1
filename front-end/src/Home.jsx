@@ -46,6 +46,11 @@ function Home() {
         fetchIntakeListToTake();
     }, []);
 
+    const handleCardClick = (id) => {
+        console.log(`Clicked on card with id: ${id}`);
+        // You could add any functionality here, or leave it as just a log for now
+    };
+
     return (
         <div className="home-page">
             <div className="half-color-bg">
