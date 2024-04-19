@@ -73,7 +73,7 @@ function Home() {
                             schedule={obj.intake.time}
                             dose={obj.intake.dose}
                             unit={obj.medicine.unit}
-                            onClick={() => navigate(`/reminder/${obj._id}`)}
+                            onClick={() => handleCardClick(obj._id)}
                         />
                     ))}
                 </div>
