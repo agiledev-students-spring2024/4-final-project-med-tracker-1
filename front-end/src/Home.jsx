@@ -13,16 +13,42 @@ function Home() {
 
     useEffect(() => {
         // Fetch user settings to get the user's name
+        // const fetchUserSettings = async() => {
+        //     const response = await fetch(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/user-settings`);
+        //     if (response.ok) {
+        //         const userSettings = await response.json();
+        //         console.log("User settings fetched:", JSON.stringify(userSettings, null, 2)); // Detailed logging
+        //         setUserName(userSettings.firstName); 
+        //     } else {
+        //         console.error('Failed to fetch user settings');
+        //     }
+        // }
         const fetchUserSettings = async() => {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/user-settings`);
-            if (response.ok) {
-                const userSettings = await response.json();
-                console.log("User settings fetched:", JSON.stringify(userSettings, null, 2)); // Detailed logging
-                setUserName(userSettings.firstName); 
-            } else {
-                console.error('Failed to fetch user settings');
+            const token = localStorage.getItem("token");
+            if (!token) {
+                console.error('No token found');
+                setError('Authentication error: No token found.');
+                return;
             }
-        }
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/user-settings`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (response.status === 200) {
+                    const userSettings = response.data;
+                    console.log("User settings fetched:", JSON.stringify(userSettings, null, 2)); // Detailed logging
+                    setUserName(userSettings.firstName); // 使用用户的 firstName
+                } else {
+                    console.error('Failed to fetch user settings');
+                    setError('Failed to fetch user settings.');
+                }
+            } catch (error) {
+                console.error('Failed to fetch user settings:', error);
+                setError('Error fetching user settings: ' + error.message);
+            }
+        };
 
         const fetchIntakeListToTake = async () => {
             const token = localStorage.getItem("token");
