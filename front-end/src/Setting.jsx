@@ -78,7 +78,7 @@ const Setting = () => {
                         <input type="email" id="username" value={settings.username} readOnly />
                     </div>
                     <button type="submit" className="save-btn blue-btn">Save</button>
-                    <Link to="/forget-password" className="white-btn">Change password</Link>
+                    <Link to="/reset-password" className="white-btn">Change password</Link>
                 </form>
                 <NavBar />
             </div>

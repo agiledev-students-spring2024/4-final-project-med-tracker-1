@@ -32,8 +32,8 @@ function App() {
               <Route path="/register" element={<Register />} />
               {/* a router for the login page */}
               <Route path="/login" element={<Login />} />
-              {/* a router for the forget password page */}
-              <Route path="/forget-password" element={<ForgetPassword />} />
+
+
               {/* a router for the reset password page */}
               <Route path="/reset-password" element={<ResetPassword />} />
 
