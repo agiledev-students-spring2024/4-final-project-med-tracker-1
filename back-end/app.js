@@ -587,6 +587,36 @@ app.get('/medicine/:medID', verifyToken, (req, res) => {
 // });
 let medicationActions = []; // Assuming this is declared somewhere in your code
 
+app.get('/reminder/:ID', verifyToken, (req, res) => {
+  try {
+    const user = req.user;
+    const { ID } = req.params;
+    const foundIntakeArr = user.todayList.todayIntakeList.filter(intake => {
+      return String(intake._id) === ID;
+    });
+    console.log('foundIntakeArr:\n', foundIntakeArr)
+    if (foundIntakeArr.length !== 0) {
+      const foundIntake = foundIntakeArr[0];
+      console.log('foundIntake: ', foundIntake)
+      return res.json({
+        intakeObj: foundIntake,
+        status: 'all good',
+      })
+    } else {
+      return res.status(401).json({
+        error: 'no matched intake ID',
+        status: 'failed to find the intake in the list of medicine to take today using intake I',
+      })
+    }
+  } catch (err) {
+    console.error(err)
+    return res.status(404).json({
+      error: err,
+      status: 'failed to find the intake using intake ID',
+    })
+  }
+})
+
 app.post('/api/confirm-intake', (req, res) => {
   try {
     const { medName, action, dose, time } = req.body;

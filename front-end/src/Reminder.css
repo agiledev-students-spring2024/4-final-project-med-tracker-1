@@ -10,14 +10,14 @@
     margin-top: 100px;
 }
 
-.reminder-page .reminder-info .field-name{
+.reminder-info .field-name{
     font-size: 40px;
     font-weight: bold;
     color: #08475E;
     padding: 20px;
 }
 
-.reminder-page .reminder-info .entry{
+.reminder-info .entry{
     font-size: 40px;
     font-weight: normal;
     color: #333;
