@@ -55,18 +55,18 @@ const Reminder = () => {
 
     const handleIntakeAction = async (actionType) => {
         try {
-            const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/${actionType}-intake`, {
-                medName: intake.medName,
-                dose: intake.dose,
-                time: intake.time
-            }, {
-                headers: { 'Content-Type': 'application/json' }
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/${actionType}-intake/${id}`, {action: actionType}, {
+                headers: { 
+                    // 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                }
             });
 
             if (response.status === 200) {
+                console.log(response.data.historyList)
                 navigate('/home');
             } else {
-                throw new Error('Failed to execute action.');
+                throw new Error(response.data.error);
             }
         } catch (error) {
             setError(`Failed to ${actionType} intake: ` + error.message);
