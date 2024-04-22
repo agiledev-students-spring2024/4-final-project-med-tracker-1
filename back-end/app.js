@@ -97,6 +97,21 @@ app.post('/api/register', async (req, res) => {
     res.status(500).json({ message: "Failed to register user." });
   }
 });
+app.post('/api/reset-password', async (req, res) => {
+  const email = req.body.email.trim().toLowerCase()
+  const { newPassword } = req.body;
+  try {
+      const user = await User.findOne({ email: email });
+      if (!user) {
+          return res.status(404).json({ ok: false, message: "User not found." });
+      }
+      user.password = newPassword;
+      await user.save();
+      res.json({ ok: true, message: "Password reset successfully." });
+  } catch (error) {
+      res.status(500).json({ ok: false, message: "Failed to reset password." });
+  }
+});
 
 
 app.post('/api/login', async (req, res) => {
