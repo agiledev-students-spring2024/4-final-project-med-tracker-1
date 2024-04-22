@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Setting.css';
 
 const Setting = () => {
+    const [error, setError] = useState('');
     const [settings, setSettings] = useState({
         firstName: '',
         username: '',
@@ -30,6 +31,7 @@ const Setting = () => {
                 });
             } catch (error) {
                 console.error('Error fetching user settings:', error);
+                setError(error)
             }
         };
         fetchSettings();
@@ -41,15 +43,19 @@ const Setting = () => {
             const serverURL = process.env.REACT_APP_SERVER_HOSTNAME;
             const response = await fetch(`${serverURL}/api/update-settings`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
                 body: JSON.stringify({ firstName: settings.firstName }) // Sending only the first name as that's what's being updated
             });
 
-            if (!response.ok) throw new Error('Failed to update settings');
+            if (!response.ok) throw new Error(response.error);
             alert('Settings updated successfully');
             navigate('/home'); // Navigate to '/home' or any other route as needed
         } catch (error) {
             console.error('Error updating settings:', error);
+            setError(error)
             alert('Failed to update settings');
         }
     };
@@ -77,6 +83,7 @@ const Setting = () => {
                         <label htmlFor="username">Username (Email)</label>
                         <input type="email" id="username" value={settings.username} readOnly />
                     </div>
+                    {error && <p className="error-message">{error}</p>} 
                     <button type="submit" className="save-btn blue-btn">Save</button>
                     <Link to="/forget-password" className="white-btn">Change password</Link>
                 </form>
