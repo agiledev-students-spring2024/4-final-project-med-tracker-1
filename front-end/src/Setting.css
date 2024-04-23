@@ -1,8 +1,15 @@
 .settings-form {
-  margin-top: 80px;
-  gap: 60px;
+  margin-top: 80px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
 }
 
 .settings-form .save-btn {
-  margin-top: 600px;
+  margin-top: 600px; 
+}
+
+.settings-form .logout-btn, .settings-form .white-btn {
+  width: 100%; 
+  margin-top: 5px;
 }

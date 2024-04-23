@@ -16,6 +16,7 @@ function Home() {
             const token = localStorage.getItem("token");
             if (!token) {
                 setError('Authentication error: No token found.');
+                navigate('/login'); 
                 return;
             }
             try {

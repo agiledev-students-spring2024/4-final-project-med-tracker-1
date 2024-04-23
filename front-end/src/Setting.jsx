@@ -65,6 +65,11 @@ const Setting = () => {
         setSettings((prevSettings) => ({ ...prevSettings, [id]: value }));
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/');
+    };
+
     return (
         <div className="setting-page">
             <div className="half-color-bg">
@@ -85,7 +90,8 @@ const Setting = () => {
                     </div>
                     {error && <p className="error-message">{error}</p>} 
                     <button type="submit" className="save-btn blue-btn">Save</button>
-                    <Link to="/forget-password" className="white-btn">Change password</Link>
+                    <Link to="/reset-password" className="white-btn">Change password</Link>
+                    <button className="logout-btn white-btn" onClick={handleLogout} >Log Out</button>
                 </form>
                 <NavBar />
             </div>
