@@ -62,7 +62,7 @@ function App() {
                 <Route path="/setting" element={<Setting />} />
 
                 {/* a router for reminder page */}
-                <Route path="/reminder/:_id" element={<Reminder />} />
+                <Route path="/reminder/:id" element={<Reminder />} />
                 {/* a router for refill reminder page */}
                 <Route path="/refill-reminder" element={<RefillReminder />} />
               </Route>

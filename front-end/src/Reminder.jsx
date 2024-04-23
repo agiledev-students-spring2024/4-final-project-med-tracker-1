@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './Reminder.css'
 
 const ReminderCard = ({ name, photo, unit, totalAmt, dose, time }) => {
     return (
+        <>
         <div className="medication-card">
             <div className="medication-info">
                 <h1>{name}</h1>
                 <p>{totalAmt} {unit} left</p>
-                <div className="medication-image" style={{ backgroundImage: `url(${photo})` }} />
             </div>
+            <img 
+                className="medication-image" 
+                src={photo ? `${process.env.REACT_APP_SERVER_HOSTNAME}/med-images/${photo}` : 'default_image.jpg'} alt={name} 
+            />
+        </div>
             <div className="reminder-info medication-card">
                 <span className="field-name">Dose</span>
                 <span className="entry">{dose} {unit}</span>
@@ -18,7 +24,7 @@ const ReminderCard = ({ name, photo, unit, totalAmt, dose, time }) => {
                 <span className="field-name">Time</span>
                 <span className="entry">{time}</span>
             </div>
-        </div>
+        </>
     );
 };
 
@@ -32,12 +38,12 @@ const Reminder = () => {
     useEffect(() => {
         const fetchMedicationDetails = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/medicine/${id}`, {
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/reminder/${id}`, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
                 });
                 if (response.data) {
-                    setMed(response.data.med);
-                    setIntake(response.data.intake); // Make sure API provides intake data
+                    setMed(response.data.intakeObj.medicine);
+                    setIntake(response.data.intakeObj.intake); // Make sure API provides intake data
                 }
             } catch (error) {
                 setError('Failed to fetch medication details: ' + error.message);
@@ -49,18 +55,18 @@ const Reminder = () => {
 
     const handleIntakeAction = async (actionType) => {
         try {
-            const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/${actionType}-intake`, {
-                medName: intake.medName,
-                dose: intake.dose,
-                time: intake.time
-            }, {
-                headers: { 'Content-Type': 'application/json' }
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/${actionType}-intake/${id}`, {action: actionType}, {
+                headers: { 
+                    // 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                }
             });
 
             if (response.status === 200) {
+                console.log(response.data.historyList)
                 navigate('/home');
             } else {
-                throw new Error('Failed to execute action.');
+                throw new Error(response.data.error);
             }
         } catch (error) {
             setError(`Failed to ${actionType} intake: ` + error.message);
@@ -76,6 +82,7 @@ const Reminder = () => {
             <div className="pop-up-white-bg register-page">
                 <h1 className="app-title">Take {med.medName}</h1>
                 <div className="reminder-container medications-container">
+                    {error && <p className="error-message">{error}</p>}
                     <ReminderCard
                         name={med.medName}
                         photo={med.photo}

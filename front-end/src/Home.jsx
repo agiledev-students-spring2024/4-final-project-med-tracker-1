@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
 import HomeCard from './HomeCard';
 import logo from './icons/favicon.png';
@@ -11,7 +10,6 @@ function Home() {
     const [date, setDate] = useState('');
     const [intakeListToTake, setIntakeListToTake] = useState([]);
     const [error, setError] = useState('');
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserSettings = async () => {
@@ -46,10 +44,10 @@ function Home() {
         fetchIntakeListToTake();
     }, []);
 
-    const handleCardClick = (id) => {
-        console.log(`Clicked on card with id: ${id}`);
-        // You could add any functionality here, or leave it as just a log for now
-    };
+    // const handleCardClick = (id) => {
+    //     console.log(`Clicked on card with id: ${id}`);
+    //     // You could add any functionality here, or leave it as just a log for now
+    // };
 
     return (
         <div className="home-page">
@@ -67,13 +65,13 @@ function Home() {
                     {intakeListToTake.map(obj => (
                         <HomeCard
                             key={obj._id}
-                            _id={obj._id}
+                            id={obj._id}
                             name={obj.medicine.medName}
                             photoURL={obj.medicine.photo}
                             schedule={obj.intake.time}
                             dose={obj.intake.dose}
                             unit={obj.medicine.unit}
-                            onClick={() => handleCardClick(obj._id)}
+                            // onClick={() => handleCardClick(obj._id)}
                         />
                     ))}
                 </div>

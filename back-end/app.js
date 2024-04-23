@@ -253,6 +253,7 @@ app.get('/home', verifyToken, async (req, res) => {
     });
 
     if (currDate.toLocaleDateString() === user.todayList.todayDate.toLocaleDateString()) {
+      console.log('rendering todayList from database...')
       return res.json({
         currDate: formattedDate,
         intakeListToTake: user.todayList.todayIntakeList, // return the list of med to take today
@@ -260,11 +261,13 @@ app.get('/home', verifyToken, async (req, res) => {
       })
     }
 
+    console.log('re-calculating todayList...')
     user.todayList.todayIntakeList = []
     const medListToTake = user.medList.filter(med => medToTake(med));
     medListToTake.forEach(med => addIntake(user, med));
     console.log("user.todayList.todayIntakeList", user.todayList.todayIntakeList)
     user.todayList.todayIntakeList.sort((a, b) => a.intake.time.localeCompare(b.intake.time))
+    user.todayList.todayDate = currDate;
     await user.save()
     return res.json({
       currDate: formattedDate,
@@ -587,16 +590,63 @@ app.get('/medicine/:medID', verifyToken, (req, res) => {
 // });
 let medicationActions = []; // Assuming this is declared somewhere in your code
 
-app.post('/api/confirm-intake', (req, res) => {
+app.get('/reminder/:ID', verifyToken, (req, res) => {
   try {
-    const { medName, action, dose, time } = req.body;
+    const user = req.user;
+    const { ID } = req.params;
+    const foundIntakeArr = user.todayList.todayIntakeList.filter(intake => {
+      return String(intake._id) === ID;
+    });
+    console.log('foundIntakeArr:\n', foundIntakeArr)
+    if (foundIntakeArr.length !== 0) {
+      const foundIntake = foundIntakeArr[0];
+      console.log('foundIntake: ', foundIntake)
+      return res.json({
+        intakeObj: foundIntake,
+        status: 'all good',
+      })
+    } else {
+      return res.status(401).json({
+        error: 'no matched intake ID',
+        status: 'failed to find the intake in the list of medicine to take today using intake I',
+      })
+    }
+  } catch (err) {
+    console.error(err)
+    return res.status(404).json({
+      error: err,
+      status: 'failed to find the intake using intake ID',
+    })
+  }
+})
 
-    medicationActions.push({ medName, action, dose, time, timestamp: new Date() });
-    console.log(medicationActions);
-    res.status(200).json({ message: 'Intake confirmed', action: req.body });
+app.post('/api/confirm-intake/:ID', verifyToken, async (req, res) => {
+  try {
+    const user = req.user;
+    const { ID } = req.params;
+    const index = user.todayList.todayIntakeList.findIndex(intakeObj => intakeObj._id == ID)
+    if (index == -1) {
+      return res.status(404).json({ status: 'cannot find the medicine to confirm intake' })
+    }
+    const newHistory = new History({
+      intakeMed: user.todayList.todayIntakeList[index]
+    })
+    if(! user.historyList){
+      user.historyList = []
+    }
+    user.historyList.push(newHistory)
+    console.log('index: ', index)
+    console.log('before splicing: ', user.todayList.todayIntakeList)
+    user.todayList.todayIntakeList.splice(index, 1)
+    await user.save()
+    console.log('after splicing: ', user.todayList.todayIntakeList)
+    return res.json({
+      historyList: user.historyList,
+      status: 'all good',
+    })
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'An error occurred while confirming intake.' });
+    res.status(401).json({ message: 'An error occurred while confirming intake.' });
   }
 });
 
