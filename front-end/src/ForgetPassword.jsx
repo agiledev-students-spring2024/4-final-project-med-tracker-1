@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from './icons/favicon.png'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import logo from './icons/favicon.png';
 import './Login.css';
 
 function changePassword(email, newPassword) {
@@ -24,20 +24,28 @@ function changePassword(email, newPassword) {
     });
 }
 
-
 export const ResetPassword = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [verificationSent, setVerificationSent] = useState(false);
     const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
+    const handleVerification = () => {
+        setVerificationSent(true);
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (!verificationSent) {
+            setError('Please verify your email address first.');
+            return;
+        }
         if (password === passwordConfirm) {
             changePassword(email, password)
-                .then((result) => {
+                .then(() => {
                     navigate('/login');
                 })
                 .catch((error) => {
@@ -53,33 +61,40 @@ export const ResetPassword = () => {
             <img className="app-logo" src={logo} alt="app logo"/>
             <h2>Change password for</h2>
             <h1 className="app-title">Med Tracker</h1>
-            <form className="input-form register-form">
-            <input  
-                    type="email"
-                    id="email"
-                    value={email}
-                    placeholder="Email"
-                    onChange={e => setEmail(e.target.value)}
-                ></input>
-                <input 
-                    type="password" 
-                    id="password"
-                    value={password} 
-                    placeholder="Password" 
-                    onChange={e => setPassword(e.target.value)}
-                />
-                <input 
-                    type="password" 
-                    id="confirm-password" 
-                    value={passwordConfirm} 
-                    placeholder="Confirm Password"
-                    onChange={e => setPasswordConfirm(e.target.value)}
-                />
-
-
-                <button type="submit" onClick={event => handleSubmit(event)} className="blue-btn">Save</button>
+            <form className="input-form register-form" onSubmit={handleSubmit}>
+                {!verificationSent && (
+                    <>
+                        <input  
+                            type="email"
+                            id="email"
+                            value={email}
+                            placeholder="Email"
+                            onChange={e => setEmail(e.target.value)}
+                        />
+                        <button type="button" onClick={handleVerification} className="blue-btn">Send Verification Email</button>
+                    </>
+                )}
+                {verificationSent && (
+                    <>
+                        <input 
+                            type="password" 
+                            id="password"
+                            value={password} 
+                            placeholder="Password" 
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                        <input 
+                            type="password" 
+                            id="confirm-password" 
+                            value={passwordConfirm} 
+                            placeholder="Confirm Password"
+                            onChange={e => setPasswordConfirm(e.target.value)}
+                        />
+                        <button type="submit" className="blue-btn">Save</button>
+                    </>
+                )}
             </form>
             {error && <p className="error-message">{error}</p>}
         </div>
-    )
+    );
 }
