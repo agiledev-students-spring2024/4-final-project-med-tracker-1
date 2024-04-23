@@ -17,14 +17,6 @@ app.use(express.static('public'))
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
 
-// mongoose.connect(process.env.MONGO_URI, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// }).then(() => {
-//   console.log('Successfully connected to MongoDB Atlas!');
-// }).catch((error) => {
-//   console.error('Connection error:', error.message);
-// });
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('Successfully connected to MongoDB Atlas!');
@@ -49,15 +41,6 @@ const mockUser2 = {
   username: 'ky7821@nyu.edu',
   password: 'katie0918'
 }
-app.get('/api/user-settings', (req, res) => {
-  console.log(mockUser2);
-  res.json(mockUser2);
-});
-app.post('/api/update-settings', (req, res) => {
-  const { firstName } = req.body;
-  mockUser2.firstName = firstName;
-  res.json({ message: 'Settings updated successfully' });
-});
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -146,69 +129,105 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
+app.get('/api/user-settings', verifyToken, (req, res) => {
+  res.json({
+    ok: true,
+    firstName: req.user.preferredFirstName,
+    username: req.user.email
+  });
+});
+
+app.post('/api/update-settings', verifyToken, async (req, res) => {
+  try {
+    const { firstName } = req.body;
+    const user = req.user;
+    if (firstName){
+      user.preferredFirstName = firstName;
+      await user.save();
+      res.json({ 
+        ok: true,
+        user: user,
+        message: 'Settings updated successfully',
+        status: 'all good'
+      });
+    }
+    else {
+      console.log('error 1')
+      throw new Error('Fail to get the new first name')
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(404).json({
+      ok: false,
+      error: error,
+      status: 'Failed to save new first name'
+    })
+  }
+});
+
 // Protected route
 app.get('/api/verify-token', verifyToken, (req, res) => {
   res.json({ message: "Token is valid", user: req.user });
 });
 
-const medList = [
-  {
-    medID: 0,
-    medName: "Zestril",
-    photo: '1712007021822_zestril.jpeg',
-    totalAmt: 96,
-    unit: "mg",
-    date: new Date("2024-03-24T15:46:48.535Z"),
-    refillAmt: 10,
-    frequency: 'regular',
-    interval: '1',
-    selectedDays: [],
-    numIntake: 2,
-    intakeList: [{ dose: 5, time: '12:00' }, { dose: 5, time: '19:30' }]
-  },
-  {
-    medID: 1,
-    medName: "Midol",
-    photo: '1712009434896_midol.jpeg',
-    totalAmt: 40,
-    unit: "pill(s)",
-    date: new Date("2024-03-14T15:46:48.535Z"),
-    refillAmt: 5,
-    frequency: 'as-needed',
-    interval: '',
-    selectedDays: [],
-    numIntake: 0,
-    intakeList: []
-  },
-  {
-    medID: 2,
-    medName: "Fish Oil",
-    photo: '1712009213743_fish_oil.jpeg',
-    totalAmt: 38,
-    unit: "pill(s)",
-    date: new Date("2024-03-14T15:46:48.535Z"),
-    refillAmt: 10,
-    frequency: 'specific',
-    interval: '',
-    selectedDays: [0, 2, 4],
-    numIntake: 1,
-    intakeList: [{ dose: 2, time: '14:30' }]
-  },
-  {
-    medID: 3,
-    medName: "Vitamin C",
-    photo: '1712009536243_vitaminC.jpeg',
-    totalAmt: 38,
-    unit: "pill(s)",
-    date: new Date("2024-03-14T15:46:48.535Z"),
-    refillAmt: 10,
-    frequency: 'specific',
-    interval: '',
-    selectedDays: [3, 5, 6],
-    numIntake: 1,
-    intakeList: [{ dose: 1, time: '17:30' }]
-  }
-];
+// const medList = [
+//   {
+//     medID: 0,
+//     medName: "Zestril",
+//     photo: '1712007021822_zestril.jpeg',
+//     totalAmt: 96,
+//     unit: "mg",
+//     date: new Date("2024-03-24T15:46:48.535Z"),
+//     refillAmt: 10,
+//     frequency: 'regular',
+//     interval: '1',
+//     selectedDays: [],
+//     numIntake: 2,
+//     intakeList: [{ dose: 5, time: '12:00' }, { dose: 5, time: '19:30' }]
+//   },
+//   {
+//     medID: 1,
+//     medName: "Midol",
+//     photo: '1712009434896_midol.jpeg',
+//     totalAmt: 40,
+//     unit: "pill(s)",
+//     date: new Date("2024-03-14T15:46:48.535Z"),
+//     refillAmt: 5,
+//     frequency: 'as-needed',
+//     interval: '',
+//     selectedDays: [],
+//     numIntake: 0,
+//     intakeList: []
+//   },
+//   {
+//     medID: 2,
+//     medName: "Fish Oil",
+//     photo: '1712009213743_fish_oil.jpeg',
+//     totalAmt: 38,
+//     unit: "pill(s)",
+//     date: new Date("2024-03-14T15:46:48.535Z"),
+//     refillAmt: 10,
+//     frequency: 'specific',
+//     interval: '',
+//     selectedDays: [0, 2, 4],
+//     numIntake: 1,
+//     intakeList: [{ dose: 2, time: '14:30' }]
+//   },
+//   {
+//     medID: 3,
+//     medName: "Vitamin C",
+//     photo: '1712009536243_vitaminC.jpeg',
+//     totalAmt: 38,
+//     unit: "pill(s)",
+//     date: new Date("2024-03-14T15:46:48.535Z"),
+//     refillAmt: 10,
+//     frequency: 'specific',
+//     interval: '',
+//     selectedDays: [3, 5, 6],
+//     numIntake: 1,
+//     intakeList: [{ dose: 1, time: '17:30' }]
+//   }
+// ];
 
 app.get('/home', verifyToken, async (req, res) => {
   function medToTake(med) {
@@ -282,47 +301,6 @@ app.get('/home', verifyToken, async (req, res) => {
     })
   }
 });
-
-// app.get('/home', verifyToken, async (req, res) => {
-//   try {
-//     const currentDate = new Date();
-//     const medListToTake = req.user.medList.filter(med => medToTake(med, currentDate));
-
-//     if (medListToTake.length === 0) {
-//       console.log('No medications to send.');
-//   }
-
-//     return res.json({
-//         currDate: currentDate.toLocaleDateString('en-US', {
-//             day: '2-digit',
-//             month: 'long',
-//             year: 'numeric',
-//         }),
-//         intakeListToTake: medListToTake,
-//     });
-//   } catch (err) {
-//     console.error("Error in /home route: ", err);
-//     return res.status(500).json({ error: 'Failed to load your list of medicines', message: err.message });
-//   }
-//   });
-
-//   function medToTake(med, currentDate) {
-//     if (med.frequency === 'regular') {
-//         const daysDiff = Math.floor((currentDate - med.date) / (1000 * 60 * 60 * 24));
-//         return daysDiff % Number(med.interval) === 0;
-//     } else if (med.frequency === 'specific') {
-//         const currDay = Number(currentDate.getDay());
-//         return med.selectedDays.includes(currDay);
-//     }
-//     return false; // "as-needed" frequency does not automatically schedule med
-//   }
-
-//   function addIntake(med, intakeListToTake) {
-//     med.intakeList.forEach((intake) => {
-//         const newIntake = {...intake, ...med};
-//         intakeListToTake.push(newIntake);
-//     });
-//   }
 
 app.get('/history', (req, res) => {
   const endDate = new Date().toISOString().split('T')[0]; // Use today as the end date
@@ -559,35 +537,6 @@ app.get('/medicine/:medID', verifyToken, (req, res) => {
   }
 })
 
-// app.put('/medicine/update/:medID', (req, res) => {
-//   try{  
-//     const { medID } = req.params; 
-//     const updates = req.body; 
-
-//     const index = medList.findIndex(medicine => medicine.medID == medID)
-
-//     if (index === -1) {
-//       return res.status(404).send({ message: 'Medicine not found' });
-//     }
-
-//     const med = medList[index];
-//     for (const key in updates) {
-//       if (med.hasOwnProperty(key)) {
-//         med[key] = updates[key];
-//       }
-//     }
-//     medList[index] = med
-//     return res.json({
-//       med: medList[index],
-//       status: 'all good'
-//     })
-//   } catch (error) {
-//       return res.status(401).json({
-//         error: err,
-//         status: 'failed med save the updated medicine info to the database',
-//       })
-//   }
-// });
 let medicationActions = []; // Assuming this is declared somewhere in your code
 
 app.get('/reminder/:ID', verifyToken, (req, res) => {
