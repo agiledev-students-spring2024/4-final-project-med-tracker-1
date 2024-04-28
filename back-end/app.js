@@ -91,7 +91,7 @@ app.post('/api/reset-password', async (req, res) => {
       if (!user) {
           return res.status(404).json({ ok: false, message: "User not found." });
       }
-      const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
       user.password = hashedNewPassword;
       await user.save();
       res.json({ ok: true, message: "Password reset successfully." });
@@ -113,7 +113,7 @@ app.post('/api/login', async (req, res) => {
     if (!validPassword) {
       return res.status(401).json({ message: "Invalid credentials." });
     }
-    const token = jwt.sign({ email: user.email }, SECRET_KEY, { expiresIn: '15m' });
+    const token = jwt.sign({ email: user.email }, SECRET_KEY, {expiresIn: Math.floor(Date.now() / 1000) + 15 * 60 });
     res.json({ token });
   } catch (error) {
     res.status(500).json({ message: "Failed to login." });
