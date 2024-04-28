@@ -84,15 +84,15 @@ app.post('/api/reset-password', async (req, res) => {
   const email = req.body.email.trim().toLowerCase()
   const { newPassword } = req.body;
   try {
-      const user = await User.findOne({ email: email });
-      if (!user) {
-          return res.status(404).json({ ok: false, message: "User not found." });
-      }
-      user.password = newPassword;
-      await user.save();
-      res.json({ ok: true, message: "Password reset successfully." });
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ ok: false, message: "User not found." });
+    }
+    user.password = newPassword;
+    await user.save();
+    res.json({ ok: true, message: "Password reset successfully." });
   } catch (error) {
-      res.status(500).json({ ok: false, message: "Failed to reset password." });
+    res.status(500).json({ ok: false, message: "Failed to reset password." });
   }
 });
 
@@ -156,10 +156,10 @@ app.post('/api/update-settings', verifyToken, async (req, res) => {
   try {
     const { firstName } = req.body;
     const user = req.user;
-    if (firstName){
+    if (firstName) {
       user.preferredFirstName = firstName;
       await user.save();
-      res.json({ 
+      res.json({
         ok: true,
         user: user,
         message: 'Settings updated successfully',
@@ -318,66 +318,15 @@ app.get('/home', verifyToken, async (req, res) => {
 });
 
 app.get('/history', (req, res) => {
-  const endDate = new Date().toISOString().split('T')[0]; // Use today as the end date
-
-  function generateDetailedPastIntakeRecords(med, endDate) {
-    let detailedIntakeRecords = [];
-    const startDate = new Date(med.date);
-    endDate = new Date(endDate);
-
-    let pillsLeft = med.totalAmt;
-
-    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-      let dCopy = new Date(d);
-      if (med.frequency === 'regular') {
-        const daysDiff = Math.floor((dCopy - startDate) / (1000 * 60 * 60 * 24));
-        if (daysDiff % Number(med.interval) === 0) {
-          med.intakeList.forEach(intake => {
-            if (pillsLeft >= intake.dose) {
-              pillsLeft -= intake.dose;
-              detailedIntakeRecords.push({
-                name: med.medName,
-                date: dCopy.toISOString().split('T')[0],
-                schedule: intake.time,
-                dose: intake.dose,
-                pillsLeft,
-                photoURL: med.photo
-              });
-            }
-          });
-        }
-      } else if (med.frequency === 'specific') {
-        if (med.selectedDays.includes(dCopy.getDay())) {
-          med.intakeList.forEach(intake => {
-            if (pillsLeft >= intake.dose) {
-              pillsLeft -= intake.dose;
-              detailedIntakeRecords.push({
-                name: med.medName,
-                date: dCopy.toISOString().split('T')[0],
-                schedule: intake.time,
-                dose: intake.dose,
-                pillsLeft,
-                photoURL: med.photo
-              });
-            }
-          });
-        }
-      }
-      // avoid infinite loop
-      d = dCopy;
-    }
-
-    return detailedIntakeRecords;
-  }
-
   try {
-    const detailedMedRecords = medList.flatMap(med => generateDetailedPastIntakeRecords(med, endDate));
-
-    res.json(detailedMedRecords);
-  } catch (error) {
-    console.error(error);
+    const user = req.user;
+    res.json(user.historyList);
+  }
+  catch (error) {
+    console.error("Failed to fetch history:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+
 });
 
 
@@ -595,7 +544,7 @@ app.post('/api/confirm-intake/:ID', verifyToken, async (req, res) => {
     const newHistory = new History({
       intakeMed: user.todayList.todayIntakeList[index]
     })
-    if(! user.historyList){
+    if (!user.historyList) {
       user.historyList = []
     }
     user.historyList.push(newHistory)
