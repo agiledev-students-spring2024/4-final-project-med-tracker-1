@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from './NavBar';
 import HomeCard from './HomeCard';
@@ -10,6 +11,7 @@ function Home() {
     const [date, setDate] = useState('');
     const [intakeListToTake, setIntakeListToTake] = useState([]);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserSettings = async () => {
