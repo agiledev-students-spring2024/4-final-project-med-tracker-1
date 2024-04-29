@@ -48,11 +48,11 @@ function History() {
                             {medications.map((historyEntry) => (
                                 <HistoryCard
                                     key={`${historyEntry._id}`} // Assume each entry has a unique ID for key
-                                    name={historyEntry.medicine.medName}
-                                    photoURL={historyEntry.medicine.photo}
-                                    pillsLeft={historyEntry.medicine.totalAmt}
-                                    schedule={`Taken on: ${new Date(historyEntry.intakeTime).toLocaleDateString()}`}
-                                    date={new Date(historyEntry.intakeTime).toLocaleDateString()}
+                                    name={historyEntry.intakeMed.medicine.medName}
+                                    photoURL={historyEntry.intakeMed.medicine.photo}
+                                    intakeAmt={historyEntry.intakeMed.intake.dose}
+                                    unit={historyEntry.intakeMed.medicine.unit}
+                                    schedule={`${new Date(historyEntry.intakeTime).toLocaleDateString()}`}
                                 />
                             ))}
                         </div>
