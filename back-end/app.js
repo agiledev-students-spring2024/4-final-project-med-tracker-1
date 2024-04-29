@@ -4,6 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const multer = require('multer')
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
 const { Medicine, History } = require('./models/Medicine')
@@ -67,10 +68,11 @@ app.post('/api/register', async (req, res) => {
     return res.status(400).json({ message: "Username already exists." });
   }
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
       email: username,
       preferredFirstName: firstname,
-      password: password,
+      password: hashedPassword,
     });
     await user.save();
     console.log("Pre registered successfully:", user);
@@ -80,21 +82,24 @@ app.post('/api/register', async (req, res) => {
     res.status(500).json({ message: "Failed to register user." });
   }
 });
+
 app.post('/api/reset-password', async (req, res) => {
-  const email = req.body.email.trim().toLowerCase()
+  const email = req.body.email.trim().toLowerCase();
   const { newPassword } = req.body;
   try {
       const user = await User.findOne({ email: email });
       if (!user) {
           return res.status(404).json({ ok: false, message: "User not found." });
       }
-      user.password = newPassword;
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedNewPassword;
       await user.save();
       res.json({ ok: true, message: "Password reset successfully." });
   } catch (error) {
       res.status(500).json({ ok: false, message: "Failed to reset password." });
   }
 });
+
 
 
 app.post('/api/login', async (req, res) => {
@@ -104,16 +109,17 @@ app.post('/api/login', async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials." });
     }
-    const validPassword = password === user.password;
+    const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(401).json({ message: "Invalid credentials." });
     }
-    const token = jwt.sign({ email: user.email }, SECRET_KEY, { expiresIn: Math.floor(Date.now() / 1000) + 15 * 60 });
+    const token = jwt.sign({ email: user.email }, SECRET_KEY, {expiresIn: Math.floor(Date.now() / 1000) + 15 * 60 });
     res.json({ token });
   } catch (error) {
     res.status(500).json({ message: "Failed to login." });
   }
 });
+
 
 // Middleware for verifying the token
 const verifyToken = async (req, res, next) => {
