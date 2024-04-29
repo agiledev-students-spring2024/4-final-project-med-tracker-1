@@ -317,17 +317,21 @@ app.get('/home', verifyToken, async (req, res) => {
   }
 });
 
-app.get('/history', (req, res) => {
-  try {
-    const user = req.user;
-    res.json(user.historyList);
+app.get('/history', verifyToken, (req, res) => {
+  console.log('User:', req.user);
+  if (!req.user || !req.user.historyList) {
+    console.error("User or user historyList undefined");
+    return res.status(500).json({ message: "Internal server error, user data missing" });
   }
-  catch (error) {
+
+  try {
+    res.json(req.user.historyList);
+  } catch (error) {
     console.error("Failed to fetch history:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-
 });
+
 
 
 // a route to handle fetch all medicines

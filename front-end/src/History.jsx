@@ -1,19 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
-import HistoryCard from './HistoryCard'
-import './Medicines.css'
+import HistoryCard from './HistoryCard';
+import './Medicines.css';
 
 function History() {
     const [medications, setMedications] = useState([]);
+    const [error, setError] = useState(null); // State to handle errors
+
     useEffect(() => {
         const fetchMedications = async () => {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_HOSTNAME}/history`);
-            const updatedMeds = await response.json();
-            setMedications(updatedMeds);
+            const token = localStorage.getItem('token'); // Get token from local storage
+            const response = await fetch(`${process.env.REACT_APP_SERVER_HOSTNAME}/history`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Include the JWT token in the request headers
+                    'Content-Type': 'application/json'
+                }
+            });
+            try {
+                if (response.ok) {
+                    const updatedMeds = await response.json();
+                    setMedications(updatedMeds);
+                } else {
+                    throw new Error('Failed to fetch history: ' + response.statusText);
+                }
+            } catch (error) {
+                setError(error.message); // Set error message in state
+                setMedications([]); // Clear medications if there's an error
+            }
         };
         fetchMedications();
-    }, [])
-
+    }, []);
 
     return (
         <>
@@ -25,23 +41,27 @@ function History() {
                     </div>
                 </div>
                 <div className="body-container">
-                    <div className="medications-container">
-                        {medications.map((med) => (
-                            <HistoryCard
-                                key={`${med.name}-${med.pillsLeft}`}
-                                name={med.name}
-                                photoURL={med.photo}
-                                pillsLeft={med.pillsLeft}
-                                schedule={med.schedule}
-                                date={med.date}
-                            />
-                        ))}
-                    </div>
+                    {error ? (
+                        <p className="error-message">{error}</p> // Display error message if there's an error
+                    ) : (
+                        <div className="medications-container">
+                            {medications.map((historyEntry) => (
+                                <HistoryCard
+                                    key={`${historyEntry._id}`} // Assume each entry has a unique ID for key
+                                    name={historyEntry.medicine.medName}
+                                    photoURL={historyEntry.medicine.photo}
+                                    pillsLeft={historyEntry.medicine.totalAmt}
+                                    schedule={`Taken on: ${new Date(historyEntry.intakeTime).toLocaleDateString()}`}
+                                    date={new Date(historyEntry.intakeTime).toLocaleDateString()}
+                                />
+                            ))}
+                        </div>
+                    )}
                     <NavBar />
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-export default History
+export default History;
