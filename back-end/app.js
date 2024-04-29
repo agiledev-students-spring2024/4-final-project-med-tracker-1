@@ -6,7 +6,7 @@ const multer = require('multer')
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
-const { Medicine, History } = require('./models/Medicine')
+const { Medicine, TodayIntake, History } = require('./models/Medicine')
 const app = express()
 
 const SECRET_KEY = process.env.SECRET_KEY || 'secretkey';
@@ -268,8 +268,7 @@ app.get('/home', verifyToken, async (req, res) => {
 
   function addIntake(user, med) {
     med.intakeList.forEach((intake) => {
-      // const newIntake = {...intake, ...med}
-      const newIntake = new History({
+      const newIntake = new TodayIntake({
         medicine: med,
         intake: intake
       })
@@ -546,11 +545,12 @@ app.post('/api/confirm-intake/:ID', verifyToken, async (req, res) => {
       return res.status(404).json({ status: 'cannot find the medicine to confirm intake' })
     }
     const newHistory = new History({
-      intakeMed: user.todayList.todayIntakeList[index]
+      intakeMed: new TodayIntake(user.todayList.todayIntakeList[index])
     })
     if (!user.historyList) {
       user.historyList = []
     }
+
     user.historyList.push(newHistory)
     console.log('index: ', index)
     console.log('before splicing: ', user.todayList.todayIntakeList)

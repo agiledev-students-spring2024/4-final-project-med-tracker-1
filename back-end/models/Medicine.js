@@ -23,20 +23,25 @@ const MedicineSchema = new mongoose.Schema(
         intakeList: [IntakeSchema]
     }
 )
-const historySchema = new mongoose.Schema({
+const TodayIntakeSchema = new mongoose.Schema({
     medicine: MedicineSchema,
-    intake: IntakeSchema,
-    // reminderId: Number
+    intake: IntakeSchema
 });
 
+const HistorySchema = new mongoose.Schema({
+    intakeTime: {type: Date, default: new Date()},
+    intakeMed: TodayIntakeSchema
+})
 
 const Medicine = mongoose.model('Medicine', MedicineSchema)
-const History = mongoose.model('History', historySchema)
-// const Home = mongoose.model('Home', homeSchema)
+const TodayIntake = mongoose.model('TodayIntake', TodayIntakeSchema)
+const History = mongoose.model('History', HistorySchema)
 
 module.exports = {
     MedicineSchema,
     Medicine,
-    historySchema,
+    TodayIntakeSchema,
+    TodayIntake,
+    HistorySchema,
     History
 }

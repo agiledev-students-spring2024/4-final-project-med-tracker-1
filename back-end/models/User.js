@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { MedicineSchema, historySchema } = require('./Medicine.js')
+const { MedicineSchema, TodayIntakeSchema, HistorySchema } = require('./Medicine.js')
 
 
 const userSchema = new mongoose.Schema({
@@ -19,19 +19,20 @@ const userSchema = new mongoose.Schema({
     medList: [MedicineSchema],
     todayList: {
         todayDate: {type: Date, default: new Date("2024-03-24T15:46:48.535Z")},
-        todayIntakeList: [historySchema]
+        todayIntakeList: [TodayIntakeSchema]
     },
-    historyList: {
-        type: Array,
-        default: [],
-        value: 
-        [
-            {   
-                intakeTime: {type: Date, default: new Date()},
-                intakeMed: historySchema
-            }
-        ]
-    }
+    historyList: [HistorySchema]
+    // {
+    //     type: Array,
+    //     default: [],
+    //     value: 
+    //     [
+    //         {   
+    //             intakeTime: {type: Date, default: new Date()},
+    //             intakeMed: historySchema
+    //         }
+    //     ]
+    // }
 }, { collection: 'userinfo' });
 
 const User = mongoose.model('User', userSchema);
