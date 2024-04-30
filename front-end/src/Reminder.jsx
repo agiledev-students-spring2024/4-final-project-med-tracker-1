@@ -95,6 +95,7 @@ const Reminder = () => {
                     <button onClick={() => handleIntakeAction('confirm')} className="blue-btn">Confirm</button>
                     <button onClick={() => handleIntakeAction('later')} className="white-btn">Later</button>
                     <button onClick={() => handleIntakeAction('skip')} className="white-btn">Skip</button>
+                    {error && <p className="error-message">{error}</p>}
                 </div>
             </div>
         </div>

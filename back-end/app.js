@@ -30,19 +30,6 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
-let users = {};
-
-const mockUser = {
-  username: 'user@example.com',
-  password: 'password123',
-  firstname: 'Yvette'
-};
-const mockUser2 = {
-  firstName: 'Katie',
-  username: 'ky7821@nyu.edu',
-  password: 'katie0918'
-}
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/med-images')
@@ -191,38 +178,38 @@ app.get('/api/verify-token', verifyToken, (req, res) => {
   res.json({ message: "Token is valid", user: req.user });
 });
 
+function medToTake(med) {
+  const currDate = new Date();
+  if (med.frequency === 'regular') {
+    daysDiff = Math.floor((currDate - med.date) / (1000 * 60 * 60 * 24))
+    if (daysDiff % Number(med.interval) === 0)
+      return true;
+    else
+      return false;
+  }
+  else if (med.frequency === 'specific') {
+    currDay = Number(currDate.getDay());
+    if (med.selectedDays.includes(currDay))
+      return true;
+    else
+      return false;
+  }
+  else { // med.frequency === 'as-needed'
+    return false;
+  }
+}
+
+function addIntake(user, med) {
+  med.intakeList.forEach((intake) => {
+    const newIntake = new TodayIntake({
+      medicine: med,
+      intake: intake
+    })
+    user.todayList.todayIntakeList.push(newIntake)
+  })
+}
 
 app.get('/home', verifyToken, async (req, res) => {
-  function medToTake(med) {
-    const currDate = new Date();
-    if (med.frequency === 'regular') {
-      daysDiff = Math.floor((currDate - med.date) / (1000 * 60 * 60 * 24))
-      if (daysDiff % Number(med.interval) === 0)
-        return true;
-      else
-        return false;
-    }
-    else if (med.frequency === 'specific') {
-      currDay = Number(currDate.getDay());
-      if (med.selectedDays.includes(currDay))
-        return true;
-      else
-        return false;
-    }
-    else { // med.frequency === 'as-needed'
-      return false;
-    }
-  }
-
-  function addIntake(user, med) {
-    med.intakeList.forEach((intake) => {
-      const newIntake = new TodayIntake({
-        medicine: med,
-        intake: intake
-      })
-      user.todayList.todayIntakeList.push(newIntake)
-    })
-  }
   try {
     const user = req.user;
     const currDate = new Date();
@@ -389,6 +376,8 @@ app.post('/add-medicine-2/:medID/save', verifyToken, async (req, res) => {
     const newMedInfo = req.body;
 
     let found = false;
+    let takeFlag = false;
+    let foundMed;
     user.medList.forEach(medicine => {
       if (String(medicine.medID) === medID) {
         found = true;
@@ -397,6 +386,7 @@ app.post('/add-medicine-2/:medID/save', verifyToken, async (req, res) => {
             medicine[key] = newMedInfo[key];
           }
         }
+        foundMed = medicine;
       }
     });
 
@@ -404,6 +394,15 @@ app.post('/add-medicine-2/:medID/save', verifyToken, async (req, res) => {
       return res.status(404).json({ status: 'cannot find matched medicine' });
     }
 
+    if (foundMed.frequency && foundMed.intakeList){
+      takeFlag = medToTake(foundMed)
+    }
+    
+    if (takeFlag) {
+      addIntake(user, foundMed)
+      user.todayList.todayIntakeList.sort((a, b) => a.intake.time.localeCompare(b.intake.time))
+    }
+    
     // save the updated med to database
     await user.save();
     console.log(user.medList)
