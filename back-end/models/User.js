@@ -22,17 +22,6 @@ const userSchema = new mongoose.Schema({
         todayIntakeList: [TodayIntakeSchema]
     },
     historyList: [HistorySchema]
-    // {
-    //     type: Array,
-    //     default: [],
-    //     value: 
-    //     [
-    //         {   
-    //             intakeTime: {type: Date, default: new Date()},
-    //             intakeMed: historySchema
-    //         }
-    //     ]
-    // }
 }, { collection: 'userinfo' });
 
 const User = mongoose.model('User', userSchema);
