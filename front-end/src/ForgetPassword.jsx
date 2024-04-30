@@ -12,14 +12,8 @@ function changePassword(email, newPassword) {
         body: JSON.stringify({ email: email.trim().toLowerCase(), newPassword }),
     })
     .then((response) => {
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error('Network response was not ok.');
-    })
-    .then((data) => {
-        if (data.error) {
-            throw new Error(data.error);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
     });
 }
