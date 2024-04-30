@@ -5,6 +5,7 @@
   align-items: center; 
 }
 
+
 .login-page .app-title{
     color: #08475E;
     margin-bottom: 100px;
@@ -26,11 +27,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-direction: column;
 }
 
 .register-container p{
     font-size: 40px;
     color: #626262;
+    margin-bottom: 10px; 
 }
 
 .register-container .sign-up-btn{

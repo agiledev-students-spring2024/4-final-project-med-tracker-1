@@ -34,6 +34,10 @@ export const ResetPassword = () => {
     const navigate = useNavigate();
 
     const handleVerification = () => {
+        if (!email) {
+            setError('Please enter your email address.');
+            return;
+        }
         setVerificationSent(true);
     }
 

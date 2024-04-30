@@ -47,7 +47,7 @@ const Login = () => {
 
     return (
         <div className="full-white-bg login-page">
-            <img className="app-logo" src={logo} alt="app logo"/>
+            <img className="app-logo" src={logo} alt="app logo" />
             <h1 className="app-title">Med Tracker</h1>
             <form className="input-form login-form" onSubmit={handleLoginSubmit}>
                 <input className="input-box" type="text" id="username" placeholder="Email" />
@@ -56,8 +56,10 @@ const Login = () => {
                 {loginError && <div className="error-message">{loginError}</div>}
             </form>
             <div className="register-container">
-                <p>Don't have an account?</p>
-                <Link to="/register" className="sign-up-btn">Sign up</Link>
+                <p>Don't have an account?
+                <Link to="/register" className="sign-up-btn">Sign up</Link></p>
+                <p>Forgot your password?
+                <Link to="/reset-password" className="sign-up-btn">Reset password</Link></p>
             </div>
         </div>
     );
