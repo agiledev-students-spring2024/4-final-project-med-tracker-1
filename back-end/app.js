@@ -191,64 +191,6 @@ app.get('/api/verify-token', verifyToken, (req, res) => {
   res.json({ message: "Token is valid", user: req.user });
 });
 
-// const medList = [
-//   {
-//     medID: 0,
-//     medName: "Zestril",
-//     photo: '1712007021822_zestril.jpeg',
-//     totalAmt: 96,
-//     unit: "mg",
-//     date: new Date("2024-03-24T15:46:48.535Z"),
-//     refillAmt: 10,
-//     frequency: 'regular',
-//     interval: '1',
-//     selectedDays: [],
-//     numIntake: 2,
-//     intakeList: [{ dose: 5, time: '12:00' }, { dose: 5, time: '19:30' }]
-//   },
-//   {
-//     medID: 1,
-//     medName: "Midol",
-//     photo: '1712009434896_midol.jpeg',
-//     totalAmt: 40,
-//     unit: "pill(s)",
-//     date: new Date("2024-03-14T15:46:48.535Z"),
-//     refillAmt: 5,
-//     frequency: 'as-needed',
-//     interval: '',
-//     selectedDays: [],
-//     numIntake: 0,
-//     intakeList: []
-//   },
-//   {
-//     medID: 2,
-//     medName: "Fish Oil",
-//     photo: '1712009213743_fish_oil.jpeg',
-//     totalAmt: 38,
-//     unit: "pill(s)",
-//     date: new Date("2024-03-14T15:46:48.535Z"),
-//     refillAmt: 10,
-//     frequency: 'specific',
-//     interval: '',
-//     selectedDays: [0, 2, 4],
-//     numIntake: 1,
-//     intakeList: [{ dose: 2, time: '14:30' }]
-//   },
-//   {
-//     medID: 3,
-//     medName: "Vitamin C",
-//     photo: '1712009536243_vitaminC.jpeg',
-//     totalAmt: 38,
-//     unit: "pill(s)",
-//     date: new Date("2024-03-14T15:46:48.535Z"),
-//     refillAmt: 10,
-//     frequency: 'specific',
-//     interval: '',
-//     selectedDays: [3, 5, 6],
-//     numIntake: 1,
-//     intakeList: [{ dose: 1, time: '17:30' }]
-//   }
-// ];
 
 app.get('/home', verifyToken, async (req, res) => {
   function medToTake(med) {
@@ -510,8 +452,6 @@ app.get('/medicine/:medID', verifyToken, (req, res) => {
   }
 })
 
-let medicationActions = []; // Assuming this is declared somewhere in your code
-
 app.get('/reminder/:ID', verifyToken, (req, res) => {
   try {
     const user = req.user;
@@ -557,6 +497,14 @@ app.post('/api/confirm-intake/:ID', verifyToken, async (req, res) => {
       user.historyList = []
     }
 
+    // deduct the dose amount from the totalAmt
+    const dose = Number(newHistory.intakeMed.intake.dose);
+    const medID = newHistory.intakeMed.medicine.medID;
+    const medIdx = user.medList.findIndex(med => med.medID === medID)
+    if (medIdx == -1){
+      return res.status(404).json({ status: 'cannot find the medicine in your list of medications' })
+    }
+    user.medList[medIdx].totalAmt -= dose;
     user.historyList.push(newHistory)
     console.log('index: ', index)
     console.log('before splicing: ', user.todayList.todayIntakeList)
@@ -573,28 +521,38 @@ app.post('/api/confirm-intake/:ID', verifyToken, async (req, res) => {
   }
 });
 
-app.post('/api/later-intake', (req, res) => {
+app.post('/api/later-intake/:ID', verifyToken, async (req, res) => {
   try {
-    const { medName, action, dose, time } = req.body;
-    medicationActions.push({ medName, action, dose, time, timestamp: new Date() });
-    res.status(200).json({ message: 'Intake postponed', action: req.body });
+    const user = req.user;
+    const { ID } = req.params;
+    const index = user.todayList.todayIntakeList.findIndex(intakeObj => intakeObj._id == ID)
+    if (index == -1) {
+      return res.status(404).json({ status: 'cannot find the medicine to confirm intake' })
+    }
+    res.status(200).json({ message: 'Intake postponed'});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'An error occurred while postponing intake.' });
   }
 });
 
-app.post('/api/skip-intake', (req, res) => {
+app.post('/api/skip-intake/:ID', verifyToken, async (req, res) => {
   try {
-    const { medName, action, dose, time } = req.body;
-    medicationActions.push({ medName, action, dose, time, timestamp: new Date() });
-    res.status(200).json({ message: 'Intake skipped', action: req.body });
+    const user = req.user;
+    const { ID } = req.params;
+    const index = user.todayList.todayIntakeList.findIndex(intakeObj => intakeObj._id == ID)
+    if (index == -1) {
+      return res.status(404).json({ status: 'cannot find the medicine to confirm intake' })
+    }
+    user.todayList.todayIntakeList.splice(index, 1)
+    await user.save()
+    res.status(200).json({ message: 'Intake skipped'});
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'An error occurred while skipping intake.' });
+    res.status(401).json({ message: 'An error occurred while skipping intake.'});
   }
 });
-let medicationIntakeActions = []; // Store medication intake actions
+
 
 // Route to handle confirming medication intake
 app.post('/api/refill-confirm', (req, res) => {
@@ -640,17 +598,5 @@ app.post('/api/refill-skip', (req, res) => {
     res.status(500).json({ message: 'An error occurred while skipping medication intake.' });
   }
 });
-app.post('/api/:action-intake', verifyToken, async (req, res) => {
-  const { action } = req.params;  // action could be 'confirm', 'later', 'skip'
-  const { medName, dose, time } = req.body;
-  const user = req.user;  // user should be attached to req in verifyToken middleware
-
-  // Log the action or update the database accordingly
-  console.log(`Action ${action} for medication ${medName} at ${time} with dose ${dose}`);
-
-  // Send response
-  res.json({ message: `Intake ${action} for ${medName}` });
-});
-
 
 module.exports = app

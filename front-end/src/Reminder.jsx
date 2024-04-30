@@ -57,7 +57,6 @@ const Reminder = () => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/api/${actionType}-intake/${id}`, {action: actionType}, {
                 headers: { 
-                    // 'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem("token")}`
                 }
             });

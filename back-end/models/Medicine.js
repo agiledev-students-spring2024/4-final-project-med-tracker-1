@@ -7,7 +7,6 @@ const IntakeSchema = new mongoose.Schema(
     }
 )
 const MedicineSchema = new mongoose.Schema(
-    
     {
         medID: Number,
         medName: String,
@@ -23,6 +22,7 @@ const MedicineSchema = new mongoose.Schema(
         intakeList: [IntakeSchema]
     }
 )
+
 const TodayIntakeSchema = new mongoose.Schema({
     medicine: MedicineSchema,
     intake: IntakeSchema
