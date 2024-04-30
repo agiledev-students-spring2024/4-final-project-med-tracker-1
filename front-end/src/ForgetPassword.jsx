@@ -13,8 +13,14 @@ function changePassword(email, newPassword) {
     })
     .then((response) => {
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            return response.json().then(err => {
+                throw new Error(`HTTP error! ${err.message}`);
+            })
+            .catch(() => {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            });
         }
+        return response.json();
     });
 }
 
