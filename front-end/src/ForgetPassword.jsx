@@ -17,10 +17,10 @@ function changePassword(email, newPassword) {
         }
         throw new Error('Network response was not ok.');
     })
-    .catch(error => {
-        return error.json().then((data) => {
-            throw new Error(data.message);
-        });
+    .then((data) => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
     });
 }
 
